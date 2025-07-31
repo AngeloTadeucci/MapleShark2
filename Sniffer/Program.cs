@@ -1,5 +1,5 @@
 using System.Text.Json;
-using NLog;
+using Serilog;
 using PacketDotNet;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -8,14 +8,22 @@ using Sniffer.Tools;
 namespace Sniffer;
 
 public class Program {
-    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    private static PcapDevice? device;
-    private static readonly List<RawCapture> packetQueue = new();
-    private static readonly HashSet<PacketSession> sessions = new();
-    private static readonly Timer processTimer = new(ProcessPacketQueue, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-    private static SnifferConfig config = new();
+    private static readonly ILogger Logger = Log.ForContext<Program>();
+    private static PcapDevice? _device;
+    private static readonly List<RawCapture> PacketQueue = [];
+    private static readonly HashSet<PacketSession> Sessions = [];
+    private static readonly Timer ProcessTimer = new(ProcessPacketQueue, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+    private static SnifferConfig _config = new();
 
     public static async Task Main(string[] args) {
+        // Initialize Serilog
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console(outputTemplate: "[{Level:u3}] {Message:lj} {Exception}{NewLine}")
+            .WriteTo.File("sniffer.log",
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {SourceContext}: {Message:lj} {Exception}{NewLine}")
+            .CreateLogger();
+
         Console.WriteLine("MapleStory2 Packet Sniffer");
         Console.WriteLine("==========================");
 
@@ -28,7 +36,7 @@ public class Program {
             return;
         }
 
-        Console.WriteLine($"Listening on {config.Interface} for ports {config.LowPort}-{config.HighPort}");
+        Console.WriteLine($"Listening on {_config.Interface} for ports {_config.LowPort}-{_config.HighPort}");
         Console.WriteLine("Press Ctrl+C to stop...");
 
         // Handle graceful shutdown
@@ -50,7 +58,7 @@ public class Program {
                 string json = File.ReadAllText(configPath);
                 var fileConfig = JsonSerializer.Deserialize<SnifferConfig>(json);
                 if (fileConfig != null) {
-                    config = fileConfig;
+                    _config = fileConfig;
                 }
             } catch (Exception ex) {
                 Console.WriteLine($"Warning: Failed to load config file: {ex.Message}");
@@ -61,15 +69,15 @@ public class Program {
         for (int i = 0; i < args.Length; i++) {
             switch (args[i]) {
                 case "--interface" when i + 1 < args.Length:
-                    config.Interface = args[++i];
+                    _config.Interface = args[++i];
                     break;
                 case "--low-port" when i + 1 < args.Length:
                     if (ushort.TryParse(args[++i], out ushort lowPort))
-                        config.LowPort = lowPort;
+                        _config.LowPort = lowPort;
                     break;
                 case "--high-port" when i + 1 < args.Length:
                     if (ushort.TryParse(args[++i], out ushort highPort))
-                        config.HighPort = highPort;
+                        _config.HighPort = highPort;
                     break;
                 case "--list-interfaces":
                     ListInterfaces();
@@ -109,17 +117,17 @@ public class Program {
     }
 
     private static bool SetupAdapter() {
-        if (device != null) {
-            device.StopCapture();
-            device.Close();
+        if (_device != null) {
+            _device.StopCapture();
+            _device.Close();
         }
 
         // If no interface specified, try to find the first active physical adapter
-        if (string.IsNullOrEmpty(config.Interface)) {
+        if (string.IsNullOrEmpty(_config.Interface)) {
             foreach (LibPcapLiveDevice pcapDevice in LibPcapLiveDeviceList.Instance) {
                 if (pcapDevice.IsActive() && pcapDevice.IsConnected()) {
-                    config.Interface = pcapDevice.Interface.Name;
-                    logger.Info($"Auto-selected interface: {pcapDevice.Interface.FriendlyName ?? pcapDevice.Interface.Description}");
+                    _config.Interface = pcapDevice.Interface.Name;
+                    Logger.Information("Auto-selected interface: {InterfaceName}", pcapDevice.Interface.FriendlyName ?? pcapDevice.Interface.Description);
                     break;
                 }
             }
@@ -127,35 +135,35 @@ public class Program {
 
         // Find the specified interface
         foreach (LibPcapLiveDevice pcapDevice in LibPcapLiveDeviceList.Instance) {
-            if (pcapDevice.Interface.Name == config.Interface) {
-                device = pcapDevice;
+            if (pcapDevice.Interface.Name == _config.Interface) {
+                _device = pcapDevice;
                 break;
             }
         }
 
-        if (device == null) {
-            Console.WriteLine($"Error: Network interface '{config.Interface}' not found.");
+        if (_device == null) {
+            Console.WriteLine($"Error: Network interface '{_config.Interface}' not found.");
             Console.WriteLine("Use --list-interfaces to see available interfaces.");
             return false;
         }
 
         try {
-            device.Open(DeviceModes.Promiscuous, 10);
+            _device.Open(DeviceModes.Promiscuous, 10);
         } catch (Exception ex) {
-            logger.Warn($"Failed to set device in promiscuous mode: {ex.Message}");
+            Logger.Warning("Failed to set device in promiscuous mode: {ErrorMessage}", ex.Message);
             try {
-                device.Open();
+                _device.Open();
             } catch (Exception ex2) {
                 Console.WriteLine($"Error: Failed to open network interface: {ex2.Message}");
                 return false;
             }
         }
 
-        device.OnPacketArrival += device_OnPacketArrival;
-        device.Filter = $"tcp portrange {config.LowPort}-{config.HighPort}";
+        _device.OnPacketArrival += device_OnPacketArrival;
+        _device.Filter = $"tcp portrange {_config.LowPort}-{_config.HighPort}";
 
         try {
-            device.StartCapture();
+            _device.StartCapture();
         } catch (Exception ex) {
             Console.WriteLine($"Error: Failed to start packet capture: {ex.Message}");
             return false;
@@ -165,72 +173,75 @@ public class Program {
     }
 
     private static void device_OnPacketArrival(object sender, PacketCapture e) {
-        lock (packetQueue) {
-            packetQueue.Add(e.GetPacket());
+        lock (PacketQueue) {
+            PacketQueue.Add(e.GetPacket());
         }
     }
 
     private static bool InPortRange(ushort port) {
-        return port >= config.LowPort && port <= config.HighPort;
+        return port >= _config.LowPort && port <= _config.HighPort;
     }
 
     private static void ProcessPacketQueue(object? state) {
         List<RawCapture> curQueue;
-        lock (packetQueue) {
-            curQueue = new List<RawCapture>(packetQueue);
-            packetQueue.Clear();
+        lock (PacketQueue) {
+            curQueue = new List<RawCapture>(PacketQueue);
+            PacketQueue.Clear();
         }
 
         DateTime now = DateTime.Now;
 
         // Clean up old sessions (less aggressive than before)
-        var sessionsToRemove = sessions.Where(s => s.ShouldClose(now)).ToList();
+        List<PacketSession> sessionsToRemove = Sessions.Where(s => s.ShouldClose(now)).ToList();
         foreach (var session in sessionsToRemove) {
-            sessions.Remove(session);
-            logger.Debug($"Removed inactive session (total active sessions: {sessions.Count})");
+            Sessions.Remove(session);
+            Logger.Debug("Removed inactive session (total active sessions: {SessionCount})", Sessions.Count);
         }
 
         foreach (RawCapture packet in curQueue) {
             try {
                 var tcpPacket = Packet.ParsePacket(packet.LinkLayerType, packet.Data).Extract<TcpPacket>();
                 if (tcpPacket == null) continue;
+                Logger.Debug("TCP Packet data: {TcpPacket}", tcpPacket);
 
-                PacketSession? session = null;
+                PacketSession? session;
                 PacketSession.Results? result;
 
-                if (tcpPacket.Synchronize && !tcpPacket.Acknowledgment && InPortRange(tcpPacket.DestinationPort)) {
+                if (tcpPacket is {Synchronize: true, Acknowledgment: false} && InPortRange(tcpPacket.DestinationPort)) {
                     // New connection
                     session = new PacketSession();
-                    sessions.Add(session);
-                    logger.Debug($"New session created (total active sessions: {sessions.Count})");
+                    Sessions.Add(session);
+                    Logger.Debug("New session created (total active sessions: {SessionCount})", Sessions.Count);
                     result = session.BufferTcpPacket(tcpPacket, packet.Timeval.Date);
                 } else {
                     // Existing connection
-                    session = sessions.FirstOrDefault(s => s.MatchTcpPacket(tcpPacket));
+                    session = Sessions.FirstOrDefault(s => s.MatchTcpPacket(tcpPacket));
                     if (session == null) {
                         continue;
                     }
+                    Logger.Debug("Existing session matched (total active sessions: {SessionCount})", Sessions.Count);
                     result = session.BufferTcpPacket(tcpPacket, packet.Timeval.Date);
                 }
 
                 switch (result) {
                     case PacketSession.Results.CloseMe:
-                        sessions.Remove(session);
+                        Sessions.Remove(session);
                         break;
                     case PacketSession.Results.Terminated:
-                        sessions.Remove(session);
+                        Sessions.Remove(session);
                         break;
                 }
             } catch (Exception ex) {
-                logger.Error(ex, "Exception while processing packet queue");
+                Logger.Error(ex, "Exception while processing packet queue");
             }
         }
     }
 
     private static void Shutdown() {
-        logger.Info("Shutting down packet sniffer...");
-        processTimer.Dispose();
-        device?.StopCapture();
-        device?.Close();
+        Logger.Information("Shutting down packet sniffer...");
+        ProcessTimer.Dispose();
+        _device?.StopCapture();
+        _device?.Close();
+        Log.CloseAndFlush();
     }
 }

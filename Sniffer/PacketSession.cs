@@ -2,7 +2,7 @@ using System.Text.Json;
 using Maple2.PacketLib.Crypto;
 using Maple2.PacketLib.Tools;
 using Sniffer.Tools;
-using NLog;
+using Serilog;
 using PacketDotNet;
 
 namespace Sniffer;
@@ -15,7 +15,7 @@ public class PacketSession {
         CloseMe
     }
 
-    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger logger = Log.ForContext<PacketSession>();
 
     private bool terminated = false;
     private ushort localPort = 0;
@@ -84,6 +84,7 @@ public class PacketSession {
 
         try {
             while (packetStream.TryRead(out byte[] packet)) {
+                logger.Debug("Processing packet: {Packet}", packet);
                 Results result = ProcessPacket(packet, isOutbound, arrivalTime);
                 switch (result) {
                     case Results.Continue:
@@ -108,18 +109,19 @@ public class PacketSession {
         if (terminated) return Results.Terminated;
 
         if (build == 0) {
+            logger.Debug("Processing handshake packet");
             // Handle handshake packet
             var packet = new ByteReader(bytes);
             packet.Read<ushort>(); // rawSeq
             int length = packet.ReadInt();
             if (bytes.Length - 6 < length) {
-                logger.Debug($"Connection on port {localPort} did not have a MapleStory2 Handshake");
+                logger.Debug("Connection on port {LocalPort} did not have a MapleStory2 Handshake", localPort);
                 return Results.CloseMe;
             }
 
             ushort opcode = packet.Read<ushort>();
             if (opcode != 0x01) {
-                logger.Debug($"Connection on port {localPort} did not have a valid MapleStory2 Connection Header");
+                logger.Debug("Connection on port {LocalPort} did not have a valid MapleStory2 Connection Header", localPort);
                 return Results.CloseMe;
             }
 
@@ -136,6 +138,7 @@ public class PacketSession {
             inDecryptor = new MapleCipher.Decryptor(build, riv, blockIV);
 
             var decodedPacket = inDecryptor.Decrypt(bytes); // Advance the IV
+            logger.Debug("Decrypted handshake packet: {Packet}", decodedPacket);
 
             // Output handshake packet
             OutputPacket(new PacketInfo {
@@ -148,13 +151,14 @@ public class PacketSession {
             });
 
             packetCount++;
-            logger.Info($"[CONNECTION] MapleStory2 V{build} session established on port {localPort}");
+            logger.Information("[CONNECTION] MapleStory2 V{Build} session established on port {LocalPort}", build, localPort);
             return Results.Show;
         }
 
         try {
             MapleCipher.Decryptor decryptor = isOutbound ? outDecryptor! : inDecryptor!;
             ByteReader packet = decryptor.Decrypt(bytes);
+            logger.Debug("Decrypted packet: {Packet}", packet);
 
             if (packet.Available == 0) {
                 return Results.Continue;
