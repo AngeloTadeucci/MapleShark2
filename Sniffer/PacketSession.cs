@@ -15,26 +15,20 @@ public class PacketSession {
         CloseMe
     }
 
-    private static readonly ILogger logger = Log.ForContext<PacketSession>();
+    private static readonly ILogger Logger = Log.ForContext<PacketSession>();
 
-    private bool terminated = false;
-    private ushort localPort = 0;
-    private ushort remotePort = 0;
-    private uint build = 0;
-    private byte locale = 0;
+    private bool terminated;
+    private ushort localPort;
+    private ushort remotePort;
+    private uint build;
+    private byte locale;
 
-    private DateTime startTime;
-    private DateTime lastActivity;
-    private int packetCount = 0;
-    private bool clearedPackets = false;
+    private readonly DateTime startTime = DateTime.Now;
+    private DateTime lastActivity = DateTime.Now;
+    private int packetCount;
     private MapleCipher.Decryptor? outDecryptor;
     private MapleCipher.Decryptor? inDecryptor;
     private readonly TcpReassembler tcpReassembler = new();
-
-    public PacketSession() {
-        startTime = DateTime.Now;
-        lastActivity = DateTime.Now;
-    }
 
     public bool MatchTcpPacket(TcpPacket tcpPacket) {
         if (terminated) return false;
@@ -47,23 +41,17 @@ public class PacketSession {
         double timeSinceStart = (currentTime - startTime).TotalSeconds;
         double timeSinceActivity = (currentTime - lastActivity).TotalSeconds;
 
-        // Debug logging
-        if (timeSinceStart > 3) { // Only log after 3 seconds to avoid spam
-            logger.Debug($"Session check: clearedPackets={clearedPackets}, packetCount={packetCount}, timeSinceStart={timeSinceStart:F1}s, timeSinceActivity={timeSinceActivity:F1}s, startTime={startTime:HH:mm:ss.fff}, lastActivity={lastActivity:HH:mm:ss.fff}, currentTime={currentTime:HH:mm:ss.fff}");
-        }
-
-        // Only close sessions that have no packets AND packets were never manually cleared
-        // AND the session has been idle for 5+ seconds
-        // This matches the logic in MainForm.SessionForm.CloseMe()
-        if (!clearedPackets && packetCount == 0 && timeSinceStart >= 5) {
-            logger.Debug($"Closing session: no packets received for 5+ seconds");
+        // Close sessions that have no packets and have been idle for 5+ seconds
+        // This is for empty sessions that never received any MapleStory2 packets
+        if (packetCount == 0 && timeSinceStart >= 5) {
+            Logger.Debug("Closing session: no packets received for 5+ seconds");
             return true;
         }
 
         // Also close sessions that have been inactive for a longer period (30 seconds)
         // to handle cases where the connection is lost but not properly terminated
         if (timeSinceActivity >= 30) {
-            logger.Debug($"Closing session: inactive for 30+ seconds");
+            Logger.Debug("Closing session: inactive for 30+ seconds");
             return true;
         }
 
@@ -95,7 +83,6 @@ public class PacketSession {
 
         try {
             while (packetStream.TryRead(out byte[] packet)) {
-                logger.Debug("Processing packet: {Packet}", packet);
                 Results result = ProcessPacket(packet, isOutbound, arrivalTime);
                 switch (result) {
                     case Results.Continue:
@@ -108,7 +95,7 @@ public class PacketSession {
                 }
             }
         } catch (Exception ex) {
-            logger.Error(ex, "Exception while buffering packets");
+            Logger.Error(ex, "Exception while buffering packets");
             terminated = true;
             return Results.Terminated;
         }
@@ -120,36 +107,32 @@ public class PacketSession {
         if (terminated) return Results.Terminated;
 
         if (build == 0) {
-            logger.Debug("Processing handshake packet");
             // Handle handshake packet
             var packet = new ByteReader(bytes);
             packet.Read<ushort>(); // rawSeq
             int length = packet.ReadInt();
             if (bytes.Length - 6 < length) {
-                logger.Debug("Connection on port {LocalPort} did not have a MapleStory2 Handshake", localPort);
                 return Results.CloseMe;
             }
 
             ushort opcode = packet.Read<ushort>();
             if (opcode != 0x01) {
-                logger.Debug("Connection on port {LocalPort} did not have a valid MapleStory2 Connection Header", localPort);
                 return Results.CloseMe;
             }
 
             uint version = packet.Read<uint>();
             uint siv = packet.Read<uint>();
             uint riv = packet.Read<uint>();
-            uint blockIV = packet.Read<uint>();
+            uint blockIv = packet.Read<uint>();
             byte type = packet.ReadByte();
 
             build = version;
             locale = 0; // Unknown locale for CLI
 
-            outDecryptor = new MapleCipher.Decryptor(build, siv, blockIV);
-            inDecryptor = new MapleCipher.Decryptor(build, riv, blockIV);
+            outDecryptor = new MapleCipher.Decryptor(build, siv, blockIv);
+            inDecryptor = new MapleCipher.Decryptor(build, riv, blockIv);
 
             var decodedPacket = inDecryptor.Decrypt(bytes); // Advance the IV
-            logger.Debug("Decrypted handshake packet: {Packet}", decodedPacket);
 
             // Output handshake packet
             OutputPacket(new PacketInfo {
@@ -162,14 +145,14 @@ public class PacketSession {
             });
 
             packetCount++;
-            logger.Information("[CONNECTION] MapleStory2 V{Build} session established on port {LocalPort} (packetCount={PacketCount})", build, localPort, packetCount);
+            Logger.Information("[CONNECTION] MapleStory2 V{Build} session established on port {LocalPort} (packetCount={PacketCount})", build,
+                localPort, packetCount);
             return Results.Show;
         }
 
         try {
             MapleCipher.Decryptor decryptor = isOutbound ? outDecryptor! : inDecryptor!;
             ByteReader packet = decryptor.Decrypt(bytes);
-            logger.Debug("Decrypted packet: {Packet}", packet);
 
             if (packet.Available == 0) {
                 return Results.Continue;
@@ -189,10 +172,9 @@ public class PacketSession {
             });
 
             packetCount++;
-            logger.Debug("Packet processed (packetCount={PacketCount})", packetCount);
             return Results.Continue;
         } catch (ArgumentException ex) {
-            logger.Error(ex, "Exception while processing packets");
+            Logger.Error(ex, "Exception while processing packets");
             return Results.CloseMe;
         }
     }

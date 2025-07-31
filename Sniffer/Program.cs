@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Serilog;
 using PacketDotNet;
+using Serilog.Events;
 using SharpPcap;
 using SharpPcap.LibPcap;
 using Sniffer.Tools;
@@ -19,7 +20,7 @@ public class Program {
         // Initialize Serilog
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Exception}{NewLine}")
+            .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Exception}{NewLine}", restrictedToMinimumLevel: LogEventLevel.Information)
             .WriteTo.File("sniffer.log",
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {SourceContext}: {Message:lj} {Exception}{NewLine}")
             .CreateLogger();
@@ -202,7 +203,6 @@ public class Program {
             try {
                 var tcpPacket = Packet.ParsePacket(packet.LinkLayerType, packet.Data).Extract<TcpPacket>();
                 if (tcpPacket == null) continue;
-                Logger.Debug("TCP Packet data: {TcpPacket}", tcpPacket);
 
                 PacketSession? session;
                 PacketSession.Results? result;
@@ -219,7 +219,6 @@ public class Program {
                     if (session == null) {
                         continue;
                     }
-                    Logger.Debug("Existing session matched (total active sessions: {SessionCount})", Sessions.Count);
                     result = session.BufferTcpPacket(tcpPacket, packet.Timeval.Date);
                 }
 
