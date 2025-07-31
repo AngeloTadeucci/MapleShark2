@@ -49,7 +49,7 @@ public class PacketSession {
 
         // Debug logging
         if (timeSinceStart > 3) { // Only log after 3 seconds to avoid spam
-            logger.Debug($"Session check: clearedPackets={clearedPackets}, packetCount={packetCount}, timeSinceStart={timeSinceStart:F1}s, timeSinceActivity={timeSinceActivity:F1}s");
+            logger.Debug($"Session check: clearedPackets={clearedPackets}, packetCount={packetCount}, timeSinceStart={timeSinceStart:F1}s, timeSinceActivity={timeSinceActivity:F1}s, startTime={startTime:HH:mm:ss.fff}, lastActivity={lastActivity:HH:mm:ss.fff}, currentTime={currentTime:HH:mm:ss.fff}");
         }
 
         // Only close sessions that have no packets AND packets were never manually cleared
@@ -87,8 +87,8 @@ public class PacketSession {
         bool isOutbound = tcpPacket.SourcePort == localPort;
         tcpReassembler.ReassembleStream(tcpPacket);
 
-        // Update activity timestamp
-        lastActivity = arrivalTime;
+        // Update activity timestamp - use current time for consistency with timeout checks
+        lastActivity = DateTime.Now;
 
         MapleStream packetStream = isOutbound ? tcpReassembler.OutStream : tcpReassembler.InStream;
         bool show = false;
