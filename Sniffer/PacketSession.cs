@@ -44,15 +44,26 @@ public class PacketSession {
     }
 
     public bool ShouldClose(DateTime currentTime) {
-        // Only close sessions that have no packets AND haven't been active for 5+ seconds
+        double timeSinceStart = (currentTime - startTime).TotalSeconds;
+        double timeSinceActivity = (currentTime - lastActivity).TotalSeconds;
+
+        // Debug logging
+        if (timeSinceStart > 3) { // Only log after 3 seconds to avoid spam
+            logger.Debug($"Session check: clearedPackets={clearedPackets}, packetCount={packetCount}, timeSinceStart={timeSinceStart:F1}s, timeSinceActivity={timeSinceActivity:F1}s");
+        }
+
+        // Only close sessions that have no packets AND packets were never manually cleared
+        // AND the session has been idle for 5+ seconds
         // This matches the logic in MainForm.SessionForm.CloseMe()
-        if (!clearedPackets && packetCount == 0 && (currentTime - startTime).TotalSeconds >= 5) {
+        if (!clearedPackets && packetCount == 0 && timeSinceStart >= 5) {
+            logger.Debug($"Closing session: no packets received for 5+ seconds");
             return true;
         }
 
         // Also close sessions that have been inactive for a longer period (30 seconds)
         // to handle cases where the connection is lost but not properly terminated
-        if ((currentTime - lastActivity).TotalSeconds >= 30) {
+        if (timeSinceActivity >= 30) {
+            logger.Debug($"Closing session: inactive for 30+ seconds");
             return true;
         }
 
@@ -151,7 +162,7 @@ public class PacketSession {
             });
 
             packetCount++;
-            logger.Information("[CONNECTION] MapleStory2 V{Build} session established on port {LocalPort}", build, localPort);
+            logger.Information("[CONNECTION] MapleStory2 V{Build} session established on port {LocalPort} (packetCount={PacketCount})", build, localPort, packetCount);
             return Results.Show;
         }
 
@@ -178,6 +189,7 @@ public class PacketSession {
             });
 
             packetCount++;
+            logger.Debug("Packet processed (packetCount={PacketCount})", packetCount);
             return Results.Continue;
         } catch (ArgumentException ex) {
             logger.Error(ex, "Exception while processing packets");

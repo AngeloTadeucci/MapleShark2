@@ -19,9 +19,9 @@ public class Program {
         // Initialize Serilog
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.Console(outputTemplate: "[{Level:u3}] {Message:lj} {Exception}{NewLine}")
+            .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Exception}{NewLine}")
             .WriteTo.File("sniffer.log",
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {SourceContext}: {Message:lj} {Exception}{NewLine}")
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {SourceContext}: {Message:lj} {Exception}{NewLine}")
             .CreateLogger();
 
         Console.WriteLine("MapleStory2 Packet Sniffer");
