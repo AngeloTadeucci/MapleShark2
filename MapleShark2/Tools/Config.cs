@@ -17,7 +17,7 @@ namespace MapleShark2.Tools {
         private static readonly IMapleSharkTheme darkTheme = new DarkTheme();
 
         public string Interface = "";
-        public ushort LowPort = 30000; //MS2 Gateway
+        public ushort LowPort = 20000; //MS2 Gateway
         public ushort HighPort = 33001; //MS2 Channel Ranges
         public int PacketRate = 300;
         public ThemeType WindowTheme = ThemeType.Light;

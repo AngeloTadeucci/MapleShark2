@@ -1,0 +1,6 @@
+{
+  "interface": "",
+  "lowPort": 20000,
+  "highPort": 33001,
+  "packetRate": 100
+}
