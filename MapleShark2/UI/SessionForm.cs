@@ -648,6 +648,7 @@ namespace MapleShark2.UI {
         }
 
         private void AddPacket(MaplePacket packet, bool buffered = true, bool forceAdd = false) {
+            packet.Index = mPackets.Count;
             mPackets.Add(packet);
 
             Definition definition =

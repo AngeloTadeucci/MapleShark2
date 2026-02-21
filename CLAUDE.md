@@ -22,7 +22,7 @@ dotnet publish Sniffer/Sniffer.csproj -c Release                  # Single-file 
 
 No test projects exist in this solution.
 
-**Requirements:** Windows only (SharpPcap + WinForms). Administrator privileges required for packet capture. .NET 6.0 SDK (GUI) and .NET 8.0 SDK (Sniffer).
+**Requirements:** Windows only (SharpPcap + WinForms). Administrator privileges required for packet capture. .NET 8.0 SDK.
 
 ## Architecture
 
@@ -31,7 +31,7 @@ Three projects sharing packet logic through a library:
 ```
 MapleShark2.sln
 ├── Maple2.PacketLib   (netstandard2.1) — git submodule; crypto + binary I/O
-├── MapleShark2        (net6.0-windows) — WinForms GUI packet analyzer
+├── MapleShark2        (net8.0-windows) — WinForms GUI packet analyzer
 └── Sniffer            (net8.0-windows) — Standalone CLI sniffer
 ```
 

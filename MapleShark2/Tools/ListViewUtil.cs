@@ -44,8 +44,12 @@ namespace MapleShark2.Tools {
         private static extern IntPtr SendMessage(IntPtr handle, uint messg, IntPtr wparam, IntPtr lparam);
 
         static ListViewUtil() {
-            listViewVirtualListSizeField = typeof(ListView).GetField("virtualListSize",
-                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            // Field was renamed from "virtualListSize" to "_virtualListSize" in .NET 8
+            listViewVirtualListSizeField =
+                typeof(ListView).GetField("_virtualListSize",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                ?? typeof(ListView).GetField("virtualListSize",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             System.Diagnostics.Debug.Assert(listViewVirtualListSizeField != null,
                 "System.Windows.Forms.ListView class no longer has a virtualListSize field.");
         }

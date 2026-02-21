@@ -3,6 +3,7 @@ using Maple2.PacketLib.Tools;
 
 namespace MapleShark2.Logging {
     public class MaplePacket {
+        public int Index { get; internal set; }
         public DateTime Timestamp { get; }
         public bool Outbound { get; }
         public uint Version { get; }

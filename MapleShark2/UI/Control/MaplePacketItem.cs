@@ -7,7 +7,7 @@ namespace MapleShark2.UI.Control
         public readonly MaplePacket Packet;
 
         internal MaplePacketItem(MaplePacket packet, string name, int index) : base(new[] {
-            index.ToString(),
+            packet.Index.ToString(),
             packet.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff"),
             packet.Outbound ? "Outbound" : "Inbound",
             packet.Length.ToString(),
