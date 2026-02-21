@@ -39,7 +39,8 @@ namespace MapleShark2.UI.Control {
         }
         
         public virtual int AddPacket(MaplePacket packetItem) {
-            Items.Add(CreateListItem(packetItem));
+            int index = Items.Count;
+            Items.Add(CreateListItem(packetItem, index));
             return Items.Count - 1;
         }
         
@@ -81,11 +82,11 @@ namespace MapleShark2.UI.Control {
             e.DrawDefault = true;
         }
         
-        protected MaplePacketItem CreateListItem(MaplePacket packet) {
+        protected MaplePacketItem CreateListItem(MaplePacket packet, int index) {
             Definition definition = Config.Instance.GetDefinition(packet);
             string name = definition == null ? "" : definition.Name;
 
-            var item = new MaplePacketItem(packet, name);
+            var item = new MaplePacketItem(packet, name, index);
             if (item.Packet.Outbound) {
                 item.BackColor = HighlightColor;
             }

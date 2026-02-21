@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ListView = new MapleShark2.UI.Control.VirtualPacketListView();
+            this.mIndexColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mTimestampColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mDirectionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mLengthColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,6 +81,7 @@
             // mPacketList
             //
             this.ListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.mIndexColumn,
             this.mTimestampColumn,
             this.mDirectionColumn,
             this.mLengthColumn,
@@ -101,6 +103,11 @@
             this.ListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ListView.ItemActivate += new System.EventHandler(this.mPacketList_ItemActivate);
             this.ListView.SelectedIndexChanged += new System.EventHandler(this.mPacketList_SelectedIndexChanged);
+            //
+            // mIndexColumn
+            //
+            this.mIndexColumn.Text = "#";
+            this.mIndexColumn.Width = 55;
             //
             // mTimestampColumn
             //
@@ -489,6 +496,7 @@
 
         #endregion
 
+        private System.Windows.Forms.ColumnHeader mIndexColumn;
         private System.Windows.Forms.ColumnHeader mTimestampColumn;
         private System.Windows.Forms.ColumnHeader mDirectionColumn;
         private System.Windows.Forms.ColumnHeader mLengthColumn;

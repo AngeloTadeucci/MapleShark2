@@ -99,6 +99,7 @@ namespace MapleShark2.UI {
         // Fix column widths when using screen scaling.
         private void ScaleColumns() {
             float scale = CreateGraphics().DpiX / 96;
+            mIndexColumn.Width = (int) (mIndexColumn.Width * scale);
             mTimestampColumn.Width = (int) (mTimestampColumn.Width * scale);
             mDirectionColumn.Width = (int) (mDirectionColumn.Width * scale);
             mLengthColumn.Width = (int) (mLengthColumn.Width * scale);

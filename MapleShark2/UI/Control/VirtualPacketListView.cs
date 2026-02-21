@@ -94,7 +94,7 @@ namespace MapleShark2.UI.Control {
             } else if (filteredPackets.Count > e.ItemIndex) {
                 //A cache miss, so create a new ListViewItem and pass it back.
                 MaplePacket packet = filteredPackets[e.ItemIndex];
-                e.Item = CreateListItem(packet);
+                e.Item = CreateListItem(packet, e.ItemIndex);
             }
         }
 
@@ -114,7 +114,7 @@ namespace MapleShark2.UI.Control {
             //Fill the cache with the appropriate ListViewItems.
             for (int i = 0; i < length; i++) {
                 MaplePacket packet = filteredPackets[i + firstItem];
-                cache[i] = CreateListItem(packet);
+                cache[i] = CreateListItem(packet, i + firstItem);
             }
         }
 
