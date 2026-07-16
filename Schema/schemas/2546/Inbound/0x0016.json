@@ -1,0 +1,22 @@
+{
+  "kind": "opcode",
+  "opcode": "0x0016",
+  "build": 2546,
+  "dir": "in",
+  "doc": "REQUEST_FIELD_ENTER",
+  "imports": ["schema_common"],
+
+  "body": [
+    { "f": "u8", "n": "message", "bind": "message" },
+    { "if": "message == 0", "do": [
+      { "f": "i32", "n": "MapId" },
+      { "f": "u8",  "n": "Unknown" },
+      { "f": "u8",  "n": "Unknown" },
+      { "f": "i32", "n": "Unknown" },
+      { "f": "i32", "n": "Unknown" },
+      { "call": "coordF", "args": ["Position"] },
+      { "call": "coordF", "args": ["Rotation"] },
+      { "f": "i32", "n": "Unknown" }
+    ]}
+  ]
+}

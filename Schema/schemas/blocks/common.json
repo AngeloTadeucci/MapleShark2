@@ -1,0 +1,26 @@
+{
+  "kind": "blocks",
+  "doc": "Shared reusable blocks (the common.py pattern). Base / all-builds.",
+  "blocks": {
+    "coordS": {
+      "params": ["label"],
+      "body": [
+        { "node": "{label}CoordS", "expand": false, "do": [
+          { "f": "i16", "n": "X" },
+          { "f": "i16", "n": "Y" },
+          { "f": "i16", "n": "Z" }
+        ]}
+      ]
+    },
+    "coordF": {
+      "params": ["label"],
+      "body": [
+        { "node": "{label}CoordF", "expand": false, "do": [
+          { "f": "f32", "n": "X" },
+          { "f": "f32", "n": "Y" },
+          { "f": "f32", "n": "Z" }
+        ]}
+      ]
+    }
+  }
+}

@@ -420,12 +420,24 @@ class holding 90.3% is exactly where the method fails. The 173 thin pairs stay `
 Consequence: Phase 5 output feeds human script-writing with per-field confidence ranking; it never
 writes to a scripts tree.
 
-### Phase 6 — Declarative schema (deferred, incremental)
+### Phase 6 — Declarative schema (incremental start DONE; bulk migration remains incremental)
 
 Still the permanent fix: field names are bare string literals (4,798 `add_*` calls, 1,434 named "Unknown"),
 IronPython 3.4.1 has no `match`/`case` (`ScriptTranslator.cs:91` downgrades `switch` → `if`/`elif`; its own
 header: *"Really bad translator… you will certainly need to manually fix"*), and `item.py`'s ~150 magic IDs
 silently desync. Phases 0/1 give it the regression harness that makes the migration safe.
+
+**Incremental start DONE (2026-07-16), `Schema/`:** JSON schema (stdlib-parseable, one-op-per-line
+diffs; YAML front-end can bolt on later), deterministic compiler to IronPython (`compile.py` — same
+schema → byte-identical .py, so the harness's `script_sha` content-addresses schemas with zero harness
+change), per-build block overrides riding the existing version-folder shadowing, and a constrained
+`ast`-validated expression grammar that covers `item.py`'s magic-ID dispatch without a Python escape.
+Migration proof: three real scripts (0x0058/2527, 0x004D/2546 mode dispatch, 0x0016/2546) hand-migrated
+and proven **exactly** equivalent under the harness — identical outcome counts, consumed histograms,
+and even the reproduced over-read signature (independently re-verified on 0x004D). Coverage census over
+all 430 scripts / 12,437 `add_*` calls: **98.3% expressible today**; a `foreach`-literal op (+1.5%) and
+`remaining()`/`while` primitives (+0.2%) lift it to ~99.9%. Bulk migration proceeds script-by-script
+with the exact-equivalence bar; each migrated script re-earns its manifest edges via the normal sweep.
 
 ## 6. Defects to fix regardless (all verified; sol independently confirmed each)
 

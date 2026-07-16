@@ -1,0 +1,32 @@
+{
+  "kind": "opcode",
+  "opcode": "0x004D",
+  "build": 2546,
+  "dir": "in",
+  "doc": "mode-dispatched (first-byte switch, 3 modes)",
+
+  "body": [
+    { "f": "u8", "n": "mode", "bind": "mode" },
+    { "switch": "mode", "cases": {
+      "3": [
+        { "f": "wstr", "n": "id" },
+        { "f": "i32",  "n": "unk" },
+        { "f": "u8",   "n": "unk" }
+      ],
+      "9": [
+        { "f": "i64",  "n": "character id" },
+        { "f": "wstr", "n": "coord" },
+        { "f": "i64",  "n": "time now" },
+        { "f": "i32",  "n": "status" }
+      ],
+      "2": [
+        { "f": "i32", "n": "count", "bind": "count" },
+        { "loop": { "count": "count" }, "var": "i", "do": [
+          { "f": "wstr", "n": "coord" },
+          { "f": "i32",  "n": "status" },
+          { "f": "u8",   "n": "unk" }
+        ]}
+      ]
+    }}
+  ]
+}

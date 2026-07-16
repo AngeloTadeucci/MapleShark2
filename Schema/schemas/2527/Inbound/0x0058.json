@@ -1,0 +1,62 @@
+{
+  "kind": "opcode",
+  "opcode": "0x0058",
+  "build": 2527,
+  "dir": "in",
+  "doc": "NPC_CONTROL",
+  "imports": ["schema_common"],
+
+  "blocks": {
+    "npc_control_buffer": {
+      "params": [],
+      "body": [
+        { "f": "i16", "n": "BufferSize" },
+        { "f": "i32", "n": "ObjectId" },
+        { "f": "u8",  "n": "Flags" },
+        { "call": "coordS", "args": ["Position"] },
+        { "f": "i16", "n": "Rotation / 10" },
+        { "call": "coordS", "args": ["Speed"] },
+        { "f": "i16", "n": "Short / 100" },
+        { "f": "u8",  "n": "state", "bind": "state" },
+        { "f": "i16", "n": "SequenceId", "bind": "seqId" },
+        { "f": "i16", "n": "Counter (per action)" },
+
+        { "if": "seqId == -2 or seqId == -3", "do": [
+          { "node": "JumpInfo", "expand": true, "do": [
+            { "f": "bool", "n": "Flag?", "bind": "b" },
+            { "if": "b", "do": [
+              { "call": "coordF", "args": ["StartPosition"] },
+              { "call": "coordF", "args": ["EndPosition"] },
+              { "f": "f32", "n": "Duration (s)" },
+              { "f": "f32", "n": "Height" }
+            ], "else": [
+              { "call": "coordF", "args": ["EndPosition"] }
+            ]}
+          ]}
+        ]},
+
+        { "switch": "state", "cases": {
+          "13": [
+            { "f": "f32", "n": "StateHitUnknown" },
+            { "f": "f32", "n": "StateHitUnknown" },
+            { "f": "f32", "n": "StateHitUnknown" },
+            { "f": "u8",  "n": "StateHitUnknown" }
+          ],
+          "17": [
+            { "f": "i32", "n": "StateSpawnUnknown" }
+          ],
+          "18": [],
+          "22": [],
+          "56": []
+        }}
+      ]
+    }
+  },
+
+  "body": [
+    { "f": "i16", "n": "Count", "bind": "count" },
+    { "loop": { "count": "count" }, "var": "i", "node": "NpcControl {i}", "expand": true, "do": [
+      { "call": "npc_control_buffer", "args": [] }
+    ]}
+  ]
+}
