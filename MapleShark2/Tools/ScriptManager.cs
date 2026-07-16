@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IronPython.Hosting;
 using MapleShark2.UI;
 using Microsoft.Scripting.Hosting;
+using NLog;
 
 namespace MapleShark2.Tools {
     public class ScriptManager {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex LocaleVersionRegex = new Regex(@"^(\d+)[\\/](\d+)[\\/].+$");
         
         private readonly StructureForm form;
@@ -25,6 +28,7 @@ namespace MapleShark2.Tools {
             // reloads modules for all engines when changed
             // Watch scripts root folder (script_api.py & others)
             Helpers.MakeSureFileDirectoryExists(Helpers.GetScriptsRoot() + Path.DirectorySeparatorChar);
+            SeedScriptApi();
             watcher = new FileSystemWatcher {
                 Path = Helpers.GetScriptsRoot(),
                 Filter = "*.py",
@@ -109,13 +113,38 @@ namespace MapleShark2.Tools {
             paths.Add(Helpers.GetScriptsRoot());
             engine.SetSearchPaths(paths);
             new Task(() => {
-                // Warm up these modules because they are commonly used
-                engine.Execute("import script_api");
-                engine.Execute("import common");
+                // Warm up these modules because they are commonly used. Missing modules are not fatal
+                // here (a fresh Scripts folder may not have them yet) — the real import error surfaces
+                // when a script actually runs.
+                foreach (string module in new[] { "script_api", "common" }) {
+                    try {
+                        engine.Execute($"import {module}");
+                    } catch (Exception ex) {
+                        logger.Warn("Engine warm-up: could not import '{0}' for locale {1} build {2}: {3}",
+                            module, locale, version, ex.Message);
+                    }
+                }
             }).Start();
 
             engines[(locale, version)] = engine;
             return engine;
+        }
+
+        // A fresh checkout/debug run has an empty Scripts folder next to the exe; scripts cannot run
+        // without script_api.py, so seed the shipped copy. Never overwrite an existing file — the
+        // compatibility manifest binds evidence to the deployed root's module contents (env hash).
+        private static void SeedScriptApi() {
+            string target = Path.Combine(Helpers.GetScriptsRoot(), "script_api.py");
+            if (File.Exists(target)) return;
+
+            string shipped = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "script_api.py");
+            if (!File.Exists(shipped)) {
+                logger.Warn("script_api.py missing from Scripts root and no shipped copy at {0}", shipped);
+                return;
+            }
+
+            File.Copy(shipped, target);
+            logger.Info("Seeded script_api.py into {0}", Helpers.GetScriptsRoot());
         }
 
         private ScriptEngine CreateBaseEngine() {
