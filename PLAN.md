@@ -381,10 +381,20 @@ decision — it would add V12 home coverage and manifest candidates).
 carries int (existing 100%-clean script reads int); generated script under-reads to 75% reproducing the
 emulator faithfully. File upstream against Maple2.
 
-**Phase 4b (remaining):** decorator-driven runtime traces for the 36 `WriteClass` opcodes
-(CubePacketTests-style hand-built models), Roslyn for the 88 control-flow builders (loop/count pairing,
-predicate extraction), struct field expansion, RecvOp static extraction (never execute `ReadFrom` —
-`GetUninitializedObject` kills discriminators).
+**Phase 4b DONE (2026-07-16):** the tractable slice landed via a better design than planned —
+`WriteClass<T>` expands by *statically* parsing `T.WriteTo` recursively (163 model bodies indexed);
+linear models inline fully, branchy models emit their exact common prefix and truncate with a marker —
+zero over-read **by construction**, no model-instance fragility. Count-paired loops emit
+`for i in range(count)`. Results: **166 scripts** (109 full, 57 safe-partial), 138/138 with corpus data
+at zero over-read (whole-tree re-verified: 0.0% over / 71.6% clean), **43 new-coverage opcodes**, and
+the hard item packet `0x0021` decoding 63.6% of packets fully as a safe partial. Second emulator/wire
+divergence found: `0x00ED` PremiumClub Activate (int+long vs shorter wire), denylisted + documented.
+Empty-body packets (RequestKey/RequestLogin) correctly emit nothing.
+
+**Phase 4c (remaining, optional):** Roslyn predicate extraction for wire-visible `if`-tier dispatch
+(~40 opcodes), `WriteArray` count pairing, multi-method disambiguation (7), RecvOp static extraction
+(never execute `ReadFrom` — `GetUninitializedObject` kills discriminators). File the two emulator bugs
+upstream (`0x0039`, `0x00ED`).
 
 Blocker: writers branch on XML metadata invisible on the wire (`Item.cs:216` — Template/Pet/Music/Badge, no
 discriminator). Resolvable via `item.Id` + a metadata lookup; `ItemAppearance` is worse (56/20/56/4 bytes,
@@ -487,17 +497,24 @@ with the exact-equivalence bar; each migrated script re-earns its manifest edges
 ## 8. Sequencing
 
 ```
-Phase 0   harness                    DONE (+ rev 3: --matrix edge enumeration, reservoir sampling, hashes)
+Phase 0   harness                    DONE (+ rev 3: matrix enumeration, reservoir sampling, hashes,
+                                     over-read signatures, per-field stats)
 Phase 2a  compile errors + sys.path  DONE — fixed + measured (11.0% -> 0.0% over-read on 2546 home)
-Phase 1   compatibility manifest     evidence + classifier DONE (see §5 sweep results);
-                                     remaining: rule-v2 signature rescue, product resolver integration
-Phase 1b  value-class invariants     closes "clean but wrong"; gates AUTOMATIC trust for ALL edges
-Phase 2b  remaining defects          label-only script fixes before 1b (re-sweep after: it's 6 minutes)
-Phase 3   perf                       profile first; AFTER the bounded-reader migration
-Phase 4   V12 generation             SendOp traces only, V12 lineage only
-Phase 5   inference                  gated on blind-V12 feasibility
-Phase 6   schema                     deferred, incremental
+Phase 1   compatibility manifest     DONE — evidence, classifier (rule v3), GUI resolver integration,
+                                     manifest deployed. GUI flow itself not yet exercised live.
+Phase 1b  value-class invariants     DONE (split verdict) — absolute invariants GATE (12 desyncs
+                                     ejected, rule v3); dist_diverge advisory pending temporal splits
+Phase 2b  remaining defects          DONE — label fixes, definitions writer/reader, MaplePacket.Search
+Phase 3   perf                       SAFE SCOPE DONE (segment reader, O(1) opcodes, session reaping);
+                                     pooling/pipeline still gated on live-capture profiling
+Phase 4   V12 generation             4a+4b DONE — 166 validated scripts, 43 new-coverage, 2 emulator
+                                     bugs found; 4c (Roslyn if-tier, RecvOp static) optional
+Phase 5   inference                  GATE RUN: PARTIAL — demoted to assistive-only, never autonomous
+Phase 6   schema                     INCREMENTAL START DONE — design + compiler + 3-script exact-
+                                     equivalence proof; bulk migration proceeds script-by-script
 ```
 
-Phases 2a, 1, 1b are the critical path, in that order. Phase 3 is independent once the reader constraint
-is respected.
+Still open across the plan: live-capture verification (GUI fallback flow, session reaping, and the
+Phase 3 profiling gate all need a real capture session); temporal-split calibration to promote
+dist_diverge; the two emulator bugs to file upstream; Ochi script fixes have no repo (tree is not
+git-controlled).
