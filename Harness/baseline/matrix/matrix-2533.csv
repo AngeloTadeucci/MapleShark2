@@ -26,7 +26,7 @@ source_build,target_build,opcode,direction,seen,executed,ran,no_script,ok_exact,
 2546,2533,0x0016,IN,7,7,7,0,7,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:7,reservoir;n=1500;seed=1,-
 2549,2533,0x0016,IN,7,7,7,0,7,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:7,reservoir;n=1500;seed=1,-
 2550,2533,0x0016,IN,7,7,7,0,7,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:7,reservoir;n=1500;seed=1,-
-12,2533,0x0017,IN,28,28,28,0,0,0,28,0,0,0,100,100,1d52865cb228,d7b7fc65329f,100:28,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:28
+12,2533,0x0017,IN,28,28,28,0,0,0,28,0,0,0,100,100,773c805d2d0c,d7b7fc65329f,100:28,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:28
 2500,2533,0x0017,IN,28,28,28,0,0,28,0,0,0,0,0,0,5f2e5359199a,e531069fb1f2,0:28,reservoir;n=1500;seed=1,-
 2503,2533,0x0017,IN,28,28,28,0,0,16,12,0,0,0,60,100,e6752d96b9a6,e531069fb1f2,52:6|56:1|58:2|60:7|100:12,reservoir;n=1500;seed=1,PastEnd: Read<Boolean>: wanted # byte(s) at offset #; only # of # remain @  [leaned:Boolean]:7|PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [id:Int32]:5
 2528,2533,0x0017,IN,28,28,28,0,0,0,28,0,0,0,100,100,a3115547491e,c7184ede6835,100:28,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:28

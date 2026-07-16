@@ -23,7 +23,7 @@ source_build,target_build,opcode,direction,seen,executed,ran,no_script,ok_exact,
 2546,2531,0x0016,IN,2,2,2,0,2,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:2,reservoir;n=1500;seed=1,-
 2549,2531,0x0016,IN,2,2,2,0,2,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:2,reservoir;n=1500;seed=1,-
 2550,2531,0x0016,IN,2,2,2,0,2,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:2,reservoir;n=1500;seed=1,-
-12,2531,0x0017,IN,2,2,2,0,0,0,2,0,0,1,76,100,1d52865cb228,d7b7fc65329f,76:1|100:1,reservoir;n=1500;seed=1,NegativeLength: ReadBytes: negative length -# at offset #/# @  [CharacterName:Field]:1|PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [StatType:#:Int32]:1
+12,2531,0x0017,IN,2,2,2,0,0,0,2,0,0,1,76,100,773c805d2d0c,d7b7fc65329f,76:1|100:1,reservoir;n=1500;seed=1,NegativeLength: ReadBytes: negative length -# at offset #/# @  [CharacterName:Field]:1|PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [StatType:#:Int32]:1
 2500,2531,0x0017,IN,2,2,2,0,0,2,0,0,0,0,0,0,5f2e5359199a,e531069fb1f2,0:2,reservoir;n=1500;seed=1,-
 2503,2531,0x0017,IN,2,2,2,0,0,2,0,0,0,0,9,14,e6752d96b9a6,e531069fb1f2,9:1|14:1,reservoir;n=1500;seed=1,-
 2528,2531,0x0017,IN,2,2,2,0,0,0,2,0,0,1,11,27,a3115547491e,c7184ede6835,11:1|27:1,reservoir;n=1500;seed=1,NegativeLength: ReadBytes: negative length -# at offset #/# @  [UUID:Field]:1|PastEnd: ReadBytes: wanted # byte(s) at offset #; only # of # remain @  [ItemName:Field]:1

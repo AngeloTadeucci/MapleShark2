@@ -24,7 +24,7 @@ source_build,target_build,opcode,direction,seen,executed,ran,no_script,ok_exact,
 2546,2464,0x0016,IN,1,1,1,0,1,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:1,reservoir;n=1500;seed=1,-
 2549,2464,0x0016,IN,1,1,1,0,1,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:1,reservoir;n=1500;seed=1,-
 2550,2464,0x0016,IN,1,1,1,0,1,0,0,0,0,0,100,100,bd0753bb66c6,750b3e3c91cc,100:1,reservoir;n=1500;seed=1,-
-12,2464,0x0017,IN,1,1,1,0,0,0,1,0,0,0,100,100,1d52865cb228,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:1
+12,2464,0x0017,IN,1,1,1,0,0,0,1,0,0,0,100,100,773c805d2d0c,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:1
 2500,2464,0x0017,IN,1,1,1,0,0,1,0,0,0,0,0,0,5f2e5359199a,e531069fb1f2,0:1,reservoir;n=1500;seed=1,-
 2503,2464,0x0017,IN,1,1,1,0,0,1,0,0,0,0,47,47,e6752d96b9a6,e531069fb1f2,47:1,reservoir;n=1500;seed=1,-
 2528,2464,0x0017,IN,1,1,1,0,0,0,1,0,0,0,100,100,a3115547491e,c7184ede6835,100:1,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [Player+#B#:Int64]:1
@@ -96,7 +96,7 @@ source_build,target_build,opcode,direction,seen,executed,ran,no_script,ok_exact,
 12,2464,0x0071,IN,1,1,1,0,1,0,0,0,0,0,100,100,2e3009231d99,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,-
 12,2464,0x0075,IN,1,1,1,0,1,0,0,0,0,0,100,100,544ba10eb9a2,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,-
 2529,2464,0x0075,IN,1,1,1,0,0,0,1,0,0,0,60,60,6bdc66760ce5,e531069fb1f2,60:1,reservoir;n=1500;seed=1,PastEnd: Read<Int#>: wanted # byte(s) at offset #; only # of # remain @  [SkillUseUid:Int64]:1
-12,2464,0x007F,IN,1,1,1,0,1,0,0,0,0,0,100,100,8984555dadc4,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,-
+12,2464,0x007F,IN,1,1,1,0,1,0,0,0,0,0,100,100,36cf06c17e8d,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,-
 12,2464,0x0080,IN,12,12,12,0,12,0,0,0,0,0,100,100,1122b421bba1,d7b7fc65329f,100:12,reservoir;n=1500;seed=1,-
 12,2464,0x0081,OUT,2,2,2,0,2,0,0,0,0,0,100,100,e190abebae08,d7b7fc65329f,100:2,reservoir;n=1500;seed=1,-
 12,2464,0x008B,IN,1,1,1,0,1,0,0,0,0,0,100,100,9dff2c8fb11a,d7b7fc65329f,100:1,reservoir;n=1500;seed=1,-

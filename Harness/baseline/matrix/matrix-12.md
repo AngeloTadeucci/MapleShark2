@@ -12,8 +12,8 @@ They describe the evidence run, not achievable coverage. Use the CSV per edge.
 
 outcome             packets   share
 NoScript             19.274   7.5%
-OkExact             164.057   64.2%
-UnderRead            56.249   22.0%
+OkExact             164.136   64.2%
+UnderRead            56.170   22.0%
 OverRead             15.857   6.2%
 Threw                    58   0.0%
 
@@ -163,7 +163,7 @@ opcode  dir      src        seen       ran    clean    under     over   threw   
 0x0016  IN      2550       1.185     1.185   100.0%     0.0%     0.0%    0.0%         100% / 100%
 0x0036  IN        12       1.185     1.185   100.0%     0.0%     0.0%    0.0%         100% / 100%
 0x001F  IN        12       1.184     1.184   100.0%     0.0%     0.0%    0.0%         100% / 100%
-0x007F  IN        12       1.184     1.184    93.3%     6.7%     0.0%    0.0%         100% / 100%
+0x007F  IN        12       1.184     1.184   100.0%     0.0%     0.0%    0.0%         100% / 100%
 0x007B  IN        12       1.118     1.118   100.0%     0.0%     0.0%    0.0%         100% / 100%
 0x00E8  IN        12       1.027     1.027   100.0%     0.0%     0.0%    0.0%         100% / 100%
 0x00F3  IN        12       1.021     1.021    56.3%     0.0%    43.7%    0.0%         100% / 100%

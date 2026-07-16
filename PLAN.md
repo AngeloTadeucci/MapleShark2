@@ -254,8 +254,10 @@ home script, falls back to the manifest, and executes fallback scripts under the
 (the module surface they were measured with). `StructureForm` shows a `[manifest] build N decoder` node
 on fallback and a `[no decoder]` node when nothing validated resolves. Functional test (headless, against
 the deployed tree): 2546/`0x0058`/IN resolves to build 2521 — the manifest's accepted edge — with both
-hash checks passing; wrong locale and unknown opcodes resolve to nothing. **Not verified: the WinForms
-flow end-to-end** (opening an msb in the GUI and clicking a 2546 packet) — needs a manual run.
+hash checks passing; wrong locale and unknown opcodes resolve to nothing. **Verified live 2026-07-16:**
+the maintainer ran a live 2546 sniff in the GUI (debug build, `Scripts` junctioned to the deployed Ochi
+tree) and confirmed fallback decoding works; before the junction every packet correctly showed
+`[no decoder]` (fail-closed, as designed — the debug Scripts root had no manifest and no source scripts).
 `manifest.csv` is deployed to the Ochi tree.
 
 **Remaining for Phase 1:** signature-matched over-read rescue (rule v2 — needs per-packet failure
@@ -548,6 +550,15 @@ text. Its findings and the remediations that landed:
    in this campaign substitutes for that; everything built here (harness, field stats, signatures,
    schema compiler, assistive inference) exists to make exactly that work fast and safe.
 
-Also still open: live-capture verification (GUI fallback flow, session reaping, Phase 3 profiling
-gate); temporal-split calibration to promote `dist_diverge`; filing the two emulator bugs upstream
-(`0x0039`, `0x00ED`); the Ochi tree remains un-version-controlled.
+Also still open: live-capture verification of session reaping and the Phase 3 profiling gate (the GUI
+fallback flow itself was verified live on a 2546 sniff, 2026-07-16); temporal-split calibration to
+promote `dist_diverge`; filing the two emulator bugs upstream (`0x0039`, `0x00ED`).
+
+**Scripts collection versioned (2026-07-16):** the deployed scripts now live in the
+`MapleShark2-Scripts` git repo (fork of kOchirasu's flat V12 repo, restructured to `0/<build>/`):
+V12 merged per-file against the deployment (conflict `0x007F` resolved by measurement — repo blocks
+reactivated + missing-`Node()` typo fixed → 1184/1184 exact vs 79 under-read / 73 threw for the two
+prior variants), 35 KMS2 build folders imported, 2522's definitions reconstructed from 2521 (originals
+destroyed by the pre-fix §6.2 loader-truncation bug, which also gutted V12's — restored from the
+repo's 2024 copies). Ochi's `Scripts` and the debug build's `Scripts` are junctions into the repo.
+Evidence re-swept post-merge: accept-set identical (353), V12 home improved.
