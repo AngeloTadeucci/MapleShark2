@@ -150,6 +150,10 @@ namespace MapleShark2.UI {
         }
 
         private void MainForm_Load(object pSender, EventArgs pArgs) {
+            // Overlaps the one-time IronPython/DLR init with form layout + adapter setup so the first
+            // session's engine.create doesn't stall the UI thread.
+            ScriptManager.PrewarmEngine();
+
             mDockPanel.Theme = Config.Instance.Theme.DockSuiteTheme;
             toolStripExtender.DefaultRenderer = new ToolStripProfessionalRenderer();
             toolStripExtender.SetStyle(mMenu, VisualStudioToolStripExtender.VsVersion.Vs2015, mDockPanel.Theme);

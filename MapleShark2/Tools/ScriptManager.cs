@@ -56,6 +56,23 @@ namespace MapleShark2.Tools {
         }
 
         /// <summary>
+        /// Absorbs the process-wide one-time cost of the first IronPython engine (DLR init, assembly
+        /// loads, compiler JIT — measured 0.7-1.3s) on a background thread at startup, so the first
+        /// session's engine.create on the UI thread only pays the per-engine cost. The throwaway
+        /// engine executes a trivial script to also warm the parse/compile path.
+        /// </summary>
+        public static void PrewarmEngine() {
+            Task.Run(() => {
+                using PerfLog.Scope perf = PerfLog.Time("engine.prewarm", always: true);
+                try {
+                    Python.CreateEngine().Execute("0");
+                } catch (Exception ex) {
+                    logger.Warn(ex, "Engine pre-warm failed");
+                }
+            });
+        }
+
+        /// <summary>
         /// A resolved decoder: the script to run and the build whose engine (and module surface) it runs
         /// under. Fallback decoders come from the compatibility manifest — measured, accepted edges only.
         /// </summary>

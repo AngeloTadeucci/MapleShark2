@@ -366,7 +366,9 @@ message pump, real induced hang with scope attribution, routing through the real
 yet run in a live capture** — the next live session produces the evidence this phase has been gated on.
 Suspects the log should adjudicate: cold IronPython engine creation on the UI thread (`session.show`),
 the relog-burst drain/flush path, `PacketListView.FilteredPackets` materializing an ImmutableList of
-every row per access (O(n²) in the indexer loops — a provable defect awaiting a measured share of blame),
+every row per access (CORRECTED: the deployed control is `VirtualPacketListView`, which overrides
+`FilteredPackets` with a maintained O(1) list — the ImmutableList sits on the unused base class only;
+the measured flush `scroll` cost is `EnsureVisible`'s virtual-item retrieval + autoscroll repaint),
 the per-resolve env-hash in `manifest.resolve`, and retention across terminated tabs (counters).
 
 **First external log (2026-07-16, Release build): the freeze is attributed.** One `main.drain` of
@@ -387,13 +389,25 @@ new opcode appeared: 893 ms of an 895 ms drain (12 calls), 1668/1668 ms (21 call
 0-2 ms per drain even at 212 decoded packets. Zin's 22.6 s freeze ≈ 292 captures × ~75 ms rebuild.
 **Fix landed:** rebuild at most once per queue drain (`OpcodesDirty` flag on `SessionForm`, consumed in
 `ProcessPacketQueue`; `RefreshPackets` clears it after its own rebuild) + `BeginUpdate`/`EndUpdate`
-around the ComboBox rebuild. Verified by build + reasoning + 20/20 PerfLog tests; **NOT yet
-runtime-verified** — the next live run's `main.drain` lines (refresh_opcodes count ≤1 per drain, drains
-collapsing to ms) are the acceptance evidence, with the instrumentation left in place to confirm.
+around the ComboBox rebuild. Zin's pre-fix log independently confirmed the same signature at scale
+(90.8 s drain, 90.79 s refresh_opcodes over 75 calls; the queue grew to 9,727 during the hang — the
+feedback loop observed live). **Runtime-verified on the maintainer's machine (2026-07-16, Release):**
+every drain shows `refresh_opcodes=…ms/1`, burst drains collapsed from multi-second to 25-75 ms
+(166 packets in 25.6 ms), zero watchdog hangs across the session. **Zin confirmed the fix live
+(2026-07-16)** — the machine that measured the 90.8 s freeze. Both reported Phase 3 symptoms traced to
+one line; the tab-stacking chug has not reappeared post-fix (retention hypothesis unproven and likely
+moot — counters stay in place to catch it if it returns). Note:
+the once-per-drain rebuild still costs ~30-40 ms while a young session keeps discovering new opcodes —
+bounded and decaying, but an incremental-add rebuild is the follow-up if it shows up again.
 Secondary measured costs, deliberately not fixed in the same change: `session.flush` scroll block
-(17-62 ms — the `FilteredPackets` double materialization + `EnsureVisible`) and `endUpdate` repaint on
-large flushes (74-99 ms); engine.create 0.4-1.3 s cold on the UI thread. Fix after the primary fix is
-confirmed, one variable at a time.
+(17-62 ms — `EnsureVisible` virtual-item retrieval + autoscroll repaint; NOT `FilteredPackets`, which
+is already O(1) on the deployed `VirtualPacketListView`) and `endUpdate` repaint on large flushes
+(74-99 ms); engine.create 0.4-1.3 s cold on the UI thread — **fixed post-verification** by
+`ScriptManager.PrewarmEngine()`: a background throwaway engine at `MainForm_Load` absorbs the one-time
+DLR/assembly/JIT cost (logged as `engine.prewarm`; acceptance = first real `engine.create` dropping to
+the warm ~100-300 ms range). Pooled decrypt, `MapleStream` memmove, and the `packetQueue` cap remain
+deliberately unfixed: the breakdown measured them at 0-33 ms per drain even at 9,727 captures — no
+evidence they matter.
 
 ### Phase 4 — Generate the V12 layer from the emulator
 
@@ -554,11 +568,12 @@ Phase 1b  value-class invariants     BUILT, honestly scoped — automatic gating
                                      review; 12 hand-reviewed desyncs quarantined (v3.1); dist_diverge
                                      advisory, surfaced in the resolver marker
 Phase 2b  remaining defects          DONE in-repo; script fixes live in the non-versioned Ochi tree
-Phase 3   perf                       SAFE SCOPE DONE (segment reader w/ committed 28-case tests, O(1)
-                                     opcodes, session reaping); live symptoms persist -> perf
-                                     instrumentation landed (PerfLog scopes + UI-hang watchdog +
-                                     counters, 15/15 tests); pooling/pipeline still gated on the
-                                     resulting live-capture evidence
+Phase 3   perf                       LIVE SYMPTOMS RESOLVED: instrumentation (PerfLog scopes +
+                                     watchdog + counters, 20/20 tests) convicted the per-segment
+                                     opcode-dropdown rebuild (90.8s of a 90.8s freeze); once-per-drain
+                                     fix verified on both machines. Engine pre-warm landed (awaiting
+                                     runtime check). Pooling/pipeline/queue-cap: measured innocent
+                                     (0-33ms per drain at 9,727 captures), deliberately unfixed
 Phase 4   V12 generation             4a+4b DONE within stated bounds: 166 scripts, zero over-read on
                                      the 138 with corpus data (prefix-safety validated, NOT field-level
                                      correctness); 57 explicitly partial; 28 without corpus data
