@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build solution
+        run: dotnet build MapleShark2.sln -c Release
+
+      - name: Run SegmentByteReader tests
+        run: dotnet run --project Tests/SegmentByteReaderTests -c Release
+
+      - name: Publish MapleShark2 (GUI)
+        run: dotnet publish MapleShark2/MapleShark2.csproj -c Release -o publish/MapleShark2
+
+      - name: Publish Sniffer (CLI)
+        run: dotnet publish Sniffer/Sniffer.csproj -c Release -o publish/Sniffer
+
+      - name: Upload MapleShark2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MapleShark2
+          path: publish/MapleShark2
+
+      - name: Upload Sniffer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MapleStory2Sniffer
+          path: publish/Sniffer
