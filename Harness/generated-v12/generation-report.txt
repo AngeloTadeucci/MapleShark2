@@ -1,0 +1,216 @@
+# Phase 4a generation report
+builder methods scanned: 1108
+opcodes emitted: 67
+
+## Emitted
+0x0004  RequestKey (1 mode(s))
+0x0009  RequestLogin (1 mode(s))
+0x000D  MoveResult (1 mode(s))
+0x0011  ResponseTimeSync (4 mode(s))
+0x0012  RequestHeartbeat (1 mode(s))
+0x0013  RequestClientTickSync (1 mode(s))
+0x0014  SyncNumber (1 mode(s))
+0x0018  FieldRemoveUser (1 mode(s))
+0x0026  ItemPutOff (1 mode(s))
+0x002C  FieldRemoveItem (1 mode(s))
+0x0030  UserBattle (1 mode(s))
+0x0031  UserSkinColor (1 mode(s))
+0x0034  RevivalConfirm (1 mode(s))
+0x0035  Revival (1 mode(s))
+0x0036  RevivalCount (1 mode(s))
+0x0037  UserState (1 mode(s))
+0x0038  ExpUp (2 mode(s))
+0x0039  LevelUp (1 mode(s))
+0x003A  Meso (1 mode(s))
+0x003B  Meret (1 mode(s))
+0x003F  SkillSync (1 mode(s))
+0x0040  SkillCancel (1 mode(s))
+0x0042  StateSkill (1 mode(s))
+0x0044  SkillResetCooldown (1 mode(s))
+0x0047  CharacterCreate (1 mode(s))
+0x0049  FieldPortal (4 mode(s))
+0x0057  FieldRemoveNpc (1 mode(s))
+0x005A  InteractNpc (1 mode(s))
+0x005C  FieldRemovePet (1 mode(s))
+0x005D  SyncPetTamingPoint (1 mode(s))
+0x0067  StateFallDamage (1 mode(s))
+0x0069  Admin (1 mode(s))
+0x0072  FollowNpc (1 mode(s))
+0x0077  Vibrate (2 mode(s))
+0x0078  HideVibrate (1 mode(s))
+0x0079  ShowVibrate (1 mode(s))
+0x008A  StoryBook (1 mode(s))
+0x0097  PlayNpcSound (1 mode(s))
+0x00A3  SystemShop (5 mode(s))
+0x00A4  AutoRevive (1 mode(s))
+0x00A8  DeadUser (1 mode(s))
+0x00AD  ItemUse (6 mode(s))
+0x00AE  ItemBox (1 mode(s))
+0x00B2  WorldShareInfo (1 mode(s))
+0x00B3  Insignia (1 mode(s))
+0x00B9  HomeCommand (2 mode(s))
+0x00BA  CharMaxCount (1 mode(s))
+0x00BC  ItemDropNotice (1 mode(s))
+0x00BE  RecallScroll (2 mode(s))
+0x00C4  QuizEvent (2 mode(s))
+0x00C5  PlaySystemSound (1 mode(s))
+0x00D5  CheckCharNameResult (1 mode(s))
+0x00E3  ShadowExpedition (3 mode(s))
+0x00EA  NpcNotice (4 mode(s))
+0x00EB  LocalCamera (1 mode(s))
+0x00F0  InGameRank (1 mode(s))
+0x00F2  DungeonWaiting (1 mode(s))
+0x00F4  CameraInterpolation (1 mode(s))
+0x00F5  TimeScale (1 mode(s))
+0x00FD  DungeonReviveCount (1 mode(s))
+0x0100  ChangeBackground (1 mode(s))
+0x0101  RoomStageDungeon (2 mode(s))
+0x0108  GmCommand (1 mode(s))
+0x010B  DungeonHelp (2 mode(s))
+0x010F  BuddyEmote (7 mode(s))
+0x0110  BuddyBadge (2 mode(s))
+0x0114  SuperWorldChat (2 mode(s))
+
+## Skipped
+0x000A  LoginResult: multi-method without clean mode discriminator
+0x000B  ServerList: Load: control flow
+0x000C  CharacterList: AddEntries: control flow
+0x000E  LoginToGame: LoginToGame: WriteBytes
+0x000F  GameToLogin: GameToLogin: WriteBytes
+0x0010  GameToGame: GameToGame: WriteBytes
+0x0015  ServerEnter: Request: control flow
+0x0016  RequestFieldEnter: multi-method without clean mode discriminator
+0x0017  FieldAddUser: AddPlayer: control flow
+0x0019  FieldEntrance: Load: control flow
+0x001A  RoomDungeon: Load: control flow
+0x001B  DungeonReward: Dungeon: WriteClass
+0x001D  UserChat: Send: control flow
+0x001E  MessengerBrowser: Link: control flow
+0x001F  Emote: Load: control flow
+0x0021  ItemInventory: Add: WriteClass
+0x0022  StorageInventory: Add: WriteClass
+0x0023  FurnishingStorage: Add: WriteClass
+0x0024  FurnishingInventory: Add: WriteClass
+0x0025  ItemPutOn: EquipItem: WriteClass
+0x002A  ItemUpdate: Update: WriteClass
+0x002B  FieldAddItem: DropItem: control flow
+0x002D  FieldPickupItem: multi-method without clean mode discriminator
+0x002F  Stat: Init: control flow
+0x0032  Beauty: BeautyShop: WriteClass
+0x003C  CurrencyToken: UpdateCurrency: control flow
+0x003D  SkillUse: Use: control flow
+0x003E  SkillDamage: Target: control flow
+0x0041  SkillUseFailed: multi-method without clean mode discriminator
+0x0043  SkillCooldown: Cooldown: control flow
+0x0045  SkillPoint: Sources: WriteClass
+0x0046  AttributePoint: Sources: WriteClass
+0x0048  Buff: Add: WriteClass
+0x004A  Job: Notify: WriteClass
+0x004C  NpcTalk: RewardItem: control flow
+0x004D  RegionSkill: Add: control flow
+0x004E  FunctionCube: SendCubes: control flow
+0x004F  Trigger: Load: control flow
+0x0050  Breakable: Update: control flow
+0x0051  RoomTimer: SetWidgetData: control flow
+0x0052  Shop: Open: WriteClass
+0x0053  Quest: Talk: control flow
+0x0054  Party: Joined: WriteClass
+0x0055  Mail: Load: control flow
+0x0056  FieldAddNpc: AddNpc: control flow
+0x0059  NpcControl: Control: control flow
+0x005B  FieldAddPet: AddPet: unsupported WriteNpcStats
+0x005E  Tombstone: Tombstone: WriteClass
+0x005F  Achieve: Load: control flow
+0x0060  UserMoveByPortal: multi-method without clean mode discriminator
+0x0063  Buddy: Load: control flow
+0x0065  InteractObject: Interact: control flow
+0x0068  Cinematic: duplicate mode value 3
+0x006A  SetCraftMode: Plot: WriteClass
+0x006B  ResponseCube: HoldCube: WriteClass
+0x006C  LoadCubes: Load: control flow
+0x006D  Ugc: ConfirmBannerSlots: control flow
+0x006E  MeretMarket: LoadPersonalListings: control flow
+0x0070  GuideObject: Create: WriteClass
+0x0071  KeyTable: Load: control flow
+0x0073  Notice: Message: WriteClass
+0x0075  Liftable: Update: control flow
+0x0076  ItemMerge: Stage: control flow
+0x007A  CharacterInfo: Load: control flow
+0x007B  ResponseRide: Start: WriteClass
+0x007E  BonusGame: Load: control flow
+0x007F  LoadUgcMap: LoadHome: WriteClass
+0x0080  ProxyGameObj: UpdatePlayer: control flow
+0x0081  BadgeEquip: EquipBadge: WriteClass
+0x0082  Taxi: RevealTaxi: control flow
+0x0083  FindFields: Add: control flow
+0x0084  Trade: AddItem: WriteClass
+0x0086  Worldmap: Load: control flow
+0x008B  GuideRecord: Load: control flow
+0x008C  Guild: Load: WriteClass
+0x008D  GroupChat: Load: control flow
+0x0098  ItemDismantle: Result: control flow
+0x0099  ItemEnchant: StageItem: control flow
+0x009A  BlackMarket: MyListings: control flow
+0x009B  MesoMarket: MyListings: control flow
+0x009C  TeamPvp: UpdateRound: control flow
+0x009F  FieldMaid: Add: WriteClass
+0x00A0  UserMaid: Load: control flow
+0x00A1  NewsNotification: multi-method without clean mode discriminator
+0x00A5  PlayerKillNotice: MassiveEvent: control flow
+0x00A6  Attendance: Unknown6: control flow
+0x00A9  DynamicChannel: Update: control flow
+0x00AA  UserEnv: LoadTitles: control flow
+0x00AB  MaidCraftItem: Load: control flow
+0x00AC  EnterUgcMap: RequestPassword: control flow
+0x00B0  MyInfo: multi-method without clean mode discriminator
+0x00B4  GameEvent: Load: control flow
+0x00B5  BannerList: Load: control flow
+0x00B8  Pvp: KillLog: control flow
+0x00BD  PartySearch: Add: WriteClass
+0x00C1  EnchantScroll: UseScroll: control flow
+0x00C3  GlobalPortal: Announce: control flow
+0x00C6  Fishing: LoadTiles: control flow
+0x00C7  DarkStream: Results: control flow
+0x00C9  PlayInstrument: StartScore: control flow
+0x00CA  ChangeAttributes: PreviewItem: WriteClass
+0x00CB  ChangeAttributesScroll: PreviewItem: WriteClass
+0x00CC  FieldProperty: Load: control flow
+0x00CD  GameEventUserValue: Load: control flow
+0x00CE  ResponsePet: UpdatePotionConfig: control flow
+0x00CF  Mastery: ClaimReward: control flow
+0x00D0  PetInventory: Add: WriteClass
+0x00D3  SkillMacro: Load: control flow
+0x00D9  SmartPush: Error: control flow
+0x00DA  PlayArcade: Results: control flow
+0x00DD  ItemLock: Commit: control flow
+0x00E0  ItemSocketSystem: UnlockSocket: control flow
+0x00E1  CharacterAbility: Load: WriteClass
+0x00E5  ItemSocketScroll: Unlock: WriteClass
+0x00E6  ItemRepackage: Commit: WriteClass
+0x00E7  Mapleopoly: Load: control flow
+0x00EC  HomeAction: SendCubePortalSettings: control flow
+0x00ED  PremiumClub: LoadItems: control flow
+0x00F3  OneTimeEffect: OneTimeEffect: control flow
+0x00F6  LegionBattle: Load: control flow
+0x00F7  ItemScript: LulluBox: control flow
+0x00F8  Club: Update: control flow
+0x00F9  EventReward: Unknown1: control flow
+0x00FA  HomeInvite: Invite: Write<> no generic
+0x00FB  TaskEvent: PromotionReward: control flow
+0x0102  DungeonMission: Load: control flow
+0x0104  ItemExchange: Unknown0: control flow
+0x0107  PlayerHost: duplicate mode value 2
+0x0109  GlamourAnvil: Extract: WriteClass
+0x010C  Mentor: MenteeInvitations: control flow
+0x010E  SkillBookTree: Load: control flow
+0x0116  Microgame: AddRewardItems: control flow
+0x0118  SurvivalEvent: CreateStorm: WriteClass
+0x011A  HalloweenEvent: duplicate mode value 2
+0x011B  Survival: LoadMedals: control flow
+0x011D  Lapenshard: Load: control flow
+0x011E  Prestige: Load: control flow
+0x0125  Wardrobe: Load: WriteClass
+0x0128  ChatStamp: Load: control flow
+0x012A  Wedding: UpdateMarriage: WriteClass
+0x012C  WeddingBillboard: Load: control flow
+0x0130  LimitBreak: StageItem: control flow

@@ -350,6 +350,28 @@ Prior art with a measured ceiling: `PrivateMaple2/tools/mapleshark/extract-emu-s
 extraction, 123 unique / 56 ambiguous / 43 none on mode attribution (~55%). Its own caveat says per-method
 mode attribution in multi-SendOp files is out of scope.
 
+**Phase 4a DONE (2026-07-15):** generator at `PrivateMaple2/Maple2.DecoderGen/` (standalone, not in
+their .sln). Key constraint discovered: `ByteWriter`'s methods are non-virtual and `Packet.Of` hardcodes
+the concrete type, so a decorator cannot intercept top-level builder bodies — only model
+`WriteTo(IByteWriter)` calls. Design: static source extraction for provably-linear builders +
+reflection for exact widths + 85 builders actually executed and byte-walked (85/85 exact) + the
+capturing decorator reserved for the `WriteClass` tier in 4b. Results: **67 V12 scripts emitted**
+(strict no-guess policy: 142 SendOps skipped — 88 control-flow, 36 WriteClass/metadata, 18 other),
+validated against the real V12 corpus: **54/54 with data at zero over-read, 51/54 at 100% clean, 9
+covering opcodes with no existing script** (independently re-verified: `0x00E3` 100% clean n=300;
+`0x0101` 100% clean vs the existing script's 45% consumed). Output tree:
+`Harness/generated-v12/` (self-sufficient scripts root; promotion into the deployed tree is a separate
+decision — it would add V12 home coverage and manifest candidates).
+
+**Found emulator bug:** `0x0039` LevelUp — emulator writes `Level` as short (2 bytes), the real wire
+carries int (existing 100%-clean script reads int); generated script under-reads to 75% reproducing the
+emulator faithfully. File upstream against Maple2.
+
+**Phase 4b (remaining):** decorator-driven runtime traces for the 36 `WriteClass` opcodes
+(CubePacketTests-style hand-built models), Roslyn for the 88 control-flow builders (loop/count pairing,
+predicate extraction), struct field expansion, RecvOp static extraction (never execute `ReadFrom` —
+`GetUninitializedObject` kills discriminators).
+
 Blocker: writers branch on XML metadata invisible on the wire (`Item.cs:216` — Template/Pet/Music/Badge, no
 discriminator). Resolvable via `item.Id` + a metadata lookup; `ItemAppearance` is worse (56/20/56/4 bytes,
 selected by `Metadata.SlotNames`, written before four more `WriteClass` calls).

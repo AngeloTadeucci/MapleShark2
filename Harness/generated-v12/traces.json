@@ -1,0 +1,2528 @@
+[
+  {
+    "opcode": "0x0004",
+    "sendOp": "RequestKey",
+    "sourceClass": "RequestPacket",
+    "modes": [
+      {
+        "method": "Key",
+        "fields": []
+      }
+    ]
+  },
+  {
+    "opcode": "0x0009",
+    "sendOp": "RequestLogin",
+    "sourceClass": "RequestPacket",
+    "modes": [
+      {
+        "method": "Login",
+        "fields": []
+      }
+    ]
+  },
+  {
+    "opcode": "0x000D",
+    "sendOp": "MoveResult",
+    "sourceClass": "MigrationPacket",
+    "modes": [
+      {
+        "method": "MoveResult",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "error",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0011",
+    "sendOp": "ResponseTimeSync",
+    "sourceClass": "TimeSyncPacket",
+    "modes": [
+      {
+        "method": "Response",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Response",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "Environment.TickCount",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "time.ToUnixTimeSeconds()",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "time.Offset.Seconds",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "0-24 Hours",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "key",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Reset",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Reset",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "Environment.TickCount",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "time.ToUnixTimeSeconds()",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "time.Offset.Seconds",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "0-24 Hours",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Request",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Request",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Set",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Set",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "time.ToUnixTimeSeconds()",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0012",
+    "sendOp": "RequestHeartbeat",
+    "sourceClass": "RequestPacket",
+    "modes": [
+      {
+        "method": "Heartbeat",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "Environment.TickCount",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0013",
+    "sendOp": "RequestClientTickSync",
+    "sourceClass": "RequestPacket",
+    "modes": [
+      {
+        "method": "TickSync",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "serverTick",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0014",
+    "sendOp": "SyncNumber",
+    "sourceClass": "StateSyncPacket",
+    "modes": [
+      {
+        "method": "SyncNumber",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "number",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0018",
+    "sendOp": "FieldRemoveUser",
+    "sourceClass": "FieldPacket",
+    "modes": [
+      {
+        "method": "RemovePlayer",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0026",
+    "sendOp": "ItemPutOff",
+    "sourceClass": "EquipPacket",
+    "modes": [
+      {
+        "method": "UnequipItem",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "player.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "item.Uid",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x002C",
+    "sendOp": "FieldRemoveItem",
+    "sourceClass": "FieldPacket",
+    "modes": [
+      {
+        "method": "RemoveItem",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0030",
+    "sendOp": "UserBattle",
+    "sourceClass": "SkillPacket",
+    "modes": [
+      {
+        "method": "InBattle",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "player.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "player.InBattle",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0031",
+    "sendOp": "UserSkinColor",
+    "sourceClass": "UserSkinColorPacket",
+    "modes": [
+      {
+        "method": "Update",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "player.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_field",
+            "Label": "skinColor",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0034",
+    "sendOp": "RevivalConfirm",
+    "sourceClass": "RevivalPacket",
+    "modes": [
+      {
+        "method": "UpdatePenalty",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "endTick",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "count",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0035",
+    "sendOp": "Revival",
+    "sourceClass": "RevivalPacket",
+    "modes": [
+      {
+        "method": "Revive",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "Unknown",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0036",
+    "sendOp": "RevivalCount",
+    "sourceClass": "RevivalPacket",
+    "modes": [
+      {
+        "method": "RevivalCount",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "count",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0037",
+    "sendOp": "UserState",
+    "sourceClass": "UserStatePacket",
+    "modes": [
+      {
+        "method": "SetState",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "state",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0038",
+    "sendOp": "ExpUp",
+    "sourceClass": "ExperienceUpPacket",
+    "modes": [
+      {
+        "method": "Add",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Add",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "gainedExp",
+            "Width": 8
+          },
+          {
+            "Api": "add_short",
+            "Label": "message",
+            "Width": 2
+          },
+          {
+            "Api": "add_long",
+            "Label": "totalExp",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "restExp",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "parameter",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "additional",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "SetRestExp",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.SetRestExp",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "restExp",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0039",
+    "sendOp": "LevelUp",
+    "sourceClass": "LevelUpPacket",
+    "modes": [
+      {
+        "method": "LevelUp",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "player.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "player.Value.Character.Level",
+            "Width": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x003A",
+    "sendOp": "Meso",
+    "sourceClass": "CurrencyPacket",
+    "modes": [
+      {
+        "method": "UpdateMeso",
+        "fields": [
+          {
+            "Api": "add_long",
+            "Label": "currency.Meso",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "PCBang related",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x003B",
+    "sendOp": "Meret",
+    "sourceClass": "CurrencyPacket",
+    "modes": [
+      {
+        "method": "UpdateMeret",
+        "fields": [
+          {
+            "Api": "add_long",
+            "Label": "currency.Meret",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "extra meret",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "currency.GameMeret",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "extra game meret",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "delta",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x003F",
+    "sendOp": "SkillSync",
+    "sourceClass": "SkillPacket",
+    "modes": [
+      {
+        "method": "Sync",
+        "fields": [
+          {
+            "Api": "add_long",
+            "Label": "skill.CastUid",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "skill.Caster.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "skill.SkillId",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "skill.Level",
+            "Width": 2
+          },
+          {
+            "Api": "add_byte",
+            "Label": "skill.MotionPoint",
+            "Width": 1
+          },
+          {
+            "Api": "add_field",
+            "Label": "skill.Position",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "skill.Direction",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "skill.Velocity",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "skill.Rotation",
+            "Width": 12
+          },
+          {
+            "Api": "add_bool",
+            "Label": "skill.IsCharge",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "skill.IsRelease",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "skill.SyncClientTick",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0040",
+    "sendOp": "SkillCancel",
+    "sourceClass": "SkillPacket",
+    "modes": [
+      {
+        "method": "Cancel",
+        "fields": [
+          {
+            "Api": "add_long",
+            "Label": "skill.CastUid",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "skill.Caster.ObjectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0042",
+    "sendOp": "StateSkill",
+    "sourceClass": "SkillPacket",
+    "modes": [
+      {
+        "method": "StateSkill",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "0x06",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "player.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "ItemId??",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "skillCastUid",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "skillId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "player.State",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0044",
+    "sendOp": "SkillResetCooldown",
+    "sourceClass": "SkillPacket",
+    "modes": [
+      {
+        "method": "ResetCooldown",
+        "fields": []
+      }
+    ]
+  },
+  {
+    "opcode": "0x0047",
+    "sendOp": "CharacterCreate",
+    "sourceClass": "CharacterListPacket",
+    "modes": [
+      {
+        "method": "CreateError",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "error",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "message",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0049",
+    "sendOp": "FieldPortal",
+    "sourceClass": "PortalPacket",
+    "modes": [
+      {
+        "method": "Add",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Add",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "portal.Id",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.Visible",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.Enabled",
+            "Width": 1
+          },
+          {
+            "Api": "add_field",
+            "Label": "fieldPortal.Position",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "fieldPortal.Rotation",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "portal.Dimension",
+            "Width": 12
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "fieldPortal.Model",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "portal.TargetMapId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "fieldPortal.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "portal.ActionType",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.MinimapVisible",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "fieldPortal.HomeId",
+            "Width": 8
+          },
+          {
+            "Api": "add_byte",
+            "Label": "portal.Type",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "fieldPortal.EndTick.Truncate32()",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "Unknown",
+            "Width": 2
+          },
+          {
+            "Api": "add_int",
+            "Label": "fieldPortal.StartTick.Truncate32()",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "!string.IsNullOrEmpty(fieldPortal.Password)",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "fieldPortal.OwnerName",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "featureName - gates portal behind CFeatureManager (empty = always enabled)",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "featurePatchVersion - gates portal behind patch version check (empty = always enabled)",
+            "Width": -1
+          }
+        ]
+      },
+      {
+        "method": "Remove",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Remove",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "portalId",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Update",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Update",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "fieldPortal.Value.Id",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.Visible",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.Enabled",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "fieldPortal.MinimapVisible",
+            "Width": 1
+          },
+          {
+            "Api": "add_short",
+            "Label": "unused on the client",
+            "Width": 2
+          }
+        ]
+      },
+      {
+        "method": "Move",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Move",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "fieldPortal.Value.Id",
+            "Width": 4
+          },
+          {
+            "Api": "add_field",
+            "Label": "fieldPortal.Position",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "fieldPortal.Rotation",
+            "Width": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0057",
+    "sendOp": "FieldRemoveNpc",
+    "sourceClass": "FieldPacket",
+    "modes": [
+      {
+        "method": "RemoveNpc",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x005A",
+    "sendOp": "InteractNpc",
+    "sourceClass": "InteractNpcPacket",
+    "modes": [
+      {
+        "method": "Cooldown",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "interactable",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x005C",
+    "sendOp": "FieldRemovePet",
+    "sourceClass": "FieldPacket",
+    "modes": [
+      {
+        "method": "RemovePet",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x005D",
+    "sendOp": "SyncPetTamingPoint",
+    "sourceClass": "PetPacket",
+    "modes": [
+      {
+        "method": "SyncTaming",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "pet.ObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "casterId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "pet.TamingPoint",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0067",
+    "sendOp": "StateFallDamage",
+    "sourceClass": "FallDamagePacket",
+    "modes": [
+      {
+        "method": "FallDamage",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "damage",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0069",
+    "sendOp": "Admin",
+    "sourceClass": "AdminPacket",
+    "modes": [
+      {
+        "method": "SetMode",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "MODE_SET_ADMIN",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "adminLevel",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0072",
+    "sendOp": "FollowNpc",
+    "sourceClass": "FollowNpcPacket",
+    "modes": [
+      {
+        "method": "FollowNpc",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "npcObjectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0077",
+    "sendOp": "Vibrate",
+    "sourceClass": "VibratePacket",
+    "modes": [
+      {
+        "method": "Add",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Add",
+            "Width": 1
+          },
+          {
+            "Api": "add_str",
+            "Label": "entityId",
+            "Width": -1
+          },
+          {
+            "Api": "add_long",
+            "Label": "damage.SkillUid",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "damage.SkillId",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "damage.Level",
+            "Width": 2
+          },
+          {
+            "Api": "add_byte",
+            "Label": "damage.MotionPoint",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "damage.AttackPoint",
+            "Width": 1
+          },
+          {
+            "Api": "add_field",
+            "Label": "damage.Position",
+            "Width": 6
+          },
+          {
+            "Api": "add_int",
+            "Label": "Environment.TickCount",
+            "Width": 4
+          },
+          {
+            "Api": "add_str",
+            "Label": "nif path",
+            "Width": -1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "flag. 0 = clear/reset, 1 = show, 2 = hide",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Stop",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Stop",
+            "Width": 1
+          },
+          {
+            "Api": "add_str",
+            "Label": "entityId",
+            "Width": -1
+          },
+          {
+            "Api": "add_str",
+            "Label": "nif path",
+            "Width": -1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "flag. 0 = clear/reset, 1 = show, 2 = hide",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0078",
+    "sendOp": "HideVibrate",
+    "sourceClass": "VibratePacket",
+    "modes": [
+      {
+        "method": "Hide",
+        "fields": [
+          {
+            "Api": "add_str",
+            "Label": "entityId",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0079",
+    "sendOp": "ShowVibrate",
+    "sourceClass": "VibratePacket",
+    "modes": [
+      {
+        "method": "Show",
+        "fields": [
+          {
+            "Api": "add_str",
+            "Label": "entityId",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x008A",
+    "sendOp": "StoryBook",
+    "sourceClass": "StoryBookPacket",
+    "modes": [
+      {
+        "method": "Load",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "storyBookId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0097",
+    "sendOp": "PlayNpcSound",
+    "sourceClass": "SoundPacket",
+    "modes": [
+      {
+        "method": "Npc",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "sound",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A3",
+    "sendOp": "SystemShop",
+    "sourceClass": "SystemShopPacket",
+    "modes": [
+      {
+        "method": "Arena",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Arena",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "true",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Fishing",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Fishing",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "true",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Mentee",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Mentee",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "true",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Mentor",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Mentor",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "true",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Item",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Item",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "true",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A4",
+    "sendOp": "AutoRevive",
+    "sourceClass": "AutoRevivePacket",
+    "modes": [
+      {
+        "method": "Countdown",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "timeMs",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A8",
+    "sendOp": "DeadUser",
+    "sourceClass": "DeadUserPacket",
+    "modes": [
+      {
+        "method": "Dead",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "darkTombstone",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00AD",
+    "sendOp": "ItemUse",
+    "sourceClass": "ItemUsePacket",
+    "modes": [
+      {
+        "method": "ExpandInventory",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.ExpandInventory",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "MaxInventory",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.MaxInventory",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "CharacterSlotAdded",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.CharacterSlotAdded",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "MaxCharacterSlots",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.MaxCharacterSlots",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "QuestScroll",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.QuestScroll",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "itemId",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "BeautyCoupon",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.BeautyCoupon",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "playerObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "itemUid",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00AE",
+    "sendOp": "ItemBox",
+    "sourceClass": "ItemBoxPacket",
+    "modes": [
+      {
+        "method": "Open",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "sourceItemId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "amount",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "error",
+            "Width": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B2",
+    "sendOp": "WorldShareInfo",
+    "sourceClass": "WorldShareInfoPacket",
+    "modes": [
+      {
+        "method": "BossAlive",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Function.BossAlive",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "npcId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "mapId",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "channel",
+            "Width": 2
+          },
+          {
+            "Api": "add_long",
+            "Label": "timestamp",
+            "Width": 8
+          },
+          {
+            "Api": "add_bool",
+            "Label": "alive",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B3",
+    "sendOp": "Insignia",
+    "sourceClass": "InsigniaPacket",
+    "modes": [
+      {
+        "method": "Update",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_short",
+            "Label": "insigniaId",
+            "Width": 2
+          },
+          {
+            "Api": "add_bool",
+            "Label": "display",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B9",
+    "sendOp": "HomeCommand",
+    "sourceClass": "HomeCommandPacket",
+    "modes": [
+      {
+        "method": "LoadHome",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Load",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "accountId",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "last time player nominated home",
+            "Width": 8
+          }
+        ]
+      },
+      {
+        "method": "UpdateArchitectScore",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.UpdateArchitectScore",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "ownerObjectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "DateTimeOffset.UtcNow.ToUnixTimeSeconds()",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "architectScoreCurrent",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "architectScoreTotal",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00BA",
+    "sendOp": "CharMaxCount",
+    "sourceClass": "CharacterListPacket",
+    "modes": [
+      {
+        "method": "SetMax",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "unlocked",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "total",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00BC",
+    "sendOp": "ItemDropNotice",
+    "sourceClass": "ItemDropNoticePacket",
+    "modes": [
+      {
+        "method": "Notice",
+        "fields": [
+          {
+            "Api": "add_unicode_str",
+            "Label": "playerName",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "item.Amount",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "item.Rarity",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "item.Uid",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00BE",
+    "sendOp": "RecallScroll",
+    "sourceClass": "RecallScrollPacket",
+    "modes": [
+      {
+        "method": "Close",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Close",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "scrollType",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Open",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Open",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "scrollType",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "playerName",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "Unknown1: read by client but never used. channel ?",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "mapId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "portalId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "expiresAt",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C4",
+    "sendOp": "QuizEvent",
+    "sourceClass": "QuizEventPacket",
+    "modes": [
+      {
+        "method": "Question",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Question",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "category",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "question",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "answer",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "duration",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Answer",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Answer",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "isTrue",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "answer",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "duration",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C5",
+    "sendOp": "PlaySystemSound",
+    "sourceClass": "SoundPacket",
+    "modes": [
+      {
+        "method": "System",
+        "fields": [
+          {
+            "Api": "add_unicode_str",
+            "Label": "sound",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00D5",
+    "sendOp": "CheckCharNameResult",
+    "sourceClass": "CheckCharacterNamePacket",
+    "modes": [
+      {
+        "method": "Result",
+        "fields": [
+          {
+            "Api": "add_bool",
+            "Label": "nameIsUsed",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "itemUid",
+            "Width": 8
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "characterName",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00E3",
+    "sendOp": "ShadowExpedition",
+    "sourceClass": "ShadowExpeditionPacket",
+    "modes": [
+      {
+        "method": "Open",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Open",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "uiType",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "title",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "currentPoints",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "maxPoints",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "UpdateGauge",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.UpdateGauge",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "points",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Close",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Close",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00EA",
+    "sendOp": "NpcNotice",
+    "sourceClass": "NpcNoticePacket",
+    "modes": [
+      {
+        "method": "Announce",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Announce",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "message",
+            "Width": -1
+          },
+          {
+            "Api": "add_int",
+            "Label": "duration",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "TargetEffect",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.TargetEffect",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "targetId",
+            "Width": 4
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "effect",
+            "Width": -1
+          }
+        ]
+      },
+      {
+        "method": "Animation",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Animation",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "sequence",
+            "Width": -1
+          }
+        ]
+      },
+      {
+        "method": "SidePopup",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.SidePopup",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "type",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "duration",
+            "Width": 4
+          },
+          {
+            "Api": "add_str",
+            "Label": "Unknown",
+            "Width": -1
+          },
+          {
+            "Api": "add_str",
+            "Label": "illustration",
+            "Width": -1
+          },
+          {
+            "Api": "add_str",
+            "Label": "voice",
+            "Width": -1
+          },
+          {
+            "Api": "add_str",
+            "Label": "sound",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "script",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00EB",
+    "sendOp": "LocalCamera",
+    "sourceClass": "CameraPacket",
+    "modes": [
+      {
+        "method": "Local",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "triggerId",
+            "Width": 4
+          },
+          {
+            "Api": "add_bool",
+            "Label": "enable",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F0",
+    "sendOp": "InGameRank",
+    "sourceClass": "InGameRankPacket",
+    "modes": [
+      {
+        "method": "Load",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "31",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "Constant.PersonalRankingRefreshSeconds",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "Constant.GlobalRankingRefreshMinutes",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F2",
+    "sendOp": "DungeonWaiting",
+    "sourceClass": "DungeonWaitingPacket",
+    "modes": [
+      {
+        "method": "Set",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "size",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F4",
+    "sendOp": "CameraInterpolation",
+    "sourceClass": "CameraPacket",
+    "modes": [
+      {
+        "method": "Interpolate",
+        "fields": [
+          {
+            "Api": "add_float",
+            "Label": "interpolationTime",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F5",
+    "sendOp": "TimeScale",
+    "sourceClass": "FieldPropertyPacket",
+    "modes": [
+      {
+        "method": "TimeScale",
+        "fields": [
+          {
+            "Api": "add_bool",
+            "Label": "enable",
+            "Width": 1
+          },
+          {
+            "Api": "add_float",
+            "Label": "startScale",
+            "Width": 4
+          },
+          {
+            "Api": "add_float",
+            "Label": "endScale",
+            "Width": 4
+          },
+          {
+            "Api": "add_float",
+            "Label": "duration",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "interpolator",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x00FD",
+    "sendOp": "DungeonReviveCount",
+    "sourceClass": "RevivalPacket",
+    "modes": [
+      {
+        "method": "DungeonReviveCount",
+        "fields": [
+          {
+            "Api": "add_int",
+            "Label": "count",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0100",
+    "sendOp": "ChangeBackground",
+    "sourceClass": "FieldPropertyPacket",
+    "modes": [
+      {
+        "method": "Background",
+        "fields": [
+          {
+            "Api": "add_str",
+            "Label": "ddsPath",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0101",
+    "sendOp": "RoomStageDungeon",
+    "sourceClass": "RoomStageDungeonPacket",
+    "modes": [
+      {
+        "method": "LoadMissionPanel",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.LoadMissionPanel",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "unknown (stored at DungeonMissionPanel\u002B0x28, no known reads)",
+            "Width": 1
+          },
+          {
+            "Api": "add_bool",
+            "Label": "abandonEnabled",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "ClearMissionPanel",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.ClearMissionPanel",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0108",
+    "sendOp": "GmCommand",
+    "sourceClass": "GmCommandPacket",
+    "modes": [
+      {
+        "method": "AddMessage",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.AddMessage",
+            "Width": 1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "url",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "message",
+            "Width": -1
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "unknown3",
+            "Width": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x010B",
+    "sendOp": "DungeonHelp",
+    "sourceClass": "DungeonHelperPacket",
+    "modes": [
+      {
+        "method": "FindHelper",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.FindHelper",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "helpRequestId",
+            "Width": 4
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "characterName",
+            "Width": -1
+          },
+          {
+            "Api": "add_long",
+            "Label": "accountId",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "characterId",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "partySize",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "FindMember",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.FindMember",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "rookieCount",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "expertCount",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "helpRequestId",
+            "Width": 4
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "characterName",
+            "Width": -1
+          },
+          {
+            "Api": "add_long",
+            "Label": "accountId",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "characterId",
+            "Width": 8
+          },
+          {
+            "Api": "add_int",
+            "Label": "dungeonId",
+            "Width": 4
+          },
+          {
+            "Api": "add_byte",
+            "Label": "partySize",
+            "Width": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x010F",
+    "sendOp": "BuddyEmote",
+    "sourceClass": "BuddyEmotePacket",
+    "modes": [
+      {
+        "method": "Invite",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Invite",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "emoteId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "sender.Character.Id",
+            "Width": 8
+          },
+          {
+            "Api": "add_unicode_str",
+            "Label": "sender.Character.Name",
+            "Width": -1
+          }
+        ]
+      },
+      {
+        "method": "InviteConfirm",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.InviteConfirm",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "receiverId",
+            "Width": 8
+          }
+        ]
+      },
+      {
+        "method": "Error",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Error",
+            "Width": 1
+          },
+          {
+            "Api": "add_byte",
+            "Label": "error",
+            "Width": 1
+          }
+        ]
+      },
+      {
+        "method": "Accept",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Accept",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "emoteId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "receiverId",
+            "Width": 8
+          }
+        ]
+      },
+      {
+        "method": "Decline",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Decline",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "emoteId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "receiverId",
+            "Width": 8
+          }
+        ]
+      },
+      {
+        "method": "Start",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Start",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "emoteId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "senderId",
+            "Width": 8
+          },
+          {
+            "Api": "add_long",
+            "Label": "receiverId",
+            "Width": 8
+          },
+          {
+            "Api": "add_field",
+            "Label": "senderPosition",
+            "Width": 12
+          },
+          {
+            "Api": "add_field",
+            "Label": "senderRotation",
+            "Width": 12
+          },
+          {
+            "Api": "add_int",
+            "Label": "Unknown",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Cancel",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Cancel",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "emoteId",
+            "Width": 4
+          },
+          {
+            "Api": "add_long",
+            "Label": "characterId",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0110",
+    "sendOp": "BuddyBadge",
+    "sourceClass": "BuddyBadgePacket",
+    "modes": [
+      {
+        "method": "Start",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Start",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "characterId",
+            "Width": 8
+          }
+        ]
+      },
+      {
+        "method": "Stop",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Stop",
+            "Width": 1
+          },
+          {
+            "Api": "add_long",
+            "Label": "characterId",
+            "Width": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "opcode": "0x0114",
+    "sendOp": "SuperWorldChat",
+    "sourceClass": "SuperChatPacket",
+    "modes": [
+      {
+        "method": "Select",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Select",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          },
+          {
+            "Api": "add_int",
+            "Label": "itemId",
+            "Width": 4
+          }
+        ]
+      },
+      {
+        "method": "Deselect",
+        "fields": [
+          {
+            "Api": "add_byte",
+            "Label": "Command.Deselect",
+            "Width": 1
+          },
+          {
+            "Api": "add_int",
+            "Label": "objectId",
+            "Width": 4
+          }
+        ]
+      }
+    ]
+  }
+]
