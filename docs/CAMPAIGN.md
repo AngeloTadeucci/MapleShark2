@@ -1,13 +1,20 @@
-# MapleShark2 — Improvement Plan (rev 3)
+# MapleShark2 — Improvement Campaign Record (rev 3, executed 2026-07)
 
-Rev 1 was reviewed by gpt-5.6-sol and its central quantitative claim did not survive. Phase 0 was then
-built and run; rev 2 replaced every estimate with a measurement. The rev 2 Phase 1 kickoff assessment
-was in turn reviewed by sol (`Harness/baseline/sol-review-rev2.md`); rev 3 incorporates that review:
-Phase 1 is redesigned around **edge enumeration** (`--matrix`) instead of `--chain`, the acceptance rule
-is rebuilt (failure signatures + sample floors, not rate comparison), and §4 grows five new entries of
-killed proposals.
+**This is a record, not a live plan.** The campaign it describes was executed to completion
+2026-07-15/16 (final statuses: §8). It stays authoritative for three things: the measured evidence
+behind the manifest/resolver/invariants machinery, the killed-proposals ledger (§4 and the
+measured-innocent list in §5 Phase 3 — **consult before proposing changes**; everything there sounded
+right and died under measurement), and the remaining open items (§9). This file was `PLAN.md` at the
+repo root until the campaign closed.
 
-**Where things live** (all paths relative to this file, `MapleShark2/`):
+History of the document: rev 1 was reviewed by gpt-5.6-sol and its central quantitative claim did not
+survive. Phase 0 was then built and run; rev 2 replaced every estimate with a measurement. The rev 2
+Phase 1 kickoff assessment was in turn reviewed by sol (`Harness/baseline/sol-review-rev2.md`); rev 3
+incorporates that review: Phase 1 was redesigned around **edge enumeration** (`--matrix`) instead of
+`--chain`, the acceptance rule rebuilt (failure signatures + sample floors, not rate comparison), and
+§4 grew five new entries of killed proposals. The sol reviews reference this file by its old root path.
+
+**Where things live** (all paths relative to the repo root, `MapleShark2/`):
 
 | path | what |
 |---|---|
@@ -36,6 +43,15 @@ MapleStory 2 preservation tooling. All projects are open-source; the game is dea
 **Two lineages.** GMS2/V12 (dead 2020, what the emulator implements) and KMS2/2464–2550 (dead now, 41
 builds in the archive). The workflow was: sniff KMS2 (the live branch) → implement into a V12 emulator.
 The lineage with ground truth is the one not being sniffed.
+
+**Briefing a fresh session** (folds the old `NEW-SESSION.md`): read this file, then
+`Harness/README.md`; don't re-derive either — the plan has been adversarially reviewed and corrected
+three times (§4 lists what earlier sessions got wrong; don't re-propose it). Lead any fresh prompt with
+the provenance sentence — it is load-bearing, since "packet sniffer" work without context can read as
+network interception: *"I maintain tooling for the MapleStory 2 preservation community. MS2 was shut
+down globally by Nexon in 2020 and KMS2 is dead too; the community keeps it playable via an open-source
+server emulator (MS2Community/Maple2) and MapleShark2, an open-source packet analyzer used to
+understand the client↔server protocol. All the projects here are ours and public."*
 
 ## 2. Phase 0 — DONE
 
@@ -346,68 +362,52 @@ case), `MaplePacket` migrated with an unchanged public API. Also: `Opcodes.Exist
 3 items (pooled decrypt adoption, pipeline/timer restructure, `packetQueue` cap, `MapleStream` memmove)
 stay gated on profiling per this section; the reader precondition for pooling is now satisfied.
 
-Overstated in rev 1, per sol, and **not yet verified** — profile before prescribing: opcode rebuild
-frequency, owner-draw cost (the column-header handler does render), retention vs allocation rate. Server
-GC is not a fix for unbounded retention.
+**Phase 3 EXECUTED (2026-07-16) — live symptoms root-caused, fixed, verified on both machines.**
+Live use reported two symptoms the safe scope did not touch: a ~10 s freeze when a session starts
+loading, and machine-wide chugging as old session tabs stack up. The profiling gate was satisfied with
+in-app instrumentation, which stays in permanently:
 
-**Perf instrumentation DONE (2026-07-16)** — built after live-use reports the safe scope did not fix:
-~10 s freeze when a session starts loading, and machine-wide chugging as terminated session tabs stack
-up. `Tools/PerfLog.cs` + a dedicated `perf.log` (nlog.config `perf` rule, `final` so it never reaches
-console/textbox/main log). Three mechanisms: (1) threshold-gated stopwatch scopes (silent under 20 ms;
-rare events — engine creation, session show, file/pcap load — always logged); (2) a UI-hang watchdog
-(background heartbeat through the message pump; hangs ≥500 ms logged with total duration and the perf
-scope open at detection, so freezes are attributed even in uninstrumented code); (3) 5 s counter lines
-(managed/working-set/private MB, GC gen counts, plus gauges: queue drain size, tab count, per-tab
-packet/row totals, pending rows, tracked sessions, engine count) to correlate chug onset with retention.
-Scopes: `main.tick`/`main.drain`/`session.show`/`pcap.load` (MainForm), `session.flush`/`session.refresh`/
-`session.load` (SessionForm), `engine.create`/`script.exec`/`manifest.resolve` (ScriptManager),
-`structure.parse` (StructureForm). Verified by 15/15 behavioral tests (`Tests/PerfLogTests` — real
-message pump, real induced hang with scope attribution, routing through the real nlog.config); **NOT
-yet run in a live capture** — the next live session produces the evidence this phase has been gated on.
-Suspects the log should adjudicate: cold IronPython engine creation on the UI thread (`session.show`),
-the relog-burst drain/flush path, `PacketListView.FilteredPackets` materializing an ImmutableList of
-every row per access (CORRECTED: the deployed control is `VirtualPacketListView`, which overrides
-`FilteredPackets` with a maintained O(1) list — the ImmutableList sits on the unused base class only;
-the measured flush `scroll` cost is `EnsureVisible`'s virtual-item retrieval + autoscroll repaint),
-the per-resolve env-hash in `manifest.resolve`, and retention across terminated tabs (counters).
+- `Tools/PerfLog.cs` → dedicated `perf.log` (nlog `perf` rule, `final=true`): threshold-gated stopwatch
+  scopes (silent under 20 ms; rare events always logged), a UI-hang watchdog (heartbeat through the
+  message pump; hangs ≥500 ms logged with total duration and the scope open at detection — freezes get
+  attributed even in uninstrumented code), 5 s counter lines (memory/GC + queue/tab/row gauges), and
+  per-stage accumulators (`Begin`/`Accum`/`FlushAccums`) dumped in `main.drain`'s detail, plus a
+  `session.flush` add/endUpdate/scroll split. Scopes: `main.tick`/`main.drain`/`session.show`/
+  `pcap.load`, `session.flush`/`refresh`/`load`, `engine.create`/`script.exec`/`manifest.resolve`,
+  `structure.parse`. 20/20 behavioral tests (`Tests/PerfLogTests`: real message pump, real induced hang
+  with scope attribution, routing through the real nlog.config).
 
-**First external log (2026-07-16, Release build): the freeze is attributed.** One `main.drain` of
-**22.6 s for 292 raw captures** (UI hang 21.7 s) — ~70 ms per capture of pure drain-loop work, of which
-`engine.create` was only 1.3 s and `session.show` 2.4 s. The user-reported "10-ish second freeze on
-session load" is the login burst being processed on the UI thread in a single tick. Also measured:
-`session.flush` 460 ms for 96 rows at a 97-row list (~5 ms/row — scales linearly with burst size).
-Memory stayed flat (one tab); the tab-stacking chug still lacks a repro log. Which stage owns the
-70 ms/capture is not yet identifiable → per-stage accumulators added inside the drain
-(`PerfLog.Begin/Accum/FlushAccums`, dumped in `main.drain`'s detail: parse / match / new_session /
-reassemble / stream_read / decrypt / process / refresh_opcodes) and a `session.flush` breakdown
-(add / endUpdate / scroll). Next heavy run names the owner; fix follows the measurement, not the guess.
+**Verdict — one line owned both machines' freezes:** the `SearchForm.RefreshOpcodes` ComboBox rebuild
+ran once per TCP segment whenever a new opcode appeared. Maintainer: 893 ms of an 895 ms drain
+(12 rebuilds). Zin: a **90.8 s drain that was 90.79 s of rebuilds** (75 × ~1.2 s), during which the
+uncapped `packetQueue` grew to 9,727 — the backlog feedback loop observed live. Everything rev 1
+suspected instead — decrypt, TCP reassembly, `MapleStream` memmove, parse, definition lookups —
+measured **0-33 ms per drain even at 9,727 captures**. Consequently pooled decrypt, the memmove fix,
+and the `packetQueue` cap are measured-innocent: do not re-propose without new evidence (the safe
+scope's segment reader keeps the pooling precondition satisfied should evidence ever appear).
+Also corrected en route: the suspected `PacketListView.FilteredPackets` ImmutableList-per-access sits
+on an unused base class — the deployed `VirtualPacketListView` already keeps an O(1) list.
 
-**Breakdown run (2026-07-16, maintainer's machine): CONVICTED — `drain.refresh_opcodes`.** The
-`SearchForm.RefreshOpcodes` ComboBox rebuild (~80-100 ms per call) ran once per TCP segment whenever a
-new opcode appeared: 893 ms of an 895 ms drain (12 calls), 1668/1668 ms (21 calls), 1518/1519 ms
-(18 calls). Everything actually suspected — decrypt, reassembly, stream reads, parse, process — totals
-0-2 ms per drain even at 212 decoded packets. Zin's 22.6 s freeze ≈ 292 captures × ~75 ms rebuild.
-**Fix landed:** rebuild at most once per queue drain (`OpcodesDirty` flag on `SessionForm`, consumed in
-`ProcessPacketQueue`; `RefreshPackets` clears it after its own rebuild) + `BeginUpdate`/`EndUpdate`
-around the ComboBox rebuild. Zin's pre-fix log independently confirmed the same signature at scale
-(90.8 s drain, 90.79 s refresh_opcodes over 75 calls; the queue grew to 9,727 during the hang — the
-feedback loop observed live). **Runtime-verified on the maintainer's machine (2026-07-16, Release):**
-every drain shows `refresh_opcodes=…ms/1`, burst drains collapsed from multi-second to 25-75 ms
-(166 packets in 25.6 ms), zero watchdog hangs across the session. **Zin confirmed the fix live
-(2026-07-16)** — the machine that measured the 90.8 s freeze. Both reported Phase 3 symptoms traced to
-one line; the tab-stacking chug has not reappeared post-fix (retention hypothesis unproven and likely
-moot — counters stay in place to catch it if it returns). Note:
-the once-per-drain rebuild still costs ~30-40 ms while a young session keeps discovering new opcodes —
-bounded and decaying, but an incremental-add rebuild is the follow-up if it shows up again.
-Secondary measured costs, deliberately not fixed in the same change: `session.flush` scroll block
-(17-62 ms — `EnsureVisible` virtual-item retrieval + autoscroll repaint; NOT `FilteredPackets`, which
-is already O(1) on the deployed `VirtualPacketListView`) and `endUpdate` repaint on large flushes
-(74-99 ms); engine.create 0.4-1.3 s cold on the UI thread — **fixed post-verification** by
-`ScriptManager.PrewarmEngine()`: a background throwaway engine at `MainForm_Load` absorbs the one-time
-DLR/assembly/JIT cost (logged as `engine.prewarm`; acceptance = first real `engine.create` dropping to
-the warm ~100-300 ms range). Pooled decrypt, `MapleStream` memmove, and the `packetQueue` cap remain
-deliberately unfixed: the breakdown measured them at 0-33 ms per drain even at 9,727 captures — no
-evidence they matter.
+**Fixes:**
+1. **Opcode dropdown rebuilt at most once per queue drain** (`OpcodesDirty` on `SessionForm`, consumed
+   in `ProcessPacketQueue`; `RefreshPackets` clears it) + `BeginUpdate`/`EndUpdate` around the rebuild.
+   **Runtime-verified on both machines:** drains collapsed from multi-second to 25-75 ms
+   (166 packets in 25.6 ms), `refresh_opcodes=…/1` on every drain, zero watchdog hangs; Zin confirmed
+   live on the machine that measured 90.8 s.
+2. **`ScriptManager.PrewarmEngine()`** — a background throwaway engine at `MainForm_Load` absorbs the
+   one-time DLR/assembly/JIT cost (`engine.create` measured 0.7-1.3 s cold on the UI thread at first
+   session show). Landed, logs as `engine.prewarm`; **not yet runtime-verified** — acceptance is the
+   first real `engine.create` dropping to the warm range in the next live log.
+
+**Residual watchlist** (bounded costs; none currently reproducing a complaint):
+- Tab-stacking chug: not reproduced post-fix — likely the same bug perceived through stacked tabs;
+  retention hypothesis unproven, counters stay in place to convict it if it returns.
+- `session.flush`: endUpdate repaint 74-99 ms on large flushes; scroll block 17-62 ms (`EnsureVisible`
+  virtual-item retrieval + autoscroll repaint).
+- The once-per-drain rebuild still costs ~30-40 ms while a young session discovers opcodes — decays as
+  the set saturates; incremental add is the follow-up if it ever matters.
+- Two ~1 s "no perf scope" hangs around packet selection in Zin's log (hex box / property grid are
+  uninstrumented) — next instrumentation target if they recur.
 
 ### Phase 4 — Generate the V12 layer from the emulator
 
@@ -552,7 +552,7 @@ with the exact-equivalence bar; each migrated script re-earns its manifest edges
 | Manifest evidence goes stale when scripts or shared modules are edited (Phases 2/6 do exactly that). | Mitigated by design (rev 3): edges bound to `script_sha` + `env_sha` (importable-module surface + path order); mismatch invalidates the edge. |
 | "Comparable to home" treats known-defective home decoders as truth. | **OPEN.** Home comparison establishes non-inferiority only. Compatibility and decoder quality are separate manifest states; portable-but-incomplete never counts as coverage. Phase 1b is the correctness axis. |
 | Phase 1b fires on legitimate cross-build content drift (false positives). | **OPEN.** Calibrate the noise floor first (temporal splits, corrupted decoders, V12 ground truth) — see Phase 1b. If FP rate is high, it demotes to advisory. |
-| Pooling silently disarms over-read detection. | Phase 3 ordering constraint above. |
+| Pooling silently disarms over-read detection. | Moot: Phase 3 profiling measured decrypt at 0-1 ms per drain, so pooling is not on the table. The segment-reader precondition is satisfied and the ordering constraint stands if pooling is ever revisited. |
 | Phase 5 inference produces plausible-but-wrong layouts at scale — `item.py`'s failure mode, automated. | Blind-on-V12 gate; proposals ranked by confidence, never auto-applied. |
 | "Fork, not rewrite" is directionally right but was never demonstrated: the msb corpus holds **already-decrypted** payloads, so it validates framing and says nothing about live capture, ciphers, or reassembly. | Restated as: *extend and refactor unless testing exposes a fundamental limitation.* Needs PCAP/live tests + profiling to become a real conclusion. |
 
@@ -613,9 +613,10 @@ text. Its findings and the remediations that landed:
    in this campaign substitutes for that; everything built here (harness, field stats, signatures,
    schema compiler, assistive inference) exists to make exactly that work fast and safe.
 
-Also still open: live-capture verification of session reaping and the Phase 3 profiling gate (the GUI
-fallback flow itself was verified live on a 2546 sniff, 2026-07-16); temporal-split calibration to
-promote `dist_diverge`; filing the two emulator bugs upstream (`0x0039`, `0x00ED`).
+Also still open: live-capture verification of session reaping (the GUI fallback flow itself was
+verified live on a 2546 sniff, 2026-07-16; the Phase 3 profiling gate is now CLOSED — see Phase 3);
+runtime check of the engine pre-warm; temporal-split calibration to promote `dist_diverge`; filing the
+two emulator bugs upstream (`0x0039`, `0x00ED`).
 
 **Scripts collection versioned (2026-07-16):** the deployed scripts now live in the
 `MapleShark2-Scripts` git repo (fork of kOchirasu's flat V12 repo, restructured to `0/<build>/`):

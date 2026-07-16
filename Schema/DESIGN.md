@@ -1,13 +1,13 @@
 # Declarative packet schema — design (Phase 6)
 
 Status: incremental start. Compiler (`compile.py`), three migrated opcodes, and a harness
-equivalence proof exist; see the bottom of this file and `../PLAN.md` §5 Phase 6.
+equivalence proof exist; see the bottom of this file and `../docs/CAMPAIGN.md` §5 Phase 6.
 
 ## Why
 
 The deployed decoders are hand-written IronPython. Measured over the Ochi tree (`coverage.py`):
 **12,437 `add_*` field calls across 430 scripts, 24.4 % of them named literally `"Unknown"`**
-(the V12 subtree alone is 4,714 calls / 26 % Unknown — the ~4,798 figure in `../PLAN.md`).
+(the V12 subtree alone is 4,714 calls / 26 % Unknown — the ~4,798 figure in `../docs/CAMPAIGN.md`).
 Three structural problems follow, all called out in the plan:
 
 1. Field names are bare string literals — no schema, no cross-build diff, no validation that
@@ -123,7 +123,7 @@ collision. The compiler emits:
 - `<root>/0/<B>/schema_common.py` — **only when build B overrides something**, carrying the *full*
   resolved set as a drop-in shadow.
 
-This deliberately reproduces the version-folder-ahead-of-shared-root semantics that `../PLAN.md` §6.6
+This deliberately reproduces the version-folder-ahead-of-shared-root semantics that `../docs/CAMPAIGN.md` §6.6
 fixed (`ScriptManager.cs` version dir before the shared root on `sys.path`, tested by the harness's
 `--version-path-first`). Under `--version-path-first`, `from schema_common import *` in a build-`B`
 decoder resolves `0/<B>/schema_common.py` first and falls back to the root copy — identical shadowing
@@ -202,7 +202,7 @@ vocabulary above can express its enclosing construct.
 | Needs extension: sentinel `while` loop (`while m != 1`) — **1 script** | 1 | <0.1 % |
 | Nested-arith on a read (expressible; flagged for review) | 1 | <0.1 % |
 
-The V12 subtree (the `../PLAN.md` scope) is 4,714 calls with the same ~98 % coverage.
+The V12 subtree (the `../docs/CAMPAIGN.md` scope) is 4,714 calls with the same ~98 % coverage.
 
 **What this says about extensions and the escape hatch:**
 

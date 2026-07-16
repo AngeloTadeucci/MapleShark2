@@ -8,7 +8,7 @@ namespace MapleShark2.Tools {
     /// backing array, instead of against the length of the whole array like
     /// <see cref="Maple2.PacketLib.Tools.ByteReader"/> does.
     ///
-    /// <para>This is the Phase 3 precondition (see PLAN.md §5 Phase 3). Over-read detection in the GUI
+    /// <para>This is the Phase 3 precondition (see docs/CAMPAIGN.md §5 Phase 3). Over-read detection in the GUI
     /// currently works <i>only because</i> every packet owns an exactly-sized array, so the packet's
     /// segment happens to equal the whole backing array. The moment buffers are pooled or shared,
     /// <see cref="Maple2.PacketLib.Tools.ByteReader"/> would bound reads against the oversized backing

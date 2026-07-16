@@ -243,7 +243,7 @@ namespace MapleShark2.Harness {
         /// Compose a per-failure signature for an over-read: the over-read reason, the exception message with
         /// every digit run collapsed to '#', the normalized node path, and the last read's label/type. This
         /// lets the classifier tell "same defect the decoder already has at home" from "new failure mode on
-        /// the edge" without a rate comparison (PLAN.md §4.8). Sanitized so it survives CSV/sparse encoding:
+        /// the edge" without a rate comparison (docs/CAMPAIGN.md §4.8). Sanitized so it survives CSV/sparse encoding:
         /// no ',' '|' or newline (all -> ';').
         /// </summary>
         private static string Signature(OverReadReason reason, string message, ParseSink sink) {

@@ -6,7 +6,7 @@ Consumes the raw matrix CSVs (baseline/matrix/matrix-<build>.csv) and stamps a v
     reject        evidence against (over-read, broken/absent home behaviour, incomparable consumption)
     insufficient  not enough evidence either way — resolver treats as unknown
 
-Raw evidence and verdicts are deliberately separate (PLAN.md §5 Phase 1): re-running this script with a
+Raw evidence and verdicts are deliberately separate (docs/CAMPAIGN.md §5 Phase 1): re-running this script with a
 new rule version re-classifies without re-running packets. Never edit the matrix CSVs.
 
 Rule v3.1.0-quarantine:
@@ -28,7 +28,7 @@ Rule v3.1.0-quarantine:
   - KS(edge consumed hist, home hist) > KS_MAX -> reject (consumption incomparable to home)
   - otherwise                              -> accept
 
-Rate comparison against home is forbidden (PLAN.md §4.8) — signatures match failure *mode*, never rate.
+Rate comparison against home is forbidden (docs/CAMPAIGN.md §4.8) — signatures match failure *mode*, never rate.
 
 Compatibility != quality: an accepted edge additionally carries a quality tier from its consumed p50
 (USEFUL >= 90, PARTIAL >= 50, STUB < 50). STUB edges are portable, not coverage.
@@ -95,7 +95,7 @@ def parse_sigs(s):
 def over_read_reason(over, edge_row, home_row):
     """v2 reject reason for an edge with over_read>0: 'same defect as home' vs 'NEW failure mode'.
 
-    Never a rate comparison (PLAN.md §4.8) — only the failure-signature *sets* are compared.
+    Never a rate comparison (docs/CAMPAIGN.md §4.8) — only the failure-signature *sets* are compared.
     """
     edge_sigs = set(parse_sigs(edge_row.get("over_sigs")))
     home_sigs = set(parse_sigs(home_row.get("over_sigs"))) if home_row is not None else set()
@@ -147,7 +147,7 @@ def main():
                     default=None,
                     help="Optional: join Phase 1b per-edge verdicts (invariants-edges.csv, produced by "
                          "invariants.py) as an advisory `invariants` column. ADVISORY ONLY — it never "
-                         "changes any accept/reject state (PLAN.md reserves that for a later decision).")
+                         "changes any accept/reject state (docs/CAMPAIGN.md reserves that for a later decision).")
     args = ap.parse_args()
 
     # Phase 1b advisory join (optional). Rollup verdict per (source,target,opcode,dir); missing -> '-'.
@@ -234,7 +234,7 @@ def main():
         w.writeheader()
         w.writerows(out_rows)
 
-    # Per-target exit-criteria summary (PLAN.md §5): explicit denominators, never a corpus aggregate.
+    # Per-target exit-criteria summary (docs/CAMPAIGN.md §5): explicit denominators, never a corpus aggregate.
     # The resolver prefers a home script when one exists; edges only matter where home doesn't hold.
     # "Trusted" home = the target's own script with zero over-read, no compile error, and n >= floor.
     by_target = {}
@@ -290,7 +290,7 @@ def main():
     print("home%  = target's own scripts, zero over-read, n >= floor (resolver always prefers home)")
     print("edge%  = accepted fallback edges for traffic home doesn't cover")
     print("insuff%= traffic with only-insufficient evidence (resolver shows unknown, today's behaviour)")
-    print("NOTE: trusted availability under the rule, NOT correctness (PLAN.md sec. 7).")
+    print("NOTE: trusted availability under the rule, NOT correctness (docs/CAMPAIGN.md sec. 7).")
 
 
 if __name__ == "__main__":

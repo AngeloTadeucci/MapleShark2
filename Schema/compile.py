@@ -2,7 +2,7 @@
 """
 MapleShark2 declarative packet schema -> IronPython 3.4 decoder compiler.
 
-Phase 6 (see ../PLAN.md). Reads declarative JSON schemas and emits IronPython
+Phase 6 (see ../docs/CAMPAIGN.md). Reads declarative JSON schemas and emits IronPython
 decoder scripts in the exact style the deployed tree uses (`from script_api import *`,
 `add_byte(...)`, `with Node(...)`, ...). The generated scripts are byte-for-byte
 deterministic: same schema in -> identical .py out, so `script_sha` in the harness /
@@ -15,7 +15,7 @@ Layout produced under --out <root> (a scripts root the harness can consume direc
     <root>/schema_common.py              base shared blocks
     <root>/0/<build>/schema_common.py    per-build shared-block OVERRIDE set (only when a
                                          build overrides a block) -- shadows the base copy
-                                         under --version-path-first, mirroring PLAN.md 6.6
+                                         under --version-path-first, mirroring docs/CAMPAIGN.md 6.6
     <root>/0/<build>/<Inbound|Outbound>/0x00NN.py   one decoder per opcode schema
 
 `script_api.py` is NOT generated -- it is the fixed harness/GUI contract and must be
@@ -382,7 +382,7 @@ def build(schemas):
         out["schema_common.py"] = emit_common_module(base_blocks, schema_shas)
 
     # Per-build override modules shadow the base copy under --version-path-first,
-    # mirroring PLAN.md 6.6's version-folder-ahead-of-shared-root semantics. Each
+    # mirroring docs/CAMPAIGN.md 6.6's version-folder-ahead-of-shared-root semantics. Each
     # build override module carries the FULL resolved set (base + overrides) so it is
     # a drop-in shadow.
     for b, overrides in sorted(build_block_overrides.items()):

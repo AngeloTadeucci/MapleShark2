@@ -6,7 +6,7 @@ Runs decoder scripts against captured packets and reports what actually happened
 
 Every claim about which decoders work on which builds was, until this existed, inferred from **packet
 lengths** — comparing length distributions per opcode across builds, never once running a script. That
-proxy turned out to be wrong in both directions (see `../PLAN.md` §3). This runs the scripts.
+proxy turned out to be wrong in both directions (see `../docs/CAMPAIGN.md` §3). This runs the scripts.
 
 ## Build & run
 
@@ -83,7 +83,7 @@ One row per (source build, target build, opcode, direction). Besides the outcome
 | `env_sha` | Hash of the resolved decoder environment: sys.path order flag + every importable top-level `.py` on both search paths (`script_api.py`, `common.py`, `item.py`, version overrides). Catches shared-module edits that `script_sha` can't see. |
 | `consumed_hist` | Sparse `pct:count\|pct:count` consumed-percentage histogram, so acceptance verdicts can be recomputed without re-running packets. p50/p90 alone can hide a rare catastrophic mode. |
 | `sampling` | `all` or `reservoir;n=<N>;seed=<S>` — the evidence's provenance. |
-| `over_sigs` | Per-bucket over-read failure signatures, `sig:count\|sig:count` (digits normalized to `#`, ≤16 distinct + `~other`). Rule v2 uses signature-SET comparison to label a reject "same defect as home" vs "NEW failure mode" — never rate comparison (PLAN.md §4.8). Diagnostics only: the accept set is identical to rule v1 (verified tuple-for-tuple). |
+| `over_sigs` | Per-bucket over-read failure signatures, `sig:count\|sig:count` (digits normalized to `#`, ≤16 distinct + `~other`). Rule v2 uses signature-SET comparison to label a reject "same defect as home" vs "NEW failure mode" — never rate comparison (docs/CAMPAIGN.md §4.8). Diagnostics only: the accept set is identical to rule v1 (verified tuple-for-tuple). |
 
 The sweep driver is committed as `sweep.ps1` (idempotent; writes `matrix-*.csv`, `fields-*.csv`, and
 `.md` reports into `baseline/matrix/`).
@@ -97,12 +97,12 @@ The sweep driver is committed as `sweep.ps1` (idempotent; writes `matrix-*.csv`,
 | `UnderRead` | Stopped early. Normal for incomplete scripts; also what a desync can look like. Ambiguous. |
 | `OverRead` | Ran past the end, or decoded a negative length. **Unambiguously wrong.** |
 | `Threw` | Non-bounds script error. |
-| `CompileError` | The `.py` doesn't parse. Two exist today — see `../PLAN.md` §6.8. |
+| `CompileError` | The `.py` doesn't parse. Two exist today — see `../docs/CAMPAIGN.md` §6.8. |
 
 **The caveat that matters: `OkExact` is not proof of correctness.** Over-read is a *floor*, not a
 guarantee. A parse can consume exactly the right number of bytes and still be entirely wrong — reading the
 wrong same-width primitive, taking a wrong branch that stays in bounds, or decoding reordered equal-width
-fields. Never quote a `clean%` as a correctness figure. Closing that gap is Phase 1b in `../PLAN.md`.
+fields. Never quote a `clean%` as a correctness figure. Closing that gap is Phase 1b in `../docs/CAMPAIGN.md`.
 
 Compare an edge against the script's **home build**, not against zero: V12's own baseline is 95.6% clean /
 1.3% over-read, so home builds are not clean either.
@@ -113,7 +113,7 @@ Compare an edge against the script's **home build**, not against zero: V12's own
   `Maple2.PacketLib.ByteReader`, which bounds against the whole backing array's length. That currently works
   only because msb loads hand out exactly-sized arrays. **Pooling would silently disarm over-read
   detection** — the harness's core safety signal. If the live path adopts pooled buffers, it must move to a
-  segment-bounded reader first (`../PLAN.md` §5 Phase 3).
+  segment-bounded reader first (`../docs/CAMPAIGN.md` §5 Phase 3).
 - **`ParseSink`** is a headless stand-in for `MapleShark2.UI.StructureForm`. Its six public members are a
   duck-typed contract with `Resources/script_api.py` (`import structure_form as sf`) — the names and
   signatures must match `StructureForm`'s exactly or every script breaks. `script_api` binds `sf` once at
@@ -127,7 +127,7 @@ Compare an edge against the script's **home build**, not against zero: V12's own
 
 ## `analysis/`
 
-Ad-hoc scripts behind `../PLAN.md` §3–4. Run with `py <name>.py`; they resolve paths relative to
+Ad-hoc scripts behind `../docs/CAMPAIGN.md` §3–4. Run with `py <name>.py`; they resolve paths relative to
 themselves.
 
 `rec.pkl` caches `(build, opcode, direction) -> {length: count}` over all 10,095,157 packets. `drift.py`
@@ -145,14 +145,14 @@ regenerates it (~4 min); everything else reads it.
 
 ## `baseline/`
 
-Committed outputs; the numbers quoted in `../PLAN.md` §3.
+Committed outputs; the numbers quoted in `../docs/CAMPAIGN.md` §3.
 
 | file | what |
 |---|---|
 | `home-12.md` / `.csv` | V12 home baseline — the self-test. 95.6% clean / 1.3% over / 3.0% under. |
 | `chain-2546.md` / `.csv` | Build 2546 lineage-chained. Traffic-weighted: 78.8% of traffic gets a script, 93.0% of that parses clean → 73.3% of all traffic, vs ~1.0% today. |
 | `e-<opcode>-<src>-<tgt>.md` | The four dominant 2546 opcodes, each as control (src vs its own build) and edge (src vs 2546). |
-| `sol-review-rev1.md` | The gpt-5.6-sol review that killed rev 1's central claim. Read before re-proposing anything in `../PLAN.md` §4. |
+| `sol-review-rev1.md` | The gpt-5.6-sol review that killed rev 1's central claim. Read before re-proposing anything in `../docs/CAMPAIGN.md` §4. |
 | `sol-review-rev2.md` | The sol review of the rev 2 Phase 1 kickoff assessment — source of the rev 3 redesign (`--matrix`, sample floors, signature matching, hash-bound evidence). |
 
 The committed baselines predate rev 3: they were measured with first-N sampling, the pre-matrix CSV

@@ -1,4 +1,4 @@
-"""Phase 1b value-class invariants (PLAN.md sec. 5 Phase 1b, sec. 7 "clean != correct").
+"""Phase 1b value-class invariants (docs/CAMPAIGN.md sec. 5 Phase 1b, sec. 7 "clean != correct").
 
 Scrutinizes ACCEPTED edges (manifest.csv state==accept) for in-bounds wrong parses that Phase 1's
 consumption gate cannot see. It compares per-field value BEHAVIOUR between the edge (source script run
@@ -18,7 +18,7 @@ Two families of check (thresholds are calibration-derived — see the CALIBRATIO
     count_neg      home is a small non-negative int (<= COUNT_SMALL); edge min < 0. severity high
     count_huge     home is a small non-negative int; edge max is absurd (>= COUNT_HUGE).  high
                    (count-like fields feed loops — we can't see the loop, so "small non-negative at
-                    home, huge/negative at edge" is the desync signal; PLAN.md's count=1714880544.)
+                    home, huge/negative at edge" is the desync signal; docs/CAMPAIGN.md's count=1714880544.)
 
   Distribution divergence (uses the capped distinct-value histogram, num fields only):
     dist_diverge   total-variation distance between home and edge value distributions.
@@ -41,7 +41,7 @@ Per-edge rollup verdict:
     suspect             >= 1 flagged field
     insufficient-fields < MIN_FIELDS_FOR_VERDICT fields had n >= FLOOR_N on both sides
 
-Phase 1b is a FLAG in this iteration: it never changes an accept/reject state (PLAN.md reserves wiring
+Phase 1b is a FLAG in this iteration: it never changes an accept/reject state (docs/CAMPAIGN.md reserves wiring
 it into acceptance for a later decision). manifest.py --invariants joins the rollup verdict as an
 advisory column only.
 

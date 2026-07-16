@@ -4,7 +4,7 @@ Reads payloads.pkl (build-12 target payloads), infers a decoder structure per
 (op,dir) WITHOUT reading any real script, and emits MapleShark IronPython scripts
 plus a JSON description of the inferred read sequence (for structural scoring).
 
-Method (per PLAN.md Phase 5):
+Method (per docs/CAMPAIGN.md Phase 5):
   1. Cluster by first-byte mode (only if first byte behaves like a dispatcher) and
      length family.
   2. Within a cluster, a position-synchronised consensus walk over all samples:
