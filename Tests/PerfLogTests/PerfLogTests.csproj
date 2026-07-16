@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>PerfLogTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Compile the real PerfLog source directly; it depends only on NLog + WinForms. -->
+    <Compile Include="..\..\MapleShark2\Tools\PerfLog.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.2.3" />
+    <!-- Needed only so the app's real nlog.config (RichTextBox target) can be loaded in the routing test. -->
+    <PackageReference Include="NLog.Windows.Forms" Version="5.2.1" />
+  </ItemGroup>
+
+</Project>

@@ -350,6 +350,25 @@ Overstated in rev 1, per sol, and **not yet verified** — profile before prescr
 frequency, owner-draw cost (the column-header handler does render), retention vs allocation rate. Server
 GC is not a fix for unbounded retention.
 
+**Perf instrumentation DONE (2026-07-16)** — built after live-use reports the safe scope did not fix:
+~10 s freeze when a session starts loading, and machine-wide chugging as terminated session tabs stack
+up. `Tools/PerfLog.cs` + a dedicated `perf.log` (nlog.config `perf` rule, `final` so it never reaches
+console/textbox/main log). Three mechanisms: (1) threshold-gated stopwatch scopes (silent under 20 ms;
+rare events — engine creation, session show, file/pcap load — always logged); (2) a UI-hang watchdog
+(background heartbeat through the message pump; hangs ≥500 ms logged with total duration and the perf
+scope open at detection, so freezes are attributed even in uninstrumented code); (3) 5 s counter lines
+(managed/working-set/private MB, GC gen counts, plus gauges: queue drain size, tab count, per-tab
+packet/row totals, pending rows, tracked sessions, engine count) to correlate chug onset with retention.
+Scopes: `main.tick`/`main.drain`/`session.show`/`pcap.load` (MainForm), `session.flush`/`session.refresh`/
+`session.load` (SessionForm), `engine.create`/`script.exec`/`manifest.resolve` (ScriptManager),
+`structure.parse` (StructureForm). Verified by 15/15 behavioral tests (`Tests/PerfLogTests` — real
+message pump, real induced hang with scope attribution, routing through the real nlog.config); **NOT
+yet run in a live capture** — the next live session produces the evidence this phase has been gated on.
+Suspects the log should adjudicate: cold IronPython engine creation on the UI thread (`session.show`),
+the relog-burst drain/flush path, `PacketListView.FilteredPackets` materializing an ImmutableList of
+every row per access (O(n²) in the indexer loops — a provable defect awaiting a measured share of blame),
+the per-resolve env-hash in `manifest.resolve`, and retention across terminated tabs (counters).
+
 ### Phase 4 — Generate the V12 layer from the emulator
 
 Scope: **executed SendOp traces only.** V12/GMS2 only — wrong lineage for KMS2.
@@ -510,7 +529,10 @@ Phase 1b  value-class invariants     BUILT, honestly scoped — automatic gating
                                      advisory, surfaced in the resolver marker
 Phase 2b  remaining defects          DONE in-repo; script fixes live in the non-versioned Ochi tree
 Phase 3   perf                       SAFE SCOPE DONE (segment reader w/ committed 28-case tests, O(1)
-                                     opcodes, session reaping); pooling/pipeline gated on profiling
+                                     opcodes, session reaping); live symptoms persist -> perf
+                                     instrumentation landed (PerfLog scopes + UI-hang watchdog +
+                                     counters, 15/15 tests); pooling/pipeline still gated on the
+                                     resulting live-capture evidence
 Phase 4   V12 generation             4a+4b DONE within stated bounds: 166 scripts, zero over-read on
                                      the 138 with corpus data (prefix-safety validated, NOT field-level
                                      correctness); 57 explicitly partial; 28 without corpus data

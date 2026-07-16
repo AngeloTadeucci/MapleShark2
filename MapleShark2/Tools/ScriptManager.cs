@@ -76,14 +76,19 @@ namespace MapleShark2.Tools {
                 return true;
             }
 
-            if (manifest.TryResolve(locale, version, outbound, opcode, out ScriptManifest.Resolution res)) {
-                decoder = new Decoder {
-                    Locale = locale, Build = res.SourceBuild,
-                    Path = Helpers.GetScriptPath(locale, res.SourceBuild, outbound, opcode),
-                    IsFallback = true,
-                    DistributionSuspect = res.DistributionSuspect,
-                };
-                return true;
+            // Deliberately uncached hash validation: every fallback resolve re-reads and re-hashes the
+            // source build's module surface on the caller's (UI) thread — a suspected per-click cost.
+            using (PerfLog.Scope perf = PerfLog.Time("manifest.resolve")) {
+                perf.SetDetail($"build={version} opcode=0x{opcode:X4}");
+                if (manifest.TryResolve(locale, version, outbound, opcode, out ScriptManifest.Resolution res)) {
+                    decoder = new Decoder {
+                        Locale = locale, Build = res.SourceBuild,
+                        Path = Helpers.GetScriptPath(locale, res.SourceBuild, outbound, opcode),
+                        IsFallback = true,
+                        DistributionSuspect = res.DistributionSuspect,
+                    };
+                    return true;
+                }
             }
 
             decoder = default;
@@ -91,6 +96,10 @@ namespace MapleShark2.Tools {
         }
 
         public void ExecuteScript(Decoder decoder) {
+            using PerfLog.Scope perf = PerfLog.Time("script.exec");
+            perf.SetDetail(
+                $"build={decoder.Build} script={Path.GetFileName(decoder.Path)}{(decoder.IsFallback ? " fallback" : "")}");
+
             // The engine is keyed by the decoder's own build so its imports resolve against the module
             // surface it was measured with, not the packet's build.
             ScriptEngine engine = GetEngine(decoder.Locale, decoder.Build);
@@ -105,13 +114,18 @@ namespace MapleShark2.Tools {
                 return engine;
             }
 
-            engine = CreateBaseEngine();
-            ICollection<string> paths = engine.GetSearchPaths();
-            // Version folder before the shared root: a version-specific module (common.py, item.py)
-            // must shadow the shared one, not the other way around.
-            paths.Add(Helpers.GetScriptFolder(locale, version));
-            paths.Add(Helpers.GetScriptsRoot());
-            engine.SetSearchPaths(paths);
+            // Cold engine creation runs on the caller's (UI) thread: DLR init plus first-touch assembly
+            // loads make the first engine of the process a prime freeze suspect — always log it.
+            using (PerfLog.Scope perf = PerfLog.Time("engine.create", always: true)) {
+                perf.SetDetail($"locale={locale} build={version}");
+                engine = CreateBaseEngine();
+                ICollection<string> paths = engine.GetSearchPaths();
+                // Version folder before the shared root: a version-specific module (common.py, item.py)
+                // must shadow the shared one, not the other way around.
+                paths.Add(Helpers.GetScriptFolder(locale, version));
+                paths.Add(Helpers.GetScriptsRoot());
+                engine.SetSearchPaths(paths);
+            }
             new Task(() => {
                 // Warm up these modules because they are commonly used. Missing modules are not fatal
                 // here (a fresh Scripts folder may not have them yet) — the real import error surfaces
@@ -127,6 +141,7 @@ namespace MapleShark2.Tools {
             }).Start();
 
             engines[(locale, version)] = engine;
+            PerfLog.Gauge("engines", engines.Count);
             return engine;
         }
 

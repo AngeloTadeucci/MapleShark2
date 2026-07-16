@@ -181,6 +181,9 @@ namespace MapleShark2.UI {
             mTimer.Interval = Config.Instance.PacketRate;
             mTimer.Enabled = true;
 
+            PerfLog.StartWatchdog(this);
+            PerfLog.StartCounters();
+
             foreach (string arg in startupArguments) {
                 SessionForm session = NewSession();
                 session.OpenReadOnly(arg);
@@ -227,6 +230,9 @@ namespace MapleShark2.UI {
         }
 
         private void LoadPcapFile(string fileName) {
+            using PerfLog.Scope perf = PerfLog.Time("pcap.load", always: true);
+            perf.SetDetail($"file={Path.GetFileName(fileName)}");
+
             PcapDevice fileDevice = new CaptureFileReaderDevice(fileName);
             fileDevice.Open();
 
@@ -316,12 +322,19 @@ namespace MapleShark2.UI {
         private readonly List<SessionForm> closes = new List<SessionForm>();
 
         private void mTimer_Tick(object sender, EventArgs e) {
+            using PerfLog.Scope perf = PerfLog.Time("main.tick");
             try {
                 mTimer.Enabled = false;
 
                 DateTime now = DateTime.Now;
+                int tabs = 0;
+                long tabPackets = 0, tabRows = 0, tabPendingRows = 0;
                 foreach (Form form in MdiChildren) {
                     var ses = (SessionForm) form;
+                    tabs++;
+                    tabPackets += ses.PacketCount;
+                    tabRows += ses.ListRowCount;
+                    tabPendingRows += ses.PendingRowCount;
                     if (ses.CloseMe(now))
                         closes.Add(ses);
                 }
@@ -330,6 +343,12 @@ namespace MapleShark2.UI {
                 closes.Clear();
 
                 ReapHalfOpenSessions(now);
+
+                PerfLog.Gauge("tabs", tabs);
+                PerfLog.Gauge("tabs.packets", tabPackets);
+                PerfLog.Gauge("tabs.rows", tabRows);
+                PerfLog.Gauge("tabs.pending_rows", tabPendingRows);
+                PerfLog.Gauge("sessions.tracked", sessions.Count);
 
                 ProcessPacketQueue();
 
@@ -381,6 +400,16 @@ namespace MapleShark2.UI {
                 packetQueue = new List<RawCapture>();
             }
 
+            if (curQueue.Count == 0) {
+                return;
+            }
+
+            // Drains the entire backlog in one UI-thread pass (decrypt + parse per packet). A slow
+            // drain grows the next backlog — the drained count is the feedback-loop signal.
+            using PerfLog.Scope perf = PerfLog.Time("main.drain");
+            perf.SetDetail($"packets={curQueue.Count}");
+            PerfLog.Gauge("queue.drained", curQueue.Count);
+
             foreach (RawCapture packet in curQueue) {
                 if (!sniffEnabled) {
                     continue;
@@ -404,8 +433,13 @@ namespace MapleShark2.UI {
 
                     switch (result) {
                         case SessionForm.Results.Show:
-                            StructureForm.InitEngine(session.Locale, session.Build);
-                            session.Show(mDockPanel, DockState.Document);
+                            // Engine warm-up + dock is the prime 10s-freeze suspect; rare, so always log.
+                            using (PerfLog.Scope showPerf = PerfLog.Time("session.show", always: true)) {
+                                showPerf.SetDetail($"build={session.Build}");
+                                StructureForm.InitEngine(session.Locale, session.Build);
+                                session.Show(mDockPanel, DockState.Document);
+                            }
+
                             break;
                         case SessionForm.Results.CloseMe:
                             session.Close();

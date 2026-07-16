@@ -73,6 +73,11 @@ namespace MapleShark2.UI {
 
         public bool Saved { get; private set; }
 
+        // Perf gauges, read by MainForm's capture tick (same UI thread).
+        internal int PacketCount => mPackets.Count;
+        internal int PendingRowCount => bufferedPackets.Count;
+        internal int ListRowCount => ListView.Count;
+
         public Action<SessionForm> OnTerminated;
 
         // Used for determining if the session did receive a packet at all, or if it just emptied its buffers
@@ -292,6 +297,9 @@ namespace MapleShark2.UI {
         }
 
         public void OpenReadOnly(string pFilename) {
+            using PerfLog.Scope perf = PerfLog.Time("session.load", always: true);
+            perf.SetDetail($"file={Path.GetFileName(pFilename)}");
+
             // mFileSaveMenu.Enabled = false;
             Saved = true;
             mTerminated = true;
@@ -312,11 +320,15 @@ namespace MapleShark2.UI {
             ListView.EndUpdate();
             if (ListView.Count > 0) ListView.EnsureVisible(0);
 
+            perf.SetDetail($"file={Path.GetFileName(pFilename)} packets={mPackets.Count}");
             Text = $"{Path.GetFileName(pFilename)} (ReadOnly)";
             logger.Info($"Loaded file: {pFilename}");
         }
 
         public void RefreshPackets() {
+            using PerfLog.Scope perf = PerfLog.Time("session.refresh");
+            perf.SetDetail($"packets={mPackets.Count}");
+
             ListView.BeginUpdate();
 
             MaplePacket previous = ListView.SelectedIndices.Count > 0
@@ -688,6 +700,8 @@ namespace MapleShark2.UI {
                 return;
             }
 
+            using PerfLog.Scope perf = PerfLog.Time("session.flush");
+
             timer.Enabled = false;
 
             List<MaplePacket> copy = bufferedPackets;
@@ -704,6 +718,7 @@ namespace MapleShark2.UI {
                 ListView.Items[FilteredPackets.Count - 1]?.EnsureVisible();
             }
 
+            perf.SetDetail($"rows={copy.Count} listTotal={ListView.Count}");
             timer.Enabled = true;
         }
 

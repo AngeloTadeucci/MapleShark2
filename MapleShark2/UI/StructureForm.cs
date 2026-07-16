@@ -38,6 +38,11 @@ namespace MapleShark2.UI {
         }
 
         public void ParseMaplePacket(MaplePacket packet) {
+            // Per-selection cost: decoder resolution (incl. manifest hash validation) + script execution
+            // + tree building, all on the UI thread.
+            using PerfLog.Scope perf = PerfLog.Time("structure.parse");
+            perf.SetDetail($"build={packet.Version} opcode=0x{packet.Opcode:X4} len={packet.Length}");
+
             tree.Nodes.Clear();
             subNodes.Clear();
             packet.Reset(); // Seek back to beginning
