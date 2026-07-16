@@ -31,11 +31,20 @@ namespace MapleShark2.Tools {
             public string EnvSha;
             public int QualityRank; // USEFUL=0, PARTIAL=1, STUB=2
             public double CleanFraction;
+            public bool DistributionSuspect; // Phase 1b advisory (dist_diverge) — resolve, but warn
         }
+
+        public readonly struct Resolution {
+            public uint SourceBuild { get; init; }
+            public bool DistributionSuspect { get; init; }
+        }
+
+        // Rule versions this resolver understands. A manifest stamped with an unknown rule may embed
+        // acceptance semantics this code predates — refuse it rather than trust it.
+        private static readonly string[] KnownRulePrefixes = { "3." };
 
         private readonly Dictionary<(uint Target, ushort Opcode, bool Outbound), List<Edge>> edges =
             new Dictionary<(uint, ushort, bool), List<Edge>>();
-        private readonly Dictionary<uint, string> envHashCache = new Dictionary<uint, string>();
 
         public ScriptManifest() {
             string path = Path.Combine(Helpers.GetScriptsRoot(), FileName);
@@ -56,14 +65,19 @@ namespace MapleShark2.Tools {
 
         /// <summary>
         /// Find the best accepted, hash-valid fallback source for a packet whose own build has no script.
-        /// Candidates are tried best-first (quality tier, then measured clean fraction, then newer build).
+        /// Candidates are tried best-first (quality tier, then measured clean fraction, then build
+        /// distance — the temporally nearer source has the stronger structural prior). STUB edges
+        /// (median consumption below 50%) are never auto-resolved: they are portable, not coverage.
+        /// Hashes are recomputed per resolve — no caching, so an edited script or shared module is
+        /// caught immediately, not after a restart.
         /// </summary>
-        public bool TryResolve(byte locale, uint version, bool outbound, ushort opcode, out uint sourceBuild) {
-            sourceBuild = 0;
+        public bool TryResolve(byte locale, uint version, bool outbound, ushort opcode, out Resolution resolution) {
+            resolution = default;
             if (locale != ManifestLocale) return false;
             if (!edges.TryGetValue((version, opcode, outbound), out List<Edge> candidates)) return false;
 
             foreach (Edge edge in candidates) {
+                if (edge.QualityRank >= 2) continue; // STUB
                 string scriptPath = Helpers.GetScriptPath(locale, edge.SourceBuild, outbound, opcode);
                 if (!File.Exists(scriptPath)) continue;
                 if (FileSha(scriptPath) != edge.ScriptSha) {
@@ -78,7 +92,10 @@ namespace MapleShark2.Tools {
                     continue;
                 }
 
-                sourceBuild = edge.SourceBuild;
+                resolution = new Resolution {
+                    SourceBuild = edge.SourceBuild,
+                    DistributionSuspect = edge.DistributionSuspect,
+                };
                 return true;
             }
 
@@ -91,13 +108,26 @@ namespace MapleShark2.Tools {
             Dictionary<string, int> col = header.Select((name, i) => (name, i)).ToDictionary(t => t.name, t => t.i);
 
             string line;
+            bool ruleChecked = false;
             while ((line = reader.ReadLine()) != null) {
                 if (line.Length == 0) continue;
                 string[] f = SplitCsv(line);
+
+                if (!ruleChecked && col.TryGetValue("rule_version", out int rv)) {
+                    string rule = f[rv];
+                    if (!KnownRulePrefixes.Any(rule.StartsWith)) {
+                        throw new InvalidDataException(
+                            $"manifest rule_version '{rule}' unknown to this resolver; refusing to load");
+                    }
+
+                    ruleChecked = true;
+                }
+
                 if (f[col["state"]] != "accept") continue;
 
                 ushort opcode = Convert.ToUInt16(f[col["opcode"]].Substring(2), 16);
-                var key = (uint.Parse(f[col["target_build"]]), opcode, f[col["direction"]] == "OUT");
+                uint target = uint.Parse(f[col["target_build"]]);
+                var key = (target, opcode, f[col["direction"]] == "OUT");
                 long n = long.Parse(f[col["n"]]);
                 var edge = new Edge {
                     SourceBuild = uint.Parse(f[col["source_build"]]),
@@ -105,6 +135,7 @@ namespace MapleShark2.Tools {
                     EnvSha = f[col["env_sha"]],
                     QualityRank = f[col["quality"]] switch { "USEFUL" => 0, "PARTIAL" => 1, _ => 2 },
                     CleanFraction = n == 0 ? 0 : (double) long.Parse(f[col["ok_exact"]]) / n,
+                    DistributionSuspect = col.TryGetValue("invariants", out int iv) && f[iv] == "suspect",
                 };
 
                 if (!edges.TryGetValue(key, out List<Edge> list)) {
@@ -114,12 +145,16 @@ namespace MapleShark2.Tools {
                 list.Add(edge);
             }
 
-            foreach (List<Edge> list in edges.Values) {
-                list.Sort((a, b) => {
+            foreach (KeyValuePair<(uint Target, ushort Opcode, bool Outbound), List<Edge>> entry in edges) {
+                uint target = entry.Key.Target;
+                entry.Value.Sort((a, b) => {
                     int cmp = a.QualityRank.CompareTo(b.QualityRank);
                     if (cmp != 0) return cmp;
                     cmp = b.CleanFraction.CompareTo(a.CleanFraction);
-                    return cmp != 0 ? cmp : b.SourceBuild.CompareTo(a.SourceBuild);
+                    if (cmp != 0) return cmp;
+                    long da = Math.Abs((long) a.SourceBuild - target);
+                    long db = Math.Abs((long) b.SourceBuild - target);
+                    return da.CompareTo(db);
                 });
             }
         }
@@ -154,7 +189,8 @@ namespace MapleShark2.Tools {
             return fields.ToArray();
         }
 
-        /// <summary>SHA-256 (first 12 hex chars, lowercase) of one file — must mirror Harness ScriptHost.FileSha.</summary>
+        /// <summary>SHA-256 (first 12 hex chars, lowercase) of one file — must mirror Harness ScriptHost.FileSha.
+        /// Deliberately uncached: an edited script must be caught on the next resolve, not after restart.</summary>
         private static string FileSha(string path) {
             using var sha = SHA256.Create();
             return Convert.ToHexString(sha.ComputeHash(File.ReadAllBytes(path))).Substring(0, 12).ToLowerInvariant();
@@ -164,10 +200,11 @@ namespace MapleShark2.Tools {
         /// Importable-module-surface hash — must mirror Harness ScriptHost.EnvHash exactly: a leading
         /// byte for the sys.path order (1 = version folder first, which is what both the harness sweep
         /// and this application now use), then name + content of every top-level .py of the scripts root
-        /// and the build's version folder, ordered by file name.
+        /// and the build's version folder, ordered by file name. Deliberately uncached (a handful of
+        /// small files per resolve): a stale cache would let edited shared modules execute under an old
+        /// accepted hash.
         /// </summary>
         private string EnvSha(uint build) {
-            if (envHashCache.TryGetValue(build, out string cached)) return cached;
             using IncrementalHash sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             sha.AppendData(new byte[] { 1 });
             foreach (string dir in new[] { Helpers.GetScriptsRoot(), Helpers.GetScriptFolder(ManifestLocale, build) }) {
@@ -179,9 +216,7 @@ namespace MapleShark2.Tools {
                 }
             }
 
-            string hash = Convert.ToHexString(sha.GetHashAndReset()).Substring(0, 12).ToLowerInvariant();
-            envHashCache[build] = hash;
-            return hash;
+            return Convert.ToHexString(sha.GetHashAndReset()).Substring(0, 12).ToLowerInvariant();
         }
     }
 }

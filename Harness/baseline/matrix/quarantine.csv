@@ -1,0 +1,13 @@
+source_build,target_build,opcode,direction,evidence,reviewed
+2527,2507,0x0058,IN,NpcControl/Short:Int16 constant 100 at home (n=805) reads -30464 at edge,2026-07-16 manual review: home-constant field diverging wildly = structural shift
+2527,2520,0x0058,IN,NpcControl/Short:Int16 constant 100 at home reads -32768 at edge,2026-07-16 manual review: home-constant field diverging wildly = structural shift
+2527,2525,0x0058,IN,NpcControl/BufferSize:Int16 constant 26 at home reads [-22858..25600]; Short:Int16 constant 100 reads -32512,2026-07-16 manual review: two home-constant fields diverging wildly = structural shift
+2527,2529,0x0058,IN,NpcControl/Short:Int16 constant 100 at home reads -32000 at edge,2026-07-16 manual review: home-constant field diverging wildly = structural shift
+2527,2549,0x0058,IN,NpcControl/BufferSize:Int16 constant 26 at home reads -13586 at edge,2026-07-16 manual review: home-constant field diverging wildly = structural shift
+2521,2486,0x0055,IN,?:Int16 home range [0..902] never negative reads -25551 at edge,2026-07-16 manual review: non-negative home field deeply negative at edge
+2521,2507,0x0055,IN,?:Int16 home range [0..902] never negative reads -25910 at edge,2026-07-16 manual review: non-negative home field deeply negative at edge
+2521,2512,0x0055,IN,?:Int16 home range [0..902] never negative reads -7215 at edge,2026-07-16 manual review: non-negative home field deeply negative at edge
+2521,2546,0x0055,IN,?:Int16 home range [0..902] never negative reads -2509 at edge,2026-07-16 manual review: non-negative home field deeply negative at edge
+12,2512,0x0020,OUT,Unknown:Int32 home range [0..4] reads 1117658858 at edge,2026-07-16 manual review: 0..4-valued field reading 1.1e9 = misalignment; also cross-lineage
+2502,2546,0x006A,IN,plot number:Int32 home range [1..10] reads -2147287552 at edge,2026-07-16 manual review: small positive id field reading 0x8002xxxx = misalignment
+2503,2546,0x006A,IN,plot number:Int32 home constant 1 reads -2147287552 at edge,2026-07-16 manual review: small positive id field reading 0x8002xxxx = misalignment

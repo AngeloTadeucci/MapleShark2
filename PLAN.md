@@ -18,6 +18,7 @@ killed proposals.
 | `Harness/baseline/` | Committed measurement outputs — the numbers quoted in §3. |
 | `Harness/baseline/sol-review-rev1.md` | The gpt-5.6-sol review that killed rev 1. Worth reading before re-proposing anything in §4. |
 | `Harness/baseline/sol-review-rev2.md` | The sol review of the rev 2 Phase 1 kickoff assessment. Killed §4.8–4.12; source of the rev 3 Phase 1 design. |
+| `Harness/baseline/sol-review-final.md` | The sol review of the executed campaign. Reversed rule v3.0's automatic gating (→ v3.1 quarantine); drove the §9 honest-status corrections. |
 
 
 ## 1. Context
@@ -500,21 +501,53 @@ with the exact-equivalence bar; each migrated script re-earns its manifest edges
 Phase 0   harness                    DONE (+ rev 3: matrix enumeration, reservoir sampling, hashes,
                                      over-read signatures, per-field stats)
 Phase 2a  compile errors + sys.path  DONE — fixed + measured (11.0% -> 0.0% over-read on 2546 home)
-Phase 1   compatibility manifest     DONE — evidence, classifier (rule v3), GUI resolver integration,
-                                     manifest deployed. GUI flow itself not yet exercised live.
-Phase 1b  value-class invariants     DONE (split verdict) — absolute invariants GATE (12 desyncs
-                                     ejected, rule v3); dist_diverge advisory pending temporal splits
-Phase 2b  remaining defects          DONE — label fixes, definitions writer/reader, MaplePacket.Search
-Phase 3   perf                       SAFE SCOPE DONE (segment reader, O(1) opcodes, session reaping);
-                                     pooling/pipeline still gated on live-capture profiling
-Phase 4   V12 generation             4a+4b DONE — 166 validated scripts, 43 new-coverage, 2 emulator
-                                     bugs found; 4c (Roslyn if-tier, RecvOp static) optional
-Phase 5   inference                  GATE RUN: PARTIAL — demoted to assistive-only, never autonomous
-Phase 6   schema                     INCREMENTAL START DONE — design + compiler + 3-script exact-
-                                     equivalence proof; bulk migration proceeds script-by-script
+Phase 1   compatibility manifest     BUILT + deployed (evidence, classifier rule v3.1, GUI resolver);
+                                     NOT live-verified — headless functional tests only
+Phase 1b  value-class invariants     BUILT, honestly scoped — automatic gating REVERSED per the final
+                                     review; 12 hand-reviewed desyncs quarantined (v3.1); dist_diverge
+                                     advisory, surfaced in the resolver marker
+Phase 2b  remaining defects          DONE in-repo; script fixes live in the non-versioned Ochi tree
+Phase 3   perf                       SAFE SCOPE DONE (segment reader w/ committed 28-case tests, O(1)
+                                     opcodes, session reaping); pooling/pipeline gated on profiling
+Phase 4   V12 generation             4a+4b DONE within stated bounds: 166 scripts, zero over-read on
+                                     the 138 with corpus data (prefix-safety validated, NOT field-level
+                                     correctness); 57 explicitly partial; 28 without corpus data
+Phase 5   inference                  GATE RUN: PARTIAL — assistive-only stands; the gate's numeric
+                                     scores are indicative, not evidence of generalization (§9)
+Phase 6   schema                     STARTED — design + deterministic compiler + 3-script behavioral-
+                                     aggregate equivalence; typed-trace comparison is the bulk-
+                                     migration bar (§9); 98.3% = syntactic expressibility only
 ```
 
-Still open across the plan: live-capture verification (GUI fallback flow, session reaping, and the
-Phase 3 profiling gate all need a real capture session); temporal-split calibration to promote
-dist_diverge; the two emulator bugs to file upstream; Ochi script fixes have no repo (tree is not
-git-controlled).
+## 9. Final review corrections (sol-review-final.md) and what remains
+
+The executed campaign was adversarially reviewed; `Harness/baseline/sol-review-final.md` is the full
+text. Its findings and the remediations that landed:
+
+1. **Rule v3.0's automatic invariant gating: REVERSED** (the review's one decision to reverse).
+   Seed-split calibration doesn't cover drift, the count-like type gate is not semantic, and deriving
+   the gate from the current accept set was circular (invariants scanned only accepted edges; a re-run
+   after gating would re-accept). Remediated: rule **3.1.0-quarantine** — the 12 catches each passed
+   *manual* review (tight/constant home range exploding at the edge) and live in the committed,
+   human-owned `quarantine.csv`; invariants.py now also scans quarantined edges (idempotency proven
+   over two full cycles) and its findings only enter quarantine by hand.
+2. **Resolver hardening** (finding 6): hash caches removed (stale `env_sha` could let edited modules
+   run under an old accepted hash), unknown `rule_version` refused, STUB edges never auto-resolve,
+   tie-break by build distance instead of "newer", `dist_diverge` suspects surfaced in the fallback
+   marker. The classifier gained an `env_sha` home-join guard against mixed sweep generations.
+3. **Honest labels** (finding 7), now reflected in §8's table: Phase 4's "validated" means
+   prefix-safety/zero-over-read on sampled corpus data — not field-level wire correctness (the two
+   emulator/wire divergences prove the distinction); Phase 5's numeric scores came from hardcoded
+   targets with self-validated inference and unpreserved scratch artifacts — the assistive-only verdict
+   stands, the numbers are indicative only; Phase 6's equivalence bar compared aggregate outcomes and
+   consumed histograms, which cannot see equal-width retypes, label errors, or per-packet compensating
+   differences — per-packet typed-trace comparison is the required bar for bulk migration.
+4. **Highest-value next work** (finding 8): manually reverse-engineer, as schemas, the top ~10
+   undocumented KMS2 variable/mode opcodes — 88.8% of undocumented traffic — using independent capture
+   sessions, per-mode sampling, typed-trace comparison, and human semantic labeling. Nothing automated
+   in this campaign substitutes for that; everything built here (harness, field stats, signatures,
+   schema compiler, assistive inference) exists to make exactly that work fast and safe.
+
+Also still open: live-capture verification (GUI fallback flow, session reaping, Phase 3 profiling
+gate); temporal-split calibration to promote `dist_diverge`; filing the two emulator bugs upstream
+(`0x0039`, `0x00ED`); the Ochi tree remains un-version-controlled.

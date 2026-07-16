@@ -46,8 +46,9 @@ namespace MapleShark2.UI {
             if (scriptManager.TryResolveDecoder(packet.Locale, packet.Version, packet.Outbound, packet.Opcode,
                     out ScriptManager.Decoder decoder)) {
                 if (decoder.IsFallback) {
+                    string suspect = decoder.DistributionSuspect ? " — field distributions suspect vs home" : "";
                     CurrentNodes.Add(new StructureNode(
-                        $"[manifest] build {decoder.Build} decoder (no build {packet.Version} script)",
+                        $"[manifest] build {decoder.Build} decoder (no build {packet.Version} script){suspect}",
                         packet.GetReadSegment(0)));
                 }
 

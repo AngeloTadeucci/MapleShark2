@@ -9,12 +9,13 @@ Consumes the raw matrix CSVs (baseline/matrix/matrix-<build>.csv) and stamps a v
 Raw evidence and verdicts are deliberately separate (PLAN.md §5 Phase 1): re-running this script with a
 new rule version re-classifies without re-running packets. Never edit the matrix CSVs.
 
-Rule v3.0.0-invariants:
-  v2 (signatures) changed reject reasons only; v3 adds ONE acceptance change on top: a would-be-accepted
-  edge with an ABSOLUTE Phase 1b invariant violation (count_neg/count_huge/bool_escape/len_huge from
-  invariants.csv — zero calibrated false positives, validated concrete catch) is rejected as an
-  in-bounds desync. dist_diverge remains advisory (calibrated against sampling noise only, not
-  cross-build content drift) and never gates.
+Rule v3.1.0-quarantine:
+  v2 (signatures) changed reject reasons only. v3.0 auto-gated on absolute Phase 1b invariants;
+  sol-review-final reversed that (seed-split calibration doesn't cover drift; the count-like type gate
+  is not semantic; deriving the gate from the current accept set was circular). v3.1 instead rejects
+  edges on the committed, hand-reviewed quarantine.csv — invariants.py findings are flagged for human
+  review and enter that file manually, never automatically. It also adds an env_sha home-join guard so
+  matrix CSVs from different sweep generations are never compared. dist_diverge remains advisory.
 
   - compile_error > 0                      -> reject  (broken script)
   - over_read > 0                          -> reject, reason is now signature-aware:
@@ -39,31 +40,30 @@ import csv
 import sys
 from pathlib import Path
 
-RULE_VERSION = "3.0.0-invariants"
+RULE_VERSION = "3.1.0-quarantine"
 HERE = Path(__file__).resolve().parent
 MATRIX_DIR = HERE.parent / "baseline" / "matrix"
 
-# Phase 1b absolute value-class invariants (invariants.py checks with zero calibrated false positives:
-# type-gated count_neg / count_huge / bool_escape / len_huge). Rule v3 gates acceptance on these — a
-# would-be-accepted edge with an absolute violation is a validated in-bounds desync (e.g. 2527->2525
-# 0x0058: constant 26 at home, [-22858, 25600] at the edge). dist_diverge remains ADVISORY ONLY: it was
-# calibrated against sampling noise (seed splits), not cross-build content drift, and must never gate
-# until a temporal-split noise floor exists (PLAN.md Phase 1b).
-ABSOLUTE_CHECKS = {"count_neg", "count_huge", "bool_escape", "len_huge"}
 
+def load_quarantine():
+    """Hand-reviewed quarantined edges (quarantine.csv) -> {tuple: evidence}.
 
-def load_absolute_violations():
-    """Edge tuples with >=1 absolute invariant violation, with their violated checks."""
-    path = MATRIX_DIR / "invariants.csv"
-    violations = {}
+    sol-review-final finding 1 reversed rule v3's AUTOMATIC gating on absolute invariants: seed-split
+    calibration doesn't cover drift, the count-like type gate is not semantic, and deriving the gate
+    from the current manifest's accept set was circular. The catches themselves survived manual review
+    (every one is a tight/constant home range exploding at the edge), so they live on as an explicit,
+    committed, human-owned list. invariants.py output NEVER gates automatically — new violations are
+    flagged for review and only enter this file by hand.
+    """
+    path = MATRIX_DIR / "quarantine.csv"
+    quarantined = {}
     if not path.exists():
-        return violations
+        return quarantined
     with open(path, newline="") as fh:
         for r in csv.DictReader(fh):
-            if r["check"] in ABSOLUTE_CHECKS:
-                key = (r["source_build"], r["target_build"], r["opcode"], r["direction"])
-                violations.setdefault(key, set()).add(r["check"])
-    return violations
+            key = (r["source_build"], r["target_build"], r["opcode"], r["direction"])
+            quarantined[key] = r["evidence"]
+    return quarantined
 
 
 def parse_hist(s):
@@ -167,9 +167,9 @@ def main():
     if not rows:
         sys.exit(f"no matrix CSVs under {MATRIX_DIR} — run the sweep first")
 
-    absolute = load_absolute_violations()
-    if absolute:
-        print(f"rule v3: {len(absolute)} edges carry absolute invariant violations", file=sys.stderr)
+    quarantined = load_quarantine()
+    if quarantined:
+        print(f"rule v3.1: {len(quarantined)} hand-quarantined edges", file=sys.stderr)
 
     # Home behaviour: the source==target rows of each source's own run, keyed by (source, opcode, dir).
     home = {}
@@ -200,11 +200,14 @@ def main():
             state, reason = "reject", f"home decoder over-reads ({h['over_read']}/{h['ran']})"
         elif n < args.floor:
             state, reason = "insufficient", f"n={n} < floor {args.floor}"
+        elif h["env_sha"] != r["env_sha"]:
+            # PLAN promises home evidence joined by env_sha; matrix CSVs from different sweep
+            # generations must never be compared (sol-review-final finding 6).
+            state, reason = "insufficient", "env_sha mismatch home vs edge — mixed sweep generations"
         elif ks is not None and ks > args.ks_max:
             state, reason = "reject", f"consumed KS={ks:.3f} > {args.ks_max} vs home"
-        elif (key := (r["source_build"], r["target_build"], r["opcode"], r["direction"])) in absolute:
-            state, reason = "reject", ("value-class invariant violation: " +
-                                       ",".join(sorted(absolute[key])) + " (in-bounds desync)")
+        elif (key := (r["source_build"], r["target_build"], r["opcode"], r["direction"])) in quarantined:
+            state, reason = "reject", f"quarantined: manual review — {quarantined[key]}"
         else:
             state, reason = "accept", ""
 

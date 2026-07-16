@@ -260,14 +260,19 @@ def compare_edge(src, tgt, op, direction, fields, cfg):
 
 
 def load_accepted_edges():
-    """Accepted edges from manifest.csv (state==accept) as (source,target,opcode,dir) + carry n/quality."""
+    """Edges to scrutinize: accepted edges PLUS edges rejected only by invariant quarantine.
+
+    Including the quarantined edges makes the pipeline idempotent (sol-review-final finding 1):
+    invariants -> quarantine -> re-run invariants must reproduce the same violation set, not drop
+    the quarantined edges and let a re-classification silently re-accept them.
+    """
     man = MATRIX_DIR / "manifest.csv"
     if not man.exists():
         sys.exit(f"missing {man} — run manifest.py first")
     edges = []
     with open(man, newline="") as fh:
         for r in csv.DictReader(fh):
-            if r["state"] == "accept":
+            if r["state"] == "accept" or r["reason"].startswith(("quarantined", "value-class invariant")):
                 edges.append(r)
     return edges
 

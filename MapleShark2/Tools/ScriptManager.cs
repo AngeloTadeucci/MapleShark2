@@ -60,6 +60,7 @@ namespace MapleShark2.Tools {
             public uint Build { get; init; }
             public string Path { get; init; }
             public bool IsFallback { get; init; }
+            public bool DistributionSuspect { get; init; }
         }
 
         // Resolution order: the packet's own build first; otherwise the best manifest-accepted,
@@ -71,11 +72,12 @@ namespace MapleShark2.Tools {
                 return true;
             }
 
-            if (manifest.TryResolve(locale, version, outbound, opcode, out uint sourceBuild)) {
+            if (manifest.TryResolve(locale, version, outbound, opcode, out ScriptManifest.Resolution res)) {
                 decoder = new Decoder {
-                    Locale = locale, Build = sourceBuild,
-                    Path = Helpers.GetScriptPath(locale, sourceBuild, outbound, opcode),
+                    Locale = locale, Build = res.SourceBuild,
+                    Path = Helpers.GetScriptPath(locale, res.SourceBuild, outbound, opcode),
                     IsFallback = true,
+                    DistributionSuspect = res.DistributionSuspect,
                 };
                 return true;
             }

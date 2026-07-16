@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>SegmentByteReaderTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Compile the real reader source directly; it is dependency-free (System.* only). -->
+    <Compile Include="..\..\MapleShark2\Tools\SegmentByteReader.cs" />
+  </ItemGroup>
+
+</Project>
