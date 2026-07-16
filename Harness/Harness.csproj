@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <AssemblyName>Harness</AssemblyName>
+        <RootNamespace>MapleShark2.Harness</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <!-- IronPython's StringOps static ctor constructs CultureInfo("en"); invariant mode throws there. -->
+        <InvariantGlobalization>false</InvariantGlobalization>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="IronPython" Version="3.4.1" />
+    </ItemGroup>
+
+</Project>
