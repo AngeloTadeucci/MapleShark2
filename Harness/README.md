@@ -69,6 +69,7 @@ over-reads in the first 1,500 vs 6 in a 2,000-packet dedicated run); committed b
 | `--scripts <dir>` | Scripts root. Default: the Ochi tree. |
 | `--sniffs <dir>` | Sniff archive root. |
 | `--out <file>` / `--csv <file>` | Text report / aggregate CSV. |
+| `--fields <file>` | Per-field value statistics CSV (Phase 1b groundwork): per (source, opcode, direction, normalized field key) — n, min/max/mean, capped distinct-value histogram. Zero overhead when absent. |
 | `--version-path-first` | Put the version dir ahead of the shared root on `sys.path`. Default reproduces the `ScriptManager.cs:88` shadowing bug; this flag tests the fix. |
 
 ### CSV schema (rev 3)
@@ -82,6 +83,10 @@ One row per (source build, target build, opcode, direction). Besides the outcome
 | `env_sha` | Hash of the resolved decoder environment: sys.path order flag + every importable top-level `.py` on both search paths (`script_api.py`, `common.py`, `item.py`, version overrides). Catches shared-module edits that `script_sha` can't see. |
 | `consumed_hist` | Sparse `pct:count\|pct:count` consumed-percentage histogram, so acceptance verdicts can be recomputed without re-running packets. p50/p90 alone can hide a rare catastrophic mode. |
 | `sampling` | `all` or `reservoir;n=<N>;seed=<S>` — the evidence's provenance. |
+| `over_sigs` | Per-bucket over-read failure signatures, `sig:count\|sig:count` (digits normalized to `#`, ≤16 distinct + `~other`). Rule v2 uses signature-SET comparison to label a reject "same defect as home" vs "NEW failure mode" — never rate comparison (PLAN.md §4.8). Diagnostics only: the accept set is identical to rule v1 (verified tuple-for-tuple). |
+
+The sweep driver is committed as `sweep.ps1` (idempotent; writes `matrix-*.csv`, `fields-*.csv`, and
+`.md` reports into `baseline/matrix/`).
 
 ## Outcomes
 

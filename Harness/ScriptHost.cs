@@ -168,7 +168,8 @@ namespace MapleShark2.Harness {
         /// Run the decoder from <paramref name="sourceBuild"/> against one packet. Returns the outcome;
         /// the sink's trace is valid until the next call on the same source build.
         /// </summary>
-        public ParseResult Execute(uint sourceBuild, RawPacket packet, bool trace) {
+        public ParseResult Execute(uint sourceBuild, RawPacket packet, bool trace,
+            Dictionary<string, FieldAgg> fieldCtx = null) {
             string path = PathFor(sourceBuild, packet.Outbound, packet.Opcode);
             if (!File.Exists(path)) {
                 return new ParseResult { Outcome = Outcome.NoScript, Declared = packet.Data.Length };
@@ -198,6 +199,7 @@ namespace MapleShark2.Harness {
             var reader = new BoundedByteReader(packet.Data, 0, packet.Data.Length);
             engine.Sink.TraceEnabled = trace;
             engine.Sink.Begin(reader);
+            engine.Sink.SetFieldContext(fieldCtx);
 
             try {
                 // Fresh scope per packet, matching ScriptSource.Execute()'s no-arg behaviour in the GUI.
@@ -208,6 +210,7 @@ namespace MapleShark2.Harness {
                 return new ParseResult {
                     Outcome = Outcome.OverRead, Reason = ex.Reason, Declared = reader.Length,
                     Consumed = reader.Consumed, Error = ex.Message, ScriptPath = path,
+                    Signature = Signature(ex.Reason, ex.Message, engine.Sink),
                     Trace = trace ? Snapshot(engine.Sink) : null,
                 };
             } catch (Exception ex) {
@@ -217,6 +220,7 @@ namespace MapleShark2.Harness {
                     return new ParseResult {
                         Outcome = Outcome.OverRead, Reason = inner.Reason, Declared = reader.Length,
                         Consumed = reader.Consumed, Error = inner.Message, ScriptPath = path,
+                        Signature = Signature(inner.Reason, inner.Message, engine.Sink),
                         Trace = trace ? Snapshot(engine.Sink) : null,
                     };
                 }
@@ -233,6 +237,20 @@ namespace MapleShark2.Harness {
                 Declared = reader.Length, Consumed = reader.Consumed,
                 ScriptPath = path, Trace = trace ? Snapshot(engine.Sink) : null,
             };
+        }
+
+        /// <summary>
+        /// Compose a per-failure signature for an over-read: the over-read reason, the exception message with
+        /// every digit run collapsed to '#', the normalized node path, and the last read's label/type. This
+        /// lets the classifier tell "same defect the decoder already has at home" from "new failure mode on
+        /// the edge" without a rate comparison (PLAN.md §4.8). Sanitized so it survives CSV/sparse encoding:
+        /// no ',' '|' or newline (all -> ';').
+        /// </summary>
+        private static string Signature(OverReadReason reason, string message, ParseSink sink) {
+            string msg = ParseSink.NormDigits(message ?? "");
+            string label = ParseSink.NormDigits(sink.LastLabel ?? "");
+            string sig = $"{reason}: {msg} @ {sink.NormNodePath} [{label}:{sink.LastType}]";
+            return sig.Replace(',', ';').Replace('|', ';').Replace('\r', ';').Replace('\n', ';');
         }
 
         private static List<ReadEvent> Snapshot(ParseSink sink) => new List<ReadEvent>(sink.Trace);
@@ -286,6 +304,7 @@ namespace MapleShark2.Harness {
         public int Consumed;
         public string Error;
         public string ScriptPath;
+        public string Signature;
         public List<ReadEvent> Trace;
 
         public double ConsumedFraction => Declared == 0 ? 1.0 : (double) Consumed / Declared;

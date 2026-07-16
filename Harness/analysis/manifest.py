@@ -9,16 +9,23 @@ Consumes the raw matrix CSVs (baseline/matrix/matrix-<build>.csv) and stamps a v
 Raw evidence and verdicts are deliberately separate (PLAN.md §5 Phase 1): re-running this script with a
 new rule version re-classifies without re-running packets. Never edit the matrix CSVs.
 
-Rule v1.0.0-conservative:
+Rule v2.0.0-signatures:
+  The ACCEPT SET is IDENTICAL to rule 1.0.0-conservative — v2 changes reject *reasons* only, using the
+  per-failure over-read signatures now exported in the `over_sigs` column. Signatures are diagnostics:
+  they never move an edge across states in this version (that is future work).
+
   - compile_error > 0                      -> reject  (broken script)
-  - over_read > 0                          -> reject  (no signature data exported yet; rate comparison
-                                                       against home is forbidden — PLAN.md §4.8)
+  - over_read > 0                          -> reject, reason is now signature-aware:
+        edge sig set subset-of home sig set (home also over-reads) -> "same defect as home"
+        otherwise (or no home signature data)                      -> "NEW failure mode vs home"
   - home row missing (no sniffs for source)-> insufficient
-  - home over_read > 0                     -> reject  (a home-broken decoder is never auto-trusted)
+  - home over_read > 0 (edge clean)        -> reject  (a home-broken decoder is never auto-trusted)
   - ran < FLOOR (300)                      -> insufficient  (0 failures at low n is not evidence;
                                                              ~300 zero-failure obs bound the rate <1%)
   - KS(edge consumed hist, home hist) > KS_MAX -> reject (consumption incomparable to home)
   - otherwise                              -> accept
+
+Rate comparison against home is forbidden (PLAN.md §4.8) — signatures match failure *mode*, never rate.
 
 Compatibility != quality: an accepted edge additionally carries a quality tier from its consumed p50
 (USEFUL >= 90, PARTIAL >= 50, STUB < 50). STUB edges are portable, not coverage.
@@ -30,7 +37,7 @@ import csv
 import sys
 from pathlib import Path
 
-RULE_VERSION = "1.0.0-conservative"
+RULE_VERSION = "2.0.0-signatures"
 HERE = Path(__file__).resolve().parent
 MATRIX_DIR = HERE.parent / "baseline" / "matrix"
 
@@ -44,6 +51,36 @@ def parse_hist(s):
         pct, count = part.split(":")
         out[int(pct)] = int(count)
     return out
+
+
+def parse_sigs(s):
+    """Sparse 'sig:count|sig:count' -> {sig: count}. '-'/None/missing -> empty.
+
+    Like parse_hist, but a signature itself legitimately contains ':' (e.g. 'ReadBytes: wanted ...'),
+    so split the count off the right. Old CSVs without the column arrive here as None -> {}.
+    """
+    if not s or s == "-":
+        return {}
+    out = {}
+    for part in s.split("|"):
+        sig, count = part.rsplit(":", 1)
+        out[sig] = int(count)
+    return out
+
+
+def over_read_reason(over, edge_row, home_row):
+    """v2 reject reason for an edge with over_read>0: 'same defect as home' vs 'NEW failure mode'.
+
+    Never a rate comparison (PLAN.md §4.8) — only the failure-signature *sets* are compared.
+    """
+    edge_sigs = set(parse_sigs(edge_row.get("over_sigs")))
+    home_sigs = set(parse_sigs(home_row.get("over_sigs"))) if home_row is not None else set()
+    home_over = int(home_row["over_read"]) if home_row is not None else 0
+    if home_row is None or home_over == 0 or not home_sigs:
+        return f"over_read={over}; NEW failure mode vs home (no home signature data)"
+    if edge_sigs and edge_sigs <= home_sigs:
+        return f"over_read={over}; same defect as home (signatures matched)"
+    return f"over_read={over}; NEW failure mode vs home"
 
 
 def ks_distance(a, b):
@@ -106,7 +143,9 @@ def main():
         if int(r["compile_error"]) > 0:
             state, reason = "reject", "compile_error"
         elif over > 0:
-            state, reason = "reject", f"over_read={over} (no signature match available in rule v1)"
+            # State is unchanged from v1 (still reject — accept set identical); only the reason is
+            # signature-aware now, distinguishing an inherited home defect from a new edge failure mode.
+            state, reason = "reject", over_read_reason(over, r, h)
         elif h is None:
             state, reason = "insufficient", "no home evidence (source has no sniffs)"
         elif h["script_sha"] != r["script_sha"]:
@@ -128,6 +167,7 @@ def main():
             "threw": r["threw"], "consumed_p50": r["consumed_p50"], "consumed_p90": r["consumed_p90"],
             "home_n": h["ran"] if h else "-", "home_over_read": h["over_read"] if h else "-",
             "home_p50": h["consumed_p50"] if h else "-",
+            "over_sigs": r.get("over_sigs", "-"), "home_over_sigs": h.get("over_sigs", "-") if h else "-",
             "ks_vs_home": f"{ks:.3f}" if ks is not None else "-",
             "script_sha": r["script_sha"], "env_sha": r["env_sha"],
             "quality": quality(int(r["consumed_p50"])),

@@ -42,6 +42,7 @@ namespace MapleShark2.Harness {
             public int Seed = 1;
             public string Out;
             public string Csv;
+            public string Fields;   // --fields: per-field value-statistics CSV (Phase 1b groundwork)
             public bool VersionPathFirst;
             public bool Chain;
             public bool Matrix;
@@ -56,6 +57,7 @@ namespace MapleShark2.Harness {
                 new Dictionary<(ushort, bool, uint), Bucket>();
             public long Considered;
             public long Executed;
+            public FieldStatsCollector Fields;  // non-null only under --fields
         }
 
         public static int Main(string[] args) {
@@ -146,6 +148,11 @@ namespace MapleShark2.Harness {
                 Console.Error.WriteLine("csv    -> " + options.Csv);
             }
 
+            if (options.Fields != null && run.Fields != null) {
+                File.WriteAllText(options.Fields, run.Fields.ToCsv());
+                Console.Error.WriteLine($"fields -> {options.Fields}  ({run.Fields.FieldCount:N0} field rows)");
+            }
+
             return 0;
         }
 
@@ -168,7 +175,7 @@ namespace MapleShark2.Harness {
         /// (chained 0x003D: 0 over-reads in the first 1,500 vs 6 in a 2,000-packet dedicated run).
         /// </summary>
         private static Run RunStreaming(ScriptHost host, List<string> files, Options options, uint source, uint target) {
-            var run = new Run();
+            var run = new Run { Fields = options.Fields != null ? new FieldStatsCollector(target) : null };
             List<uint> lineage = Lineage(host, options, target);
             if (!options.Chain) host.Warm(source);
 
@@ -211,7 +218,7 @@ namespace MapleShark2.Harness {
 
         /// <summary>Two-pass: seeded reservoir sample per (opcode, direction), then execute the samples.</summary>
         private static Run RunSampled(ScriptHost host, List<string> files, Options options, uint source, uint target) {
-            var run = new Run();
+            var run = new Run { Fields = options.Fields != null ? new FieldStatsCollector(target) : null };
             List<uint> lineage = Lineage(host, options, target);
             if (!options.Chain) host.Warm(source);
 
@@ -238,7 +245,9 @@ namespace MapleShark2.Harness {
         /// Source-major so each IronPython engine lives exactly as long as its build is being measured.
         /// </summary>
         private static Run RunMatrix(ScriptHost host, List<string> files, Options options) {
-            var run = new Run();
+            var run = new Run {
+                Fields = options.Fields != null ? new FieldStatsCollector(options.TargetBuild.Value) : null,
+            };
             (Dictionary<(ushort, bool), long> seen, Dictionary<(ushort, bool), List<RawPacket>> samples) =
                 Collect(files, options, run);
 
@@ -366,7 +375,9 @@ namespace MapleShark2.Harness {
             }
 
             bool trace = bucket.SampleTraces.Count < options.SampleErrors;
-            ParseResult result = host.Execute(from.Value, packet, trace);
+            Dictionary<string, FieldAgg> fieldCtx =
+                run.Fields?.For(from.Value, packet.Opcode, packet.Outbound);
+            ParseResult result = host.Execute(from.Value, packet, trace, fieldCtx);
             bucket.SourceBuild = from.Value;
             bucket.Executed++;
             run.Executed++;
@@ -403,10 +414,15 @@ namespace MapleShark2.Harness {
             public readonly long[] ConsumedHist = new long[101]; // percent buckets, 0..100
             public readonly List<string> SampleErrors = new List<string>();
             public readonly List<List<ReadEvent>> SampleTraces = new List<List<ReadEvent>>();
+            // Per-failure over-read signatures: sig -> count. Capped at 16 distinct; the 17th and beyond
+            // collapse into a single "~other" key so a pathologically desynced edge can't explode the CSV.
+            public readonly Dictionary<string, long> OverSigs = new Dictionary<string, long>();
             public string ScriptPath;
             public uint SourceBuild;
             public string ScriptSha;
             public string EnvSha;
+
+            private const int MaxSigs = 16;
 
             public void Add(ParseResult result, int maxSamples) {
                 Outcomes[(int) result.Outcome]++;
@@ -414,6 +430,13 @@ namespace MapleShark2.Harness {
 
                 if (result.Outcome == Outcome.OverRead && result.Reason == OverReadReason.NegativeLength) {
                     NegativeLength++;
+                }
+
+                if (result.Outcome == Outcome.OverRead && result.Signature != null) {
+                    string sig = result.Signature;
+                    if (!OverSigs.ContainsKey(sig) && OverSigs.Count >= MaxSigs) sig = "~other";
+                    OverSigs.TryGetValue(sig, out long c);
+                    OverSigs[sig] = c + 1;
                 }
 
                 if (result.Outcome != Outcome.NoScript && result.Outcome != Outcome.CompileError) {
@@ -453,6 +476,16 @@ namespace MapleShark2.Harness {
                 }
 
                 return parts.Count == 0 ? "-" : string.Join("|", parts);
+            }
+
+            /// <summary>Sparse "sig:count|sig:count" over-read signatures, most frequent first, or "-".
+            /// Mirrors <see cref="Hist"/>; signatures are pre-sanitized (no ',' '|' newline).</summary>
+            public string Sigs() {
+                if (OverSigs.Count == 0) return "-";
+                return string.Join("|", OverSigs
+                    .OrderByDescending(e => e.Value)
+                    .ThenBy(e => e.Key, StringComparer.Ordinal)
+                    .Select(e => e.Key + ":" + e.Value));
             }
         }
 
@@ -560,7 +593,7 @@ namespace MapleShark2.Harness {
             var sb = new StringBuilder();
             sb.AppendLine("source_build,target_build,opcode,direction,seen,executed,ran,no_script,ok_exact," +
                           "under_read,over_read,threw,compile_error,negative_length,consumed_p50,consumed_p90," +
-                          "script_sha,env_sha,consumed_hist,sampling");
+                          "script_sha,env_sha,consumed_hist,sampling,over_sigs");
             foreach (KeyValuePair<(ushort Opcode, bool Outbound, uint Source), Bucket> e in run.Buckets
                          .OrderBy(e => e.Key.Opcode)
                          .ThenBy(e => e.Key.Outbound)
@@ -576,7 +609,7 @@ namespace MapleShark2.Harness {
                     b.NegativeLength.ToString(),
                     b.Percentile(50).ToString(CultureInfo.InvariantCulture),
                     b.Percentile(90).ToString(CultureInfo.InvariantCulture),
-                    b.ScriptSha ?? "-", b.EnvSha ?? "-", b.Hist(), options.Sampling,
+                    b.ScriptSha ?? "-", b.EnvSha ?? "-", b.Hist(), options.Sampling, b.Sigs(),
                 }));
             }
 
@@ -606,6 +639,7 @@ namespace MapleShark2.Harness {
                     case "--seed": options.Seed = int.Parse(Next(arg)); break;
                     case "--out": options.Out = Next(arg); break;
                     case "--csv": options.Csv = Next(arg); break;
+                    case "--fields": options.Fields = Next(arg); break;
                     case "--version-path-first": options.VersionPathFirst = true; break;
                     case "--chain": options.Chain = true; break;
                     case "--matrix": options.Matrix = true; break;
@@ -650,6 +684,8 @@ Harness — run decoder scripts against captured packets and report what happene
   --sniffs <dir>       Sniff archive root.
   --out <file>         Write the text report.
   --csv <file>         Write the aggregate as CSV (includes script/env hashes + consumed histogram).
+  --fields <file>      Write per-(source,opcode,dir,field) value statistics as CSV (Phase 1b groundwork).
+                       Off by default — zero per-read overhead when absent.
   --version-path-first Put the version dir ahead of the shared root on sys.path
                        (tests the ScriptManager.cs:88 shadowing bug; default reproduces it).
 

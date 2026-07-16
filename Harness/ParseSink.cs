@@ -32,8 +32,31 @@ namespace MapleShark2.Harness {
         private readonly List<ReadEvent> trace = new List<ReadEvent>();
         private BoundedByteReader reader;
 
+        // Always-on lightweight failure context (no trace allocation). Maintained even when TraceEnabled
+        // is false so ScriptHost can compose an over-read signature without a full trace: the normalized
+        // node path (rebuilt only on Start/EndNode, never per read) plus the last read's label and type.
+        private readonly List<string> normNodes = new List<string>();
+        private string normPath = "";
+        private string lastLabel = "";
+        private string lastType = "";
+
+        // Optional per-field value aggregation (--fields). Null on the normal path => zero overhead.
+        private Dictionary<string, FieldAgg> fieldCtx;
+
         public bool TraceEnabled { get; set; }
         public IReadOnlyList<ReadEvent> Trace => trace;
+
+        /// <summary>Normalized current node path (digit runs collapsed to '#'), for failure signatures.</summary>
+        public string NormNodePath => normPath;
+
+        /// <summary>Label of the last read attempted (set before the read, so it names a failing read).</summary>
+        public string LastLabel => lastLabel;
+
+        /// <summary>Type name of the last read attempted.</summary>
+        public string LastType => lastType;
+
+        /// <summary>Set the per-field aggregation target for the next packet, or null to disable.</summary>
+        public void SetFieldContext(Dictionary<string, FieldAgg> ctx) => fieldCtx = ctx;
 
         /// <summary>Messages the script emitted via log(). Scripts use these to flag their own uncertainty.</summary>
         public List<string> Logs { get; } = new List<string>();
@@ -43,6 +66,10 @@ namespace MapleShark2.Harness {
             nodes.Clear();
             trace.Clear();
             Logs.Clear();
+            normNodes.Clear();
+            normPath = "";
+            lastLabel = "";
+            lastType = "";
         }
 
         private string CurrentPath => nodes.Count == 0 ? "" : string.Join("/", ReverseNodes());
@@ -65,25 +92,42 @@ namespace MapleShark2.Harness {
         // ---- structure_form contract (must mirror StructureForm) ----
 
         public T Add<T>(string name) where T : struct {
+            // Set the failure context BEFORE the read so, if the read over-runs, it names the field that
+            // was being decoded (where the parse diverged) rather than the previous successful one.
+            lastType = typeof(T).Name;
+            lastLabel = name ?? "";
             int offset = reader.Consumed;
             T value = reader.Read<T>(); // throws OverReadException past the end
-            Record(offset, Unsafe.SizeOf<T>(), typeof(T).Name, name, Convert.ToString(value));
+            Record(offset, Unsafe.SizeOf<T>(), lastType, name, Convert.ToString(value));
+            if (fieldCtx != null) {
+                FieldFor(name, lastType).AddNumeric(Convert.ToDouble(value), value.ToString());
+            }
+
             return value;
         }
 
         public byte[] AddField(string name, int length) {
+            lastType = "Field";
+            lastLabel = name ?? "";
             int offset = reader.Consumed;
             byte[] data = reader.ReadBytes(length);
             Record(offset, length, "Field", name, Hex(data));
+            if (fieldCtx != null) FieldFor(name, "Field").AddBlob(data.Length);
             return data;
         }
 
         public void StartNode(string name) {
             nodes.Push(name ?? "");
+            normNodes.Add(NormDigits(name ?? ""));
+            normPath = string.Join("/", normNodes);
         }
 
         public void EndNode(bool expand) {
             if (nodes.Count > 0) nodes.Pop();
+            if (normNodes.Count > 0) {
+                normNodes.RemoveAt(normNodes.Count - 1);
+                normPath = string.Join("/", normNodes);
+            }
         }
 
         public int Remaining() => reader.Available;
@@ -93,6 +137,45 @@ namespace MapleShark2.Harness {
         }
 
         // ---- helpers ----
+
+        /// <summary>
+        /// Resolve the aggregate for the current field. The key is the normalized node path plus the
+        /// digit-normalized label and the read's type name — so "StatOption 3/Value" and
+        /// "StatOption 12/Value" collapse to the same field across builds. One key-string allocation per
+        /// read is the only cost (and only when --fields is set); the node path is cached, not rebuilt.
+        /// </summary>
+        private FieldAgg FieldFor(string label, string type) {
+            string key = normPath + "/" + NormDigits(label ?? "") + ":" + type;
+            if (!fieldCtx.TryGetValue(key, out FieldAgg agg)) {
+                fieldCtx[key] = agg = new FieldAgg();
+            }
+
+            return agg;
+        }
+
+        /// <summary>Collapse every run of decimal digits to a single '#'. Allocation-free when there are none.</summary>
+        public static string NormDigits(string s) {
+            if (string.IsNullOrEmpty(s)) return s ?? "";
+            bool any = false;
+            for (int i = 0; i < s.Length; i++) {
+                if (s[i] >= '0' && s[i] <= '9') { any = true; break; }
+            }
+
+            if (!any) return s;
+
+            var sb = new StringBuilder(s.Length);
+            bool inDigits = false;
+            foreach (char c in s) {
+                if (c >= '0' && c <= '9') {
+                    if (!inDigits) { sb.Append('#'); inDigits = true; }
+                } else {
+                    sb.Append(c);
+                    inDigits = false;
+                }
+            }
+
+            return sb.ToString();
+        }
 
         private static string Hex(byte[] data) {
             if (data.Length == 0) return "";
