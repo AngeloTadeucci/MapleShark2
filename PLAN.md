@@ -319,6 +319,16 @@ uncapped (`MainForm.cs:37`); GUI calls non-pooled `Decrypt` while `TryDecrypt` (
 pooled and unused; unshown partial-handshake `SessionForm`s never reaped (`MainForm.cs:94`);
 `Opcodes.Exists` linear per packet (`SessionForm.cs:656`); `MapleStream.cs:47` memmoves per packet.
 
+**Safe scope DONE (2026-07-15):** the segment-bounded reader migration landed —
+`MapleShark2/Tools/SegmentByteReader.cs` (bounds every read against the packet's segment, preserves
+`ByteReader`'s `IndexOutOfRangeException` contract; 28/28 bounds tests incl. the pooling-regression
+case), `MaplePacket` migrated with an unchanged public API. Also: `Opcodes.Exists` linear scans → O(1)
+`HashSet` tracking; never-shown half-open `SessionForm`s reaped from the existing UI timer via
+`Dispose()` (deliberately not `Close()` — never-shown forms and mid-`RemoveWhere` mutation).
+**Verified by build + unit tests + reasoning; NOT runtime-verified in a live capture.** Remaining Phase
+3 items (pooled decrypt adoption, pipeline/timer restructure, `packetQueue` cap, `MapleStream` memmove)
+stay gated on profiling per this section; the reader precondition for pooling is now satisfied.
+
 Overstated in rev 1, per sol, and **not yet verified** — profile before prescribing: opcode rebuild
 frequency, owner-draw cost (the column-header handler does render), retention vs allocation rate. Server
 GC is not a fix for unbounded retention.
@@ -369,8 +379,13 @@ silently desync. Phases 0/1 give it the regression harness that makes the migrat
 ## 6. Defects to fix regardless (all verified; sol independently confirmed each)
 
 1. `DefinitionsContainer.cs:115` vs `Config.cs:73` — send/recv properties inverted between writer and reader.
-   **FIXED** — writer now maps outbound → `send.properties`, matching the reader and the deployed trees
-   (`Request*` in send, `Response*` in recv).
+   **FIXED — on the reader side.** The first fix went the wrong way (inverted the writer to match the
+   reader) and was reverted. Ground truth: send/recv are named from the **server's** perspective,
+   matching the emulator's SendOp/RecvOp — `RequestVersion` is a *server-sent* handshake message
+   (emulator `Session.PerformHandshake` writes `SendOp.RequestVersion`) and lives in the deployed
+   `send.properties`; V12 `Inbound/0x0001.py` is REQUEST_VERSION, so script-tree `Inbound` =
+   server→client too. The writer already followed this; `Config.GetPropertiesFile` and its two menu
+   callers were the inverted side and are now fixed.
 2. `DefinitionsContainer.cs:114` — `return` where `continue` is meant; one `0xFFFF` truncates all output.
    **FIXED.**
 3. `item.py:76` — set literal → the four stat blocks are mislabeled (`common.py:154` does it right).

@@ -130,10 +130,11 @@ namespace MapleShark2.Logging {
                             $"{(kvp2.Value == "" ? "# UNSET: " : kvp2.Value.Replace(' ', '_'))} = 0x{kvp2.Key:X4}");
                     }
 
-                    // headerList is indexed by the outbound flag (1 = outbound), and outbound maps to
-                    // send.properties — the convention Config.GetPropertiesFile reads and the deployed
-                    // trees follow (Request* in send, Response* in recv).
-                    string propertiesPath = Path.Combine(path, $"{(i == 1 ? "send" : "recv")}.properties");
+                    // send/recv are named from the SERVER's perspective, matching the emulator's
+                    // SendOp/RecvOp: send.properties = server->client = Outbound==false definitions
+                    // (headerList[0]). The deployed trees follow this (RequestVersion, a server-sent
+                    // handshake message, lives in send.properties).
+                    string propertiesPath = Path.Combine(path, $"{(i == 0 ? "send" : "recv")}.properties");
                     File.WriteAllText(propertiesPath, builder.ToString());
                 }
             }

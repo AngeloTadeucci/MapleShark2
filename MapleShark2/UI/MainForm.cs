@@ -329,6 +329,8 @@ namespace MapleShark2.UI {
                 closes.ForEach((a) => { a.Close(); });
                 closes.Clear();
 
+                ReapHalfOpenSessions(now);
+
                 ProcessPacketQueue();
 
                 mTimer.Enabled = true;
@@ -337,6 +339,39 @@ namespace MapleShark2.UI {
                     device.Open(DeviceModes.Promiscuous, 1);
                 }
             }
+        }
+
+        // A SessionForm is created for every TCP SYN in the capture port range and added to `sessions`.
+        // It is only ever shown (docked -> becomes an MdiChild) once it completes the MapleStory
+        // handshake and returns Results.Show. Sessions that never complete the handshake and never see a
+        // FIN/RST (dead half-open connections, missed teardown, capture stopped mid-stream) are never
+        // shown and never closed, so the MdiChildren reap loop in mTimer_Tick never sees them and they
+        // accumulate in `sessions` for the life of the process — unbounded retention.
+        //
+        // Reap them here: an unshown session (DockPanel == null) that is idle past the existing CloseMe
+        // timeout (5s with zero decoded packets) is disposed. Shown sessions are deliberately left alone
+        // — they are reaped by the MdiChildren loop or closed by the user, who may still want to inspect
+        // a terminated capture. Dispose() is used rather than Close() because a form that was never shown
+        // does not run its disposal path on Close(); Dispose() also avoids the re-entrant
+        // Close -> OnFormClosing -> Terminate -> OnTerminated -> sessions.Remove that would mutate the set
+        // mid-enumeration (RemoveWhere itself performs the removal instead).
+        private void ReapHalfOpenSessions(DateTime now) {
+            sessions.RemoveWhere(session => {
+                if (session.IsDisposed) {
+                    return true;
+                }
+
+                if (session.DockPanel != null) {
+                    return false; // Shown session — handled by the MdiChildren loop / user close.
+                }
+
+                if (session.CloseMe(now)) {
+                    session.Dispose();
+                    return true;
+                }
+
+                return false;
+            });
         }
 
         private void ProcessPacketQueue() {

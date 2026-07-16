@@ -1,5 +1,6 @@
 ﻿using System;
 using Maple2.PacketLib.Tools;
+using MapleShark2.Tools;
 
 namespace MapleShark2.Logging {
     public class MaplePacket {
@@ -11,7 +12,7 @@ namespace MapleShark2.Logging {
         public ushort Opcode { get; }
 
         private readonly ArraySegment<byte> buffer;
-        private readonly ByteReader reader;
+        private readonly SegmentByteReader reader;
 
         public int Position => reader.Position - buffer.Offset;
         public int Offset => buffer.Offset;
@@ -25,7 +26,7 @@ namespace MapleShark2.Logging {
             Locale = MapleLocale.UNKNOWN;
             Opcode = opcode;
             this.buffer = buffer;
-            reader = new ByteReader(this.buffer.Array, this.buffer.Offset);
+            reader = new SegmentByteReader(this.buffer.Array, this.buffer.Offset, this.buffer.Count);
         }
 
         public void Reset() {

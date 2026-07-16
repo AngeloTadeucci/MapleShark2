@@ -52,6 +52,25 @@ namespace MapleShark2.UI {
         public byte Locale { get; private set; }
         public List<Opcode> Opcodes { get; private set; } = new List<Opcode>();
 
+        // O(1) membership mirror of Opcodes: replaces the per-packet List.Exists linear scan.
+        // (Outbound, Header) is packed into an int key. All mutations of Opcodes go through
+        // TrackOpcode/ClearOpcodes, and UpdateOpcodeList only re-orders the same elements, so the
+        // two stay in lockstep. Definitions renamed at runtime don't add/remove opcodes, so no rebuild.
+        private readonly HashSet<int> opcodeKeys = new HashSet<int>();
+
+        private static int OpcodeKey(bool outbound, ushort header) => (outbound ? 1 << 16 : 0) | header;
+
+        private void TrackOpcode(bool outbound, ushort header) {
+            if (opcodeKeys.Add(OpcodeKey(outbound, header))) {
+                Opcodes.Add(new Opcode(outbound, header));
+            }
+        }
+
+        private void ClearOpcodes() {
+            Opcodes.Clear();
+            opcodeKeys.Clear();
+        }
+
         public bool Saved { get; private set; }
 
         public Action<SessionForm> OnTerminated;
@@ -241,11 +260,8 @@ namespace MapleShark2.UI {
 
                 ArraySegment<byte> segment = new ArraySegment<byte>(packet.Buffer);
                 var maplePacket = new MaplePacket(timestamp, isOutbound, Build, opcode, segment);
-                // Add to list of not exist (TODO: SortedSet?)
-                if (!Opcodes.Exists(op => op.Outbound == maplePacket.Outbound && op.Header == maplePacket.Opcode)) {
-                    // Should be false, but w/e
-                    Opcodes.Add(new Opcode(maplePacket.Outbound, maplePacket.Opcode));
-                }
+                // Should be false, but w/e
+                TrackOpcode(maplePacket.Outbound, maplePacket.Opcode);
 
                 AddPacket(maplePacket, false, true);
 
@@ -306,7 +322,7 @@ namespace MapleShark2.UI {
             MaplePacket previous = ListView.SelectedIndices.Count > 0
                 ? FilteredPackets[ListView.SelectedIndices[0]]
                 : null;
-            Opcodes.Clear();
+            ClearOpcodes();
             ListView.Clear();
 
             MainForm.DataForm.ClearHexBox();
@@ -318,9 +334,7 @@ namespace MapleShark2.UI {
             foreach (MaplePacket packet in mPackets) {
                 if (packet.Outbound && !mViewOutboundMenu.Checked) continue;
                 if (!packet.Outbound && !mViewInboundMenu.Checked) continue;
-                if (!Opcodes.Exists(op => op.Outbound == packet.Outbound && op.Header == packet.Opcode)) {
-                    Opcodes.Add(new Opcode(packet.Outbound, packet.Opcode));
-                }
+                TrackOpcode(packet.Outbound, packet.Opcode);
 
                 Definition definition = Config.Instance.GetDefinition(packet);
                 if (definition != null && !mViewIgnoredMenu.Checked && definition.Ignore) continue;
@@ -555,7 +569,8 @@ namespace MapleShark2.UI {
 
         private void sendPropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
             DefinitionsContainer.Instance.SaveProperties();
-            string tmp = Config.GetPropertiesFile(true, (byte) Locale, Build);
+            // send.properties = server->client = Outbound==false (server-perspective naming).
+            string tmp = Config.GetPropertiesFile(false, (byte) Locale, Build);
             try {
                 Process.Start(tmp);
             } catch {
@@ -565,7 +580,7 @@ namespace MapleShark2.UI {
 
         private void recvPropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
             DefinitionsContainer.Instance.SaveProperties();
-            string tmp = Config.GetPropertiesFile(false, (byte) Locale, Build);
+            string tmp = Config.GetPropertiesFile(true, (byte) Locale, Build);
             try {
                 Process.Start(tmp);
             } catch {
@@ -584,7 +599,7 @@ namespace MapleShark2.UI {
 
             mPackets.Clear();
             ListView.Clear();
-            Opcodes.Clear();
+            ClearOpcodes();
             RefreshPackets();
         }
 
@@ -653,9 +668,7 @@ namespace MapleShark2.UI {
 
             Definition definition =
                 Config.Instance.GetDefinition(Build, Locale, packet.Outbound, packet.Opcode);
-            if (!Opcodes.Exists(op => op.Outbound == packet.Outbound && op.Header == packet.Opcode)) {
-                Opcodes.Add(new Opcode(packet.Outbound, packet.Opcode));
-            }
+            TrackOpcode(packet.Outbound, packet.Opcode);
 
             if (!forceAdd) {
                 if (definition != null && !mViewIgnoredMenu.Checked && definition.Ignore) return;

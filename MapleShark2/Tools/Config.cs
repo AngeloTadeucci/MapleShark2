@@ -69,8 +69,11 @@ namespace MapleShark2.Tools {
         }
 
         internal static string GetPropertiesFile(bool pOutbound, byte pLocale, uint pVersion) {
+            // send/recv are server-perspective (emulator SendOp/RecvOp): an outbound (client->server)
+            // packet is one the server RECEIVES -> recv.properties. Matches DefinitionsContainer's writer
+            // and the deployed trees.
             return Path.Combine(Helpers.GetScriptFolder(pLocale, pVersion),
-                $"{(pOutbound ? "send" : "recv")}.properties");
+                $"{(pOutbound ? "recv" : "send")}.properties");
         }
 
         internal void Save() {
