@@ -391,6 +391,21 @@ classify the rare tail as insufficient-data rather than pretending otherwise.
 Note `0x0021` (ITEM_INVENTORY) consumes 17% at home — the highest-value inference target is a packet whose
 *home* decoder is already failing, and the emulator has V12 ground truth for it.
 
+**GATE RUN (2026-07-15): verdict PARTIAL — inference is demoted to an assistive tool, never autonomous.**
+Blind inference (`analysis/infer.py`, mode/length clustering first per this section's constraints) was
+frozen, then scored on 15 V12 opcodes against ground truth. Reliable: fixed layouts, ushort-prefixed
+strings, first-byte mode dispatch (5/6), single-level count arrays. Unreliable: fine typing (int vs
+float/short is unidentifiable from bytes), nested arrays, polymorphic bodies (`0x0021` body
+unrecovered, 63% clean). Aggregate structural score: ~61% boundary recall, ~59% type accuracy.
+**Live proof of §7's top risk:** `0x0023` inferred a false array from a near-constant byte and still
+scored 99.5% clean — plausible-but-wrong at its purest; behavioral clean% systematically overstates
+correctness. Sample hunger: ~30 (fixed), ~300 (variable), ~300 *per mode* (dispatch). KMS2 projection:
+138/311 undocumented pairs meet the attempt floor (99.7% of undocumented traffic by volume), but only
+the 74 fixed-family pairs (**9.4% of traffic**) are in the reliably-correct zone; the variable/mode
+class holding 90.3% is exactly where the method fails. The 173 thin pairs stay `insufficient`.
+Consequence: Phase 5 output feeds human script-writing with per-field confidence ranking; it never
+writes to a scripts tree.
+
 ### Phase 6 — Declarative schema (deferred, incremental)
 
 Still the permanent fix: field names are bare string literals (4,798 `add_*` calls, 1,434 named "Unknown"),
