@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -42,3 +45,20 @@ jobs:
         with:
           name: MapleStory2Sniffer
           path: publish/Sniffer
+
+      - name: Package release zips
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          Compress-Archive -Path publish/MapleShark2/* -DestinationPath MapleShark2.zip
+          Compress-Archive -Path publish/Sniffer/* -DestinationPath MapleStory2Sniffer.zip
+
+      - name: Update rolling latest release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --cleanup-tag --yes 2>$null || Write-Host "no existing latest release"
+          gh release create latest MapleShark2.zip MapleStory2Sniffer.zip `
+            --title "Latest build" `
+            --notes "Automated build of master ($env:GITHUB_SHA)" `
+            --prerelease
