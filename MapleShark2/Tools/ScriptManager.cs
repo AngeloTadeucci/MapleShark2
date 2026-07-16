@@ -70,7 +70,10 @@ namespace MapleShark2.Tools {
 
             engine = CreateBaseEngine();
             ICollection<string> paths = engine.GetSearchPaths();
+            // Version folder before the shared root: a version-specific module (common.py, item.py)
+            // must shadow the shared one, not the other way around.
             paths.Add(Helpers.GetScriptFolder(locale, version));
+            paths.Add(Helpers.GetScriptsRoot());
             engine.SetSearchPaths(paths);
             new Task(() => {
                 // Warm up these modules because they are commonly used
@@ -84,9 +87,6 @@ namespace MapleShark2.Tools {
 
         private ScriptEngine CreateBaseEngine() {
             ScriptEngine engine = Python.CreateEngine();
-            ICollection<string> paths = engine.GetSearchPaths();
-            paths.Add(Helpers.GetScriptsRoot());
-            engine.SetSearchPaths(paths);
             engine.Runtime.Globals.SetVariable("structure_form", form);
 
             return engine;
