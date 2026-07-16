@@ -35,6 +35,29 @@ namespace MapleShark2.Tools {
 
         public static void Gauge(string name, long value) => gauges[name] = value;
 
+        // Per-stage accumulators for hot loops: too fine-grained for one scope each, so callers bracket
+        // each stage with Begin()/Accum() and the owning scope dumps totals via FlushAccums() in its
+        // detail — e.g. main.drain reporting decrypt vs reassembly vs UI-refresh time per drained batch.
+        private static readonly ConcurrentDictionary<string, (long Ticks, long Count)> accums =
+            new ConcurrentDictionary<string, (long, long)>();
+
+        public static long Begin() => Stopwatch.GetTimestamp();
+
+        public static void Accum(string name, long beginTimestamp) {
+            long elapsed = Stopwatch.GetTimestamp() - beginTimestamp;
+            accums.AddOrUpdate(name, (elapsed, 1), (_, cur) => (cur.Ticks + elapsed, cur.Count + 1));
+        }
+
+        /// <summary>Formats all accumulated stage totals as "name=NNNms/count ..." and clears them.</summary>
+        public static string FlushAccums() {
+            if (accums.IsEmpty) return "";
+
+            string result = string.Join(" ", accums.OrderBy(kv => kv.Key, StringComparer.Ordinal)
+                .Select(kv => $"{kv.Key}={kv.Value.Ticks * 1000.0 / Stopwatch.Frequency:F0}ms/{kv.Value.Count}"));
+            accums.Clear();
+            return result;
+        }
+
         public sealed class Scope : IDisposable {
             private readonly string name;
             private readonly bool always;

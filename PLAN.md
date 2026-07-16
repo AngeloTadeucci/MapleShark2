@@ -369,6 +369,17 @@ the relog-burst drain/flush path, `PacketListView.FilteredPackets` materializing
 every row per access (O(n²) in the indexer loops — a provable defect awaiting a measured share of blame),
 the per-resolve env-hash in `manifest.resolve`, and retention across terminated tabs (counters).
 
+**First external log (2026-07-16, Release build): the freeze is attributed.** One `main.drain` of
+**22.6 s for 292 raw captures** (UI hang 21.7 s) — ~70 ms per capture of pure drain-loop work, of which
+`engine.create` was only 1.3 s and `session.show` 2.4 s. The user-reported "10-ish second freeze on
+session load" is the login burst being processed on the UI thread in a single tick. Also measured:
+`session.flush` 460 ms for 96 rows at a 97-row list (~5 ms/row — scales linearly with burst size).
+Memory stayed flat (one tab); the tab-stacking chug still lacks a repro log. Which stage owns the
+70 ms/capture is not yet identifiable → per-stage accumulators added inside the drain
+(`PerfLog.Begin/Accum/FlushAccums`, dumped in `main.drain`'s detail: parse / match / new_session /
+reassemble / stream_read / decrypt / process / refresh_opcodes) and a `session.flush` breakdown
+(add / endUpdate / scroll). Next heavy run names the owner; fix follows the measurement, not the guess.
+
 ### Phase 4 — Generate the V12 layer from the emulator
 
 Scope: **executed SendOp traces only.** V12/GMS2 only — wrong lineage for KMS2.

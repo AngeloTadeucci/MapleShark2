@@ -46,6 +46,21 @@ internal static class Program {
 
         Check("always-scope logged even when fast", Logs().Any(l => l.Contains("scope.always") && l.Contains("d=2")));
 
+        // --- Stage accumulators ---
+        Check("accums start empty", PerfLog.FlushAccums() == "");
+        long t1 = PerfLog.Begin();
+        Thread.Sleep(30);
+        PerfLog.Accum("stage.b", t1);
+        long t2 = PerfLog.Begin();
+        PerfLog.Accum("stage.a", t2);
+        long t3 = PerfLog.Begin();
+        PerfLog.Accum("stage.a", t3);
+        string accums = PerfLog.FlushAccums();
+        Check("accums aggregate count per stage", accums.Contains("stage.a=") && accums.Contains("ms/2"), accums);
+        Check("accums record elapsed time", accums.Contains("stage.b=3") || accums.Contains("stage.b=4"), accums);
+        Check("accums sorted by name", accums.IndexOf("stage.a") < accums.IndexOf("stage.b"), accums);
+        Check("flush clears accums", PerfLog.FlushAccums() == "");
+
         // --- Gauges + counters ---
         PerfLog.Gauge("test.gauge", 42);
         PerfLog.StartCounters(periodSeconds: 1);

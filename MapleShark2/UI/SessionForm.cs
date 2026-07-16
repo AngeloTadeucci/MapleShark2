@@ -188,14 +188,25 @@ namespace MapleShark2.UI {
             }
 
             bool isOutbound = pTcpPacket.SourcePort == mLocalPort;
+            long tReassemble = PerfLog.Begin();
             tcpReassembler.ReassembleStream(pTcpPacket);
+            PerfLog.Accum("drain.reassemble", tReassemble);
 
             MapleStream packetStream = isOutbound ? tcpReassembler.OutStream : tcpReassembler.InStream;
             int opcodeCount = Opcodes.Count;
             bool show = false;
             try {
-                while (packetStream.TryRead(out byte[] packet)) {
+                while (true) {
+                    long tRead = PerfLog.Begin();
+                    bool hasPacket = packetStream.TryRead(out byte[] packet);
+                    PerfLog.Accum("drain.stream_read", tRead);
+                    if (!hasPacket) {
+                        break;
+                    }
+
+                    long tProcess = PerfLog.Begin();
                     Results result = ProcessPacket(packet, isOutbound, pArrivalTime);
+                    PerfLog.Accum("drain.process", tProcess);
                     switch (result) {
                         case Results.Continue:
                             continue;
@@ -213,7 +224,9 @@ namespace MapleShark2.UI {
             }
 
             if (DockPanel != null && DockPanel.ActiveDocument == this && opcodeCount != Opcodes.Count) {
+                long tRefresh = PerfLog.Begin();
                 MainForm.SearchForm.RefreshOpcodes(true);
+                PerfLog.Accum("drain.refresh_opcodes", tRefresh);
             }
 
             return show ? Results.Show : Results.Continue;
@@ -277,7 +290,9 @@ namespace MapleShark2.UI {
 
             try {
                 MapleCipher.Decryptor decryptor = isOutbound ? outDecryptor : inDecryptor;
+                long tDecrypt = PerfLog.Begin();
                 ByteReader packet = decryptor.Decrypt(bytes);
+                PerfLog.Accum("drain.decrypt", tDecrypt);
                 // It's possible to get an empty packet, just ignore it.
                 // Decryption is still necessary to advance sequence number.
                 if (packet.Available == 0) {
@@ -707,18 +722,27 @@ namespace MapleShark2.UI {
             List<MaplePacket> copy = bufferedPackets;
             bufferedPackets = new List<MaplePacket>(copy.Count);
 
+            long tAdd = Stopwatch.GetTimestamp();
             ListView.BeginUpdate();
             foreach (MaplePacket packet in copy) {
                 ListView.AddPacket(packet);
             }
+
+            double addMs = (Stopwatch.GetTimestamp() - tAdd) * 1000.0 / Stopwatch.Frequency;
+            long tEnd = Stopwatch.GetTimestamp();
             ListView.EndUpdate();
+            double endMs = (Stopwatch.GetTimestamp() - tEnd) * 1000.0 / Stopwatch.Frequency;
 
             // This should be called after EndUpdate so VirtualListSize is set properly
+            long tScroll = Stopwatch.GetTimestamp();
             if (ListView.SelectedIndices.Count == 0 && FilteredPackets.Count > 0) {
                 ListView.Items[FilteredPackets.Count - 1]?.EnsureVisible();
             }
 
-            perf.SetDetail($"rows={copy.Count} listTotal={ListView.Count}");
+            double scrollMs = (Stopwatch.GetTimestamp() - tScroll) * 1000.0 / Stopwatch.Frequency;
+
+            perf.SetDetail($"rows={copy.Count} listTotal={ListView.Count} " +
+                           $"add={addMs:F0}ms endUpdate={endMs:F0}ms scroll={scrollMs:F0}ms");
             timer.Enabled = true;
         }
 

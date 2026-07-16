@@ -267,6 +267,7 @@ namespace MapleShark2.UI {
             }
 
             session?.Show(mDockPanel, DockState.Document);
+            perf.SetDetail($"file={Path.GetFileName(fileName)} {PerfLog.FlushAccums()}");
         }
 
         private void mFileOpenMenu_Click(object pSender, EventArgs pArgs) {
@@ -407,7 +408,6 @@ namespace MapleShark2.UI {
             // Drains the entire backlog in one UI-thread pass (decrypt + parse per packet). A slow
             // drain grows the next backlog — the drained count is the feedback-loop signal.
             using PerfLog.Scope perf = PerfLog.Time("main.drain");
-            perf.SetDetail($"packets={curQueue.Count}");
             PerfLog.Gauge("queue.drained", curQueue.Count);
 
             foreach (RawCapture packet in curQueue) {
@@ -415,15 +415,21 @@ namespace MapleShark2.UI {
                     continue;
                 }
 
+                long tParse = PerfLog.Begin();
                 var tcpPacket = Packet.ParsePacket(packet.LinkLayerType, packet.Data).Extract<TcpPacket>();
+                PerfLog.Accum("drain.parse", tParse);
                 SessionForm session = null;
                 try {
                     SessionForm.Results? result;
                     if (tcpPacket.Synchronize && !tcpPacket.Acknowledgment && InPortRange(tcpPacket.DestinationPort)) {
+                        long tNew = PerfLog.Begin();
                         session = NewSession();
+                        PerfLog.Accum("drain.new_session", tNew);
                         result = session.BufferTcpPacket(tcpPacket, packet.Timeval.Date);
                     } else {
+                        long tMatch = PerfLog.Begin();
                         session = sessions.FirstOrDefault(s => s.MatchTcpPacket(tcpPacket));
+                        PerfLog.Accum("drain.match", tMatch);
                         if (session == null) {
                             continue;
                         }
@@ -450,6 +456,8 @@ namespace MapleShark2.UI {
                     session?.Close();
                 }
             }
+
+            perf.SetDetail($"packets={curQueue.Count} {PerfLog.FlushAccums()}");
         }
 
         private void mStopStartButton_Click(object sender, EventArgs e) {
