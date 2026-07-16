@@ -9,10 +9,12 @@ Consumes the raw matrix CSVs (baseline/matrix/matrix-<build>.csv) and stamps a v
 Raw evidence and verdicts are deliberately separate (PLAN.md §5 Phase 1): re-running this script with a
 new rule version re-classifies without re-running packets. Never edit the matrix CSVs.
 
-Rule v2.0.0-signatures:
-  The ACCEPT SET is IDENTICAL to rule 1.0.0-conservative — v2 changes reject *reasons* only, using the
-  per-failure over-read signatures now exported in the `over_sigs` column. Signatures are diagnostics:
-  they never move an edge across states in this version (that is future work).
+Rule v3.0.0-invariants:
+  v2 (signatures) changed reject reasons only; v3 adds ONE acceptance change on top: a would-be-accepted
+  edge with an ABSOLUTE Phase 1b invariant violation (count_neg/count_huge/bool_escape/len_huge from
+  invariants.csv — zero calibrated false positives, validated concrete catch) is rejected as an
+  in-bounds desync. dist_diverge remains advisory (calibrated against sampling noise only, not
+  cross-build content drift) and never gates.
 
   - compile_error > 0                      -> reject  (broken script)
   - over_read > 0                          -> reject, reason is now signature-aware:
@@ -37,9 +39,31 @@ import csv
 import sys
 from pathlib import Path
 
-RULE_VERSION = "2.0.0-signatures"
+RULE_VERSION = "3.0.0-invariants"
 HERE = Path(__file__).resolve().parent
 MATRIX_DIR = HERE.parent / "baseline" / "matrix"
+
+# Phase 1b absolute value-class invariants (invariants.py checks with zero calibrated false positives:
+# type-gated count_neg / count_huge / bool_escape / len_huge). Rule v3 gates acceptance on these — a
+# would-be-accepted edge with an absolute violation is a validated in-bounds desync (e.g. 2527->2525
+# 0x0058: constant 26 at home, [-22858, 25600] at the edge). dist_diverge remains ADVISORY ONLY: it was
+# calibrated against sampling noise (seed splits), not cross-build content drift, and must never gate
+# until a temporal-split noise floor exists (PLAN.md Phase 1b).
+ABSOLUTE_CHECKS = {"count_neg", "count_huge", "bool_escape", "len_huge"}
+
+
+def load_absolute_violations():
+    """Edge tuples with >=1 absolute invariant violation, with their violated checks."""
+    path = MATRIX_DIR / "invariants.csv"
+    violations = {}
+    if not path.exists():
+        return violations
+    with open(path, newline="") as fh:
+        for r in csv.DictReader(fh):
+            if r["check"] in ABSOLUTE_CHECKS:
+                key = (r["source_build"], r["target_build"], r["opcode"], r["direction"])
+                violations.setdefault(key, set()).add(r["check"])
+    return violations
 
 
 def parse_hist(s):
@@ -119,11 +143,33 @@ def main():
     ap.add_argument("--floor", type=int, default=300)
     ap.add_argument("--ks-max", type=float, default=0.2)
     ap.add_argument("--out", default=str(MATRIX_DIR / "manifest.csv"))
+    ap.add_argument("--invariants", nargs="?", const=str(MATRIX_DIR / "invariants-edges.csv"),
+                    default=None,
+                    help="Optional: join Phase 1b per-edge verdicts (invariants-edges.csv, produced by "
+                         "invariants.py) as an advisory `invariants` column. ADVISORY ONLY — it never "
+                         "changes any accept/reject state (PLAN.md reserves that for a later decision).")
     args = ap.parse_args()
+
+    # Phase 1b advisory join (optional). Rollup verdict per (source,target,opcode,dir); missing -> '-'.
+    inv_verdict = {}
+    if args.invariants:
+        inv_path = Path(args.invariants)
+        if inv_path.exists():
+            with open(inv_path, newline="") as fh:
+                for iv in csv.DictReader(fh):
+                    inv_verdict[(iv["source_build"], iv["target_build"],
+                                 iv["opcode"], iv["direction"])] = iv["verdict"]
+        else:
+            print(f"warning: --invariants given but {inv_path} not found; column will be '-'",
+                  file=sys.stderr)
 
     rows = load_rows()
     if not rows:
         sys.exit(f"no matrix CSVs under {MATRIX_DIR} — run the sweep first")
+
+    absolute = load_absolute_violations()
+    if absolute:
+        print(f"rule v3: {len(absolute)} edges carry absolute invariant violations", file=sys.stderr)
 
     # Home behaviour: the source==target rows of each source's own run, keyed by (source, opcode, dir).
     home = {}
@@ -156,6 +202,9 @@ def main():
             state, reason = "insufficient", f"n={n} < floor {args.floor}"
         elif ks is not None and ks > args.ks_max:
             state, reason = "reject", f"consumed KS={ks:.3f} > {args.ks_max} vs home"
+        elif (key := (r["source_build"], r["target_build"], r["opcode"], r["direction"])) in absolute:
+            state, reason = "reject", ("value-class invariant violation: " +
+                                       ",".join(sorted(absolute[key])) + " (in-bounds desync)")
         else:
             state, reason = "accept", ""
 
@@ -172,6 +221,8 @@ def main():
             "script_sha": r["script_sha"], "env_sha": r["env_sha"],
             "quality": quality(int(r["consumed_p50"])),
             "state": state, "reason": reason,
+            "invariants": inv_verdict.get(
+                (r["source_build"], r["target_build"], r["opcode"], r["direction"]), "-"),
             "rule_version": RULE_VERSION, "sampling": r["sampling"],
         })
 

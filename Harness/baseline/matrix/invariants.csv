@@ -1,0 +1,578 @@
+source_build,target_build,opcode,direction,field_key,check,edge_value,home_value,severity
+2512,12,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=0.891,home_other=0.00,high
+2512,12,0x0020,OUT,/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,12,0x0020,OUT,/flag:Boolean,dist_diverge,tvd=0.998,home_other=0.00,high
+2512,12,0x0020,OUT,ImpactPositionCoordF/Z:Single,dist_diverge,tvd=0.635,home_other=0.01,high
+2512,12,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,12,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.528,home_other=0.16,medium
+2512,12,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.541,home_other=0.71,medium
+2502,12,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.705,home_other=0.09,high
+2507,12,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.759,home_other=0.09,high
+12,2464,0x0012,OUT,/Function:Byte,dist_diverge,tvd=0.656,home_other=0.00,high
+12,2464,0x0012,OUT,Segment #/StateSync/CoordS / #:Int16,dist_diverge,tvd=0.726,home_other=0.28,high
+12,2464,0x0012,OUT,Segment #/StateSync/PositionCoordS/X:Int16,dist_diverge,tvd=1.000,home_other=0.92,high
+12,2464,0x0012,OUT,Segment #/StateSync/PositionCoordS/Y:Int16,dist_diverge,tvd=1.000,home_other=0.91,high
+12,2464,0x0012,OUT,Segment #/StateSync/PositionCoordS/Z:Int16,dist_diverge,tvd=0.873,home_other=0.31,high
+12,2464,0x0012,OUT,Segment #/StateSync/Rotation# CoordS / #:Int16,dist_diverge,tvd=0.874,home_other=0.27,high
+12,2464,0x0012,OUT,Segment #/StateSync/Rotation:Int16,dist_diverge,tvd=0.853,home_other=0.23,high
+12,2464,0x0012,OUT,Segment #/StateSync/SpeedCoordS/X:Int16,dist_diverge,tvd=0.502,home_other=0.00,medium
+12,2464,0x0012,OUT,Segment #/StateSync/SpeedCoordS/Y:Int16,dist_diverge,tvd=0.508,home_other=0.00,medium
+12,2464,0x0012,OUT,Segment #/StateSync/Unknown:Int32,dist_diverge,tvd=0.989,home_other=0.52,high
+12,2464,0x0012,OUT,Segment #/StateSync/state:Byte,dist_diverge,tvd=0.639,home_other=0.00,high
+12,2464,0x0012,OUT,Segment #/StateSync/subState:Byte,dist_diverge,tvd=0.598,home_other=0.00,medium
+12,2464,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.935,home_other=0.12,high
+2502,2464,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.938,home_other=0.09,high
+2507,2464,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.995,home_other=0.09,high
+12,2465,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2465,0x0012,OUT,/Function:Byte,dist_diverge,tvd=0.508,home_other=0.00,medium
+12,2465,0x0012,OUT,Segment #/StateSync/CoordS / #:Int16,dist_diverge,tvd=0.840,home_other=0.28,high
+12,2465,0x0012,OUT,Segment #/StateSync/PositionCoordS/X:Int16,dist_diverge,tvd=0.999,home_other=0.92,high
+12,2465,0x0012,OUT,Segment #/StateSync/PositionCoordS/Y:Int16,dist_diverge,tvd=1.000,home_other=0.91,high
+12,2465,0x0012,OUT,Segment #/StateSync/PositionCoordS/Z:Int16,dist_diverge,tvd=0.992,home_other=0.31,high
+12,2465,0x0012,OUT,Segment #/StateSync/Rotation# CoordS / #:Int16,dist_diverge,tvd=0.858,home_other=0.27,high
+12,2465,0x0012,OUT,Segment #/StateSync/Rotation:Int16,dist_diverge,tvd=0.858,home_other=0.23,high
+12,2465,0x0012,OUT,Segment #/StateSync/Unknown:Byte,dist_diverge,tvd=0.873,home_other=0.00,high
+12,2465,0x0012,OUT,Segment #/StateSync/Unknown:Int32,dist_diverge,tvd=0.744,home_other=0.52,high
+12,2465,0x0012,OUT,Segment #/StateSync/state:Byte,dist_diverge,tvd=0.716,home_other=0.00,high
+12,2465,0x0012,OUT,Segment #/StateSync/subState:Byte,dist_diverge,tvd=0.716,home_other=0.00,high
+12,2465,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.935,home_other=0.12,high
+2502,2465,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.938,home_other=0.09,high
+2507,2465,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.995,home_other=0.09,high
+2527,2465,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2465,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=1.000,home_other=0.20,high
+2527,2465,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=1.000,home_other=0.18,high
+2527,2465,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2465,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.606,home_other=0.00,high
+2527,2465,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.999,home_other=0.00,high
+12,2486,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2486,0x001C,IN,/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/AnimationString?/size:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/Flag:Byte,dist_diverge,tvd=0.521,home_other=0.00,medium
+12,2486,0x001C,IN,StateSync/PositionCoordS/X:Int16,dist_diverge,tvd=0.863,home_other=0.44,high
+12,2486,0x001C,IN,StateSync/PositionCoordS/Y:Int16,dist_diverge,tvd=0.906,home_other=0.45,high
+12,2486,0x001C,IN,StateSync/PositionCoordS/Z:Int16,dist_diverge,tvd=0.918,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/Rotation# CoordS / #:Int16,dist_diverge,tvd=0.864,home_other=0.07,high
+12,2486,0x001C,IN,StateSync/Rotation:Int16,dist_diverge,tvd=0.844,home_other=0.08,high
+12,2486,0x001C,IN,StateSync/SpeedCoordS/X:Int16,dist_diverge,tvd=0.600,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/SpeedCoordS/Y:Int16,dist_diverge,tvd=0.666,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/SpeedCoordS/Z:Int16,dist_diverge,tvd=0.687,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/Unknown:Byte,dist_diverge,tvd=0.641,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/Unknown:Int32,dist_diverge,tvd=0.928,home_other=0.12,high
+12,2486,0x001C,IN,StateSync/state:Byte,dist_diverge,tvd=0.727,home_other=0.00,high
+12,2486,0x001C,IN,StateSync/subState:Byte,dist_diverge,tvd=0.747,home_other=0.00,high
+12,2486,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=0.891,home_other=0.04,high
+12,2486,0x0020,OUT,/SkillLevel:Int16,dist_diverge,tvd=0.571,home_other=0.00,medium
+12,2486,0x0020,OUT,/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.15,high
+12,2486,0x0020,OUT,ImpactPositionCoordF/X:Single,dist_diverge,tvd=0.745,home_other=0.68,high
+12,2486,0x0020,OUT,ImpactPositionCoordF/Y:Single,dist_diverge,tvd=0.750,home_other=0.70,high
+12,2486,0x0020,OUT,ImpactPositionCoordF/Z:Single,dist_diverge,tvd=0.820,home_other=0.04,high
+12,2486,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.33,high
+12,2486,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.513,home_other=0.93,medium
+12,2486,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.508,home_other=0.93,medium
+12,2486,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.858,home_other=0.07,high
+12,2486,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.560,home_other=0.34,medium
+2512,2486,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=0.995,home_other=0.00,high
+2512,2486,0x0020,OUT,/SkillLevel:Int16,dist_diverge,tvd=0.876,home_other=0.00,high
+2512,2486,0x0020,OUT,/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,2486,0x0020,OUT,/flag:Boolean,dist_diverge,tvd=0.998,home_other=0.00,high
+2512,2486,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.523,home_other=0.44,medium
+2512,2486,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.532,home_other=0.46,medium
+2512,2486,0x0020,OUT,ImpactPositionCoordF/X:Single,dist_diverge,tvd=0.745,home_other=0.77,high
+2512,2486,0x0020,OUT,ImpactPositionCoordF/Y:Single,dist_diverge,tvd=0.750,home_other=0.77,high
+2512,2486,0x0020,OUT,ImpactPositionCoordF/Z:Single,dist_diverge,tvd=0.970,home_other=0.01,high
+2512,2486,0x0020,OUT,Npc #/NpcObjectId:Int32,dist_diverge,tvd=0.524,home_other=0.29,medium
+2512,2486,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,2486,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.513,home_other=0.90,medium
+2512,2486,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.508,home_other=0.90,medium
+2512,2486,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.968,home_other=0.16,high
+2512,2486,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.700,home_other=0.71,high
+12,2486,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.724,home_other=0.12,high
+2507,2486,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.694,home_other=0.09,high
+12,2486,0x0026,OUT,/SkillId:Int32,dist_diverge,tvd=0.982,home_other=0.00,high
+12,2486,0x0026,OUT,EntityRelatedCoordF/Z:Single,dist_diverge,tvd=0.955,home_other=0.00,high
+2528,2486,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.571,home_other=0.00,medium
+2528,2486,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.554,home_other=0.00,medium
+2512,2486,0x003C,IN,/ObjectId:Int32,dist_diverge,tvd=0.809,home_other=0.24,high
+2512,2486,0x003C,IN,/SkillId:Int32,dist_diverge,tvd=0.847,home_other=0.15,high
+2512,2486,0x003C,IN,/SkillLevel:Int16,dist_diverge,tvd=0.590,home_other=0.00,medium
+2512,2486,0x003C,IN,PositionCoordS/Z:Int16,dist_diverge,tvd=0.792,home_other=0.15,high
+2512,2486,0x004C,IN,PositionCoordF/X:Single,dist_diverge,tvd=0.844,home_other=0.76,high
+2512,2486,0x004C,IN,PositionCoordF/Y:Single,dist_diverge,tvd=0.763,home_other=0.71,high
+2512,2486,0x004C,IN,PositionCoordF/Z:Single,dist_diverge,tvd=0.984,home_other=0.23,high
+2521,2486,0x0055,IN,/?:Int16,count_neg,-25551,"[0,902]",high
+2521,2486,0x0055,IN,/hp base:Int64,dist_diverge,tvd=0.783,home_other=0.00,high
+2521,2486,0x0055,IN,/hp bonus:Int64,dist_diverge,tvd=0.785,home_other=0.00,high
+2521,2486,0x0055,IN,/hp total:Int64,dist_diverge,tvd=0.785,home_other=0.00,high
+2521,2486,0x0055,IN,/id:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2521,2486,0x0055,IN,coord/y:Single,dist_diverge,tvd=0.584,home_other=0.30,medium
+2521,2486,0x0055,IN,coord/z:Single,dist_diverge,tvd=0.799,home_other=0.00,high
+2529,2486,0x0075,IN,/SkillId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2529,2486,0x0075,IN,/SkillLevel:Int16,dist_diverge,tvd=0.789,home_other=0.00,high
+2529,2486,0x0075,IN,/SkillUseUid:Int64,dist_diverge,tvd=0.946,home_other=0.53,high
+2529,2486,0x0075,IN,/coord x:Int16,dist_diverge,tvd=0.938,home_other=0.12,high
+2529,2486,0x0075,IN,/coord y:Int16,dist_diverge,tvd=0.945,home_other=0.04,high
+2529,2486,0x0075,IN,/coord z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2489,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2489,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=0.888,home_other=0.04,high
+12,2489,0x0020,OUT,/SkillLevel:Int16,dist_diverge,tvd=0.835,home_other=0.00,high
+12,2489,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.713,home_other=0.29,high
+12,2489,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.714,home_other=0.31,high
+12,2489,0x0020,OUT,Npc #/NpcObjectId:Int32,dist_diverge,tvd=0.532,home_other=0.40,medium
+12,2489,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.33,high
+12,2489,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.784,home_other=0.93,high
+12,2489,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.987,home_other=0.93,high
+12,2489,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.861,home_other=0.07,high
+12,2489,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.898,home_other=0.34,high
+2512,2489,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,2489,0x0020,OUT,/SkillLevel:Int16,dist_diverge,tvd=0.820,home_other=0.00,high
+2512,2489,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.743,home_other=0.44,high
+2512,2489,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.745,home_other=0.46,high
+2512,2489,0x0020,OUT,Npc #/NpcObjectId:Int32,dist_diverge,tvd=0.610,home_other=0.29,high
+2512,2489,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2512,2489,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.784,home_other=0.90,high
+2512,2489,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.987,home_other=0.90,high
+2512,2489,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.889,home_other=0.16,high
+2512,2489,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.956,home_other=0.71,high
+12,2489,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.992,home_other=0.12,high
+12,2489,0x0024,IN,/ItemUid:Int64,dist_diverge,tvd=1.000,home_other=0.93,high
+2502,2489,0x0024,IN,/cube uid?:Int64,dist_diverge,tvd=1.000,home_other=0.93,high
+2502,2489,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.995,home_other=0.09,high
+2507,2489,0x0024,IN,/cube uid?:Int64,dist_diverge,tvd=1.000,home_other=0.94,high
+2507,2489,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.973,home_other=0.09,high
+2528,2489,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.628,home_other=0.00,high
+2528,2489,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.628,home_other=0.00,high
+2527,2489,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2489,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.789,home_other=0.20,high
+2527,2489,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.811,home_other=0.18,high
+2527,2489,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.802,home_other=0.00,high
+2527,2489,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.932,home_other=0.00,high
+2527,2489,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.556,home_other=0.00,medium
+2527,2490,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2490,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.800,home_other=0.20,high
+2527,2490,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.822,home_other=0.18,high
+2527,2490,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.805,home_other=0.00,high
+2527,2490,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.946,home_other=0.00,high
+2527,2490,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.793,home_other=0.00,high
+12,2492,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2492,0x001C,IN,/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/Animation#:Byte,dist_diverge,tvd=0.550,home_other=0.00,medium
+12,2492,0x001C,IN,StateSync/CoordS / #:Int16,dist_diverge,tvd=0.744,home_other=0.11,high
+12,2492,0x001C,IN,StateSync/PositionCoordS/X:Int16,dist_diverge,tvd=0.556,home_other=0.44,medium
+12,2492,0x001C,IN,StateSync/PositionCoordS/Y:Int16,dist_diverge,tvd=0.550,home_other=0.45,medium
+12,2492,0x001C,IN,StateSync/PositionCoordS/Z:Int16,dist_diverge,tvd=0.995,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/Rotation# CoordS / #:Int16,dist_diverge,tvd=0.942,home_other=0.07,high
+12,2492,0x001C,IN,StateSync/Rotation:Int16,dist_diverge,tvd=0.929,home_other=0.08,high
+12,2492,0x001C,IN,StateSync/SpeedCoordS/X:Int16,dist_diverge,tvd=0.600,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/SpeedCoordS/Y:Int16,dist_diverge,tvd=0.666,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/SpeedCoordS/Z:Int16,dist_diverge,tvd=0.693,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/Unknown:Byte,dist_diverge,tvd=0.641,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/Unknown:Int16,dist_diverge,tvd=0.714,home_other=0.00,high
+12,2492,0x001C,IN,StateSync/Unknown:Int32,dist_diverge,tvd=0.998,home_other=0.12,high
+12,2492,0x001C,IN,StateSync/state:Byte,dist_diverge,tvd=0.582,home_other=0.00,medium
+12,2492,0x001C,IN,StateSync/subState:Byte,dist_diverge,tvd=0.590,home_other=0.00,medium
+12,2492,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.773,home_other=0.12,high
+2521,2492,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.583,home_other=0.32,medium
+2527,2492,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2492,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.711,home_other=0.20,high
+2527,2492,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.715,home_other=0.18,high
+2527,2492,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.610,home_other=0.00,high
+2527,2492,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.577,home_other=0.00,medium
+12,2493,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.672,home_other=0.12,high
+2507,2493,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.686,home_other=0.09,high
+2521,2493,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.845,home_other=0.56,high
+2521,2493,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.709,home_other=0.32,high
+2527,2493,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2493,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.707,home_other=0.20,high
+2527,2493,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.797,home_other=0.18,high
+2527,2493,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2493,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.871,home_other=0.00,high
+2527,2493,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.695,home_other=0.00,high
+12,2495,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2495,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.544,home_other=0.29,medium
+12,2495,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.588,home_other=0.31,medium
+12,2495,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.516,home_other=0.93,medium
+12,2495,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.503,home_other=0.93,medium
+12,2495,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.863,home_other=0.07,high
+2512,2495,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.600,home_other=0.44,medium
+2512,2495,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.630,home_other=0.46,high
+2512,2495,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.516,home_other=0.90,medium
+2512,2495,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.503,home_other=0.90,medium
+2512,2495,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.847,home_other=0.16,high
+12,2495,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.705,home_other=0.12,high
+2507,2495,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.609,home_other=0.09,high
+12,2495,0x002D,IN,/ObjectId:Int32,dist_diverge,tvd=0.574,home_other=0.78,medium
+2521,2495,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.516,home_other=0.32,medium
+2527,2495,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2495,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.682,home_other=0.20,high
+2527,2495,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.816,home_other=0.18,high
+2527,2495,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.994,home_other=0.00,high
+2527,2495,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.739,home_other=0.00,high
+12,2496,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2496,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.811,home_other=0.12,high
+2507,2496,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.507,home_other=0.09,medium
+2528,2496,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.667,home_other=0.00,high
+2528,2496,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.662,home_other=0.00,high
+2521,2496,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.666,home_other=0.56,high
+2521,2496,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.543,home_other=0.32,medium
+2527,2496,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2496,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.737,home_other=0.20,high
+2527,2496,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.792,home_other=0.18,high
+2527,2496,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.889,home_other=0.00,high
+2527,2496,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.648,home_other=0.00,high
+12,2500,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.672,home_other=0.12,high
+2507,2500,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.686,home_other=0.09,high
+12,2502,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2502,0x0020,OUT,/SkillUseUid:Int64,dist_diverge,tvd=0.853,home_other=0.95,high
+12,2502,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.535,home_other=0.29,medium
+12,2502,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.628,home_other=0.31,high
+12,2502,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.656,home_other=0.93,high
+12,2502,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.561,home_other=0.93,medium
+12,2502,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.846,home_other=0.07,high
+2512,2502,0x0020,OUT,/SkillUseUid:Int64,dist_diverge,tvd=0.853,home_other=0.94,high
+2512,2502,0x0020,OUT,DirectionCoordF/X:Single,dist_diverge,tvd=0.598,home_other=0.44,medium
+2512,2502,0x0020,OUT,DirectionCoordF/Y:Single,dist_diverge,tvd=0.704,home_other=0.46,high
+2512,2502,0x0020,OUT,Npc #/NpcObjectId:Int32,dist_diverge,tvd=0.567,home_other=0.29,medium
+2512,2502,0x0020,OUT,PositionCoordF/X:Single,dist_diverge,tvd=0.656,home_other=0.90,high
+2512,2502,0x0020,OUT,PositionCoordF/Y:Single,dist_diverge,tvd=0.561,home_other=0.90,medium
+2512,2502,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.953,home_other=0.16,high
+12,2502,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.705,home_other=0.12,high
+2529,2502,0x0075,IN,/SkillId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2529,2502,0x0075,IN,/SkillUseUid:Int64,dist_diverge,tvd=0.997,home_other=0.53,high
+2529,2502,0x0075,IN,/coord x:Int16,dist_diverge,tvd=1.000,home_other=0.12,high
+2529,2502,0x0075,IN,/coord y:Int16,dist_diverge,tvd=1.000,home_other=0.04,high
+2529,2502,0x0075,IN,/coord z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2503,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2503,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.739,home_other=0.12,high
+12,2504,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2504,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.731,home_other=0.12,high
+2512,2504,0x003C,IN,/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.24,high
+2512,2504,0x003C,IN,/SkillId:Int32,dist_diverge,tvd=1.000,home_other=0.15,high
+2512,2504,0x003C,IN,/SkillLevel:Int16,dist_diverge,tvd=0.521,home_other=0.00,medium
+2512,2504,0x003C,IN,DirectionCoordF/X:Single,dist_diverge,tvd=0.627,home_other=0.30,high
+2512,2504,0x003C,IN,DirectionCoordF/Y:Single,dist_diverge,tvd=0.762,home_other=0.32,high
+2512,2504,0x003C,IN,PositionCoordS/Z:Int16,dist_diverge,tvd=0.961,home_other=0.15,high
+2512,2504,0x003C,IN,RotationCoordF/Z:Single,dist_diverge,tvd=0.865,home_other=0.80,high
+12,2506,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2506,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.875,home_other=0.12,high
+2502,2506,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.722,home_other=0.09,high
+2528,2506,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.651,home_other=0.00,high
+2528,2506,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.650,home_other=0.00,high
+2521,2506,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.861,home_other=0.56,high
+2521,2506,0x0058,IN,Coord/x:Int16,dist_diverge,tvd=0.574,home_other=0.43,medium
+2521,2506,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.574,home_other=0.32,medium
+2527,2506,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2506,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.669,home_other=0.20,high
+2527,2506,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.820,home_other=0.18,high
+2527,2506,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2506,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.764,home_other=0.00,high
+12,2507,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2507,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.759,home_other=0.12,high
+2521,2507,0x0055,IN,/?:Int16,count_neg,-25910,"[0,902]",high
+2521,2507,0x0055,IN,/hp base:Int64,dist_diverge,tvd=0.588,home_other=0.00,medium
+2521,2507,0x0055,IN,/hp bonus:Int64,dist_diverge,tvd=0.588,home_other=0.00,medium
+2521,2507,0x0055,IN,/hp total:Int64,dist_diverge,tvd=0.588,home_other=0.00,medium
+2521,2507,0x0055,IN,/id:Int32,dist_diverge,tvd=0.889,home_other=0.00,high
+2521,2507,0x0055,IN,coord/y:Single,dist_diverge,tvd=0.532,home_other=0.30,medium
+2521,2507,0x0055,IN,coord/z:Single,dist_diverge,tvd=0.574,home_other=0.00,medium
+2521,2507,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.544,home_other=0.32,medium
+2527,2507,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2507,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.713,home_other=0.20,high
+2527,2507,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.735,home_other=0.18,high
+2527,2507,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.852,home_other=0.00,high
+2527,2507,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.750,home_other=0.00,high
+2527,2507,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.540,home_other=0.00,medium
+2527,2507,0x0058,IN,NpcControl #/Short / #:Int16,count_neg,-30464,"[100,100]",high
+12,2509,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.693,home_other=0.12,high
+2507,2509,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.679,home_other=0.09,high
+2527,2509,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2509,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.949,home_other=0.20,high
+2527,2509,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.875,home_other=0.18,high
+2527,2509,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2509,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.697,home_other=0.00,high
+2527,2509,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.655,home_other=0.00,high
+12,2511,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2511,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.874,home_other=0.12,high
+2502,2511,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.862,home_other=0.09,high
+2507,2511,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.528,home_other=0.09,medium
+12,2512,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2512,0x0011,IN,/Timezone:Byte,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2512,0x0020,OUT,/SkillId:Int32,dist_diverge,tvd=0.891,home_other=0.04,high
+12,2512,0x0020,OUT,/Unknown:Int32,count_huge,1117658858,"[0,4]",high
+12,2512,0x0020,OUT,/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.15,high
+12,2512,0x0020,OUT,/flag:Boolean,dist_diverge,tvd=0.998,home_other=0.00,high
+12,2512,0x0020,OUT,ImpactPositionCoordF/Z:Single,dist_diverge,tvd=0.635,home_other=0.04,high
+12,2512,0x0020,OUT,Npc #/UserObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.33,high
+12,2512,0x0020,OUT,PositionCoordF/Z:Single,dist_diverge,tvd=0.528,home_other=0.07,medium
+12,2512,0x0020,OUT,RotationCoordF/Z:Single,dist_diverge,tvd=0.541,home_other=0.34,medium
+12,2512,0x0021,OUT,/ItemUid:Int64,dist_diverge,tvd=0.960,home_other=0.00,high
+12,2512,0x0021,OUT,/SkillId:Int32,dist_diverge,tvd=0.960,home_other=0.00,high
+12,2512,0x0022,OUT,/ObjectId?:Int32,dist_diverge,tvd=1.000,home_other=0.68,high
+2502,2512,0x0023,IN,/item id:Int32,dist_diverge,tvd=0.855,home_other=0.64,high
+2502,2512,0x0023,IN,/item uid:Int64,dist_diverge,tvd=0.991,home_other=0.73,high
+2502,2512,0x0023,IN,/unk:Int32,dist_diverge,tvd=0.688,home_other=0.54,high
+12,2512,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.999,home_other=0.12,high
+2502,2512,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.734,home_other=0.09,high
+2507,2512,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.674,home_other=0.09,high
+12,2512,0x0026,OUT,/SkillId:Int32,dist_diverge,tvd=0.931,home_other=0.00,high
+12,2512,0x0026,OUT,/SkillLevel:Int16,dist_diverge,tvd=0.779,home_other=0.00,high
+12,2512,0x0026,OUT,EntityRelatedCoordF/Z:Single,dist_diverge,tvd=0.636,home_other=0.00,high
+2507,2512,0x0048,IN,/id:Int32,dist_diverge,tvd=0.510,home_other=0.23,medium
+2507,2512,0x0048,IN,/target map id:Int32,dist_diverge,tvd=0.652,home_other=0.05,high
+2507,2512,0x0048,IN,coords/x:Single,dist_diverge,tvd=0.543,home_other=0.19,medium
+2507,2512,0x0048,IN,coords/y:Single,dist_diverge,tvd=0.514,home_other=0.20,medium
+2507,2512,0x0048,IN,coords/z:Single,dist_diverge,tvd=0.543,home_other=0.00,medium
+2521,2512,0x0055,IN,/?:Int16,count_neg,-7215,"[0,902]",high
+2521,2512,0x0055,IN,/hp base:Int64,dist_diverge,tvd=0.756,home_other=0.00,high
+2521,2512,0x0055,IN,/hp bonus:Int64,dist_diverge,tvd=0.756,home_other=0.00,high
+2521,2512,0x0055,IN,/hp total:Int64,dist_diverge,tvd=0.756,home_other=0.00,high
+2521,2512,0x0055,IN,/id:Int32,dist_diverge,tvd=0.999,home_other=0.00,high
+2521,2512,0x0055,IN,coord/x:Single,dist_diverge,tvd=0.508,home_other=0.44,medium
+2521,2512,0x0055,IN,coord/y:Single,dist_diverge,tvd=0.661,home_other=0.30,high
+2521,2512,0x0055,IN,coord/z:Single,dist_diverge,tvd=0.640,home_other=0.00,high
+2506,2512,0x005E,IN,/counter:Int64,dist_diverge,tvd=0.576,home_other=0.17,medium
+2486,2512,0x006A,IN,Cube #/CubeItemInfo/ItemId:Int32,dist_diverge,tvd=0.994,home_other=0.82,high
+2486,2512,0x006A,IN,Cube #/IsTaken:Byte,dist_diverge,tvd=0.824,home_other=0.00,high
+2502,2512,0x006A,IN,/item_id:Int32,dist_diverge,tvd=0.636,home_other=0.21,high
+2503,2512,0x006A,IN,/item_id:Int32,dist_diverge,tvd=0.601,home_other=0.19,high
+2529,2512,0x0075,IN,/SkillId:Int32,dist_diverge,tvd=0.997,home_other=0.00,high
+2529,2512,0x0075,IN,/SkillLevel:Int16,dist_diverge,tvd=0.549,home_other=0.00,medium
+2529,2512,0x0075,IN,/SkillUseUid:Int64,dist_diverge,tvd=0.596,home_other=0.53,medium
+2529,2512,0x0075,IN,/coord x:Int16,dist_diverge,tvd=0.875,home_other=0.12,high
+2529,2512,0x0075,IN,/coord y:Int16,dist_diverge,tvd=0.955,home_other=0.04,high
+2529,2512,0x0075,IN,/coord z:Int16,dist_diverge,tvd=0.999,home_other=0.00,high
+12,2513,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2513,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.788,home_other=0.12,high
+2502,2513,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.713,home_other=0.09,high
+2507,2513,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.560,home_other=0.09,medium
+12,2516,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2516,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.700,home_other=0.12,high
+2507,2516,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.540,home_other=0.09,medium
+2528,2516,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.707,home_other=0.00,high
+2528,2516,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.703,home_other=0.00,high
+2521,2516,0x0055,IN,/hp base:Int64,dist_diverge,tvd=0.769,home_other=0.00,high
+2521,2516,0x0055,IN,/hp bonus:Int64,dist_diverge,tvd=0.769,home_other=0.00,high
+2521,2516,0x0055,IN,/hp total:Int64,dist_diverge,tvd=0.769,home_other=0.00,high
+2521,2516,0x0055,IN,/id:Int32,dist_diverge,tvd=0.897,home_other=0.00,high
+2521,2516,0x0055,IN,coord/x:Single,dist_diverge,tvd=0.512,home_other=0.44,medium
+2521,2516,0x0055,IN,coord/y:Single,dist_diverge,tvd=0.641,home_other=0.30,high
+2521,2516,0x0055,IN,coord/z:Single,dist_diverge,tvd=0.669,home_other=0.00,high
+2527,2516,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2516,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.779,home_other=0.20,high
+2527,2516,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.807,home_other=0.18,high
+2527,2516,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2516,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.854,home_other=0.00,high
+12,2517,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.694,home_other=0.12,high
+2507,2517,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.679,home_other=0.09,high
+12,2518,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.991,home_other=0.12,high
+2502,2518,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.733,home_other=0.09,high
+2507,2518,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.664,home_other=0.09,high
+2521,2518,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.654,home_other=0.32,high
+2527,2518,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2518,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.796,home_other=0.20,high
+2527,2518,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.821,home_other=0.18,high
+2527,2518,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.688,home_other=0.00,high
+2527,2518,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.834,home_other=0.00,high
+12,2520,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2520,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.770,home_other=0.12,high
+2507,2520,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.516,home_other=0.09,medium
+2528,2520,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.650,home_other=0.00,high
+2528,2520,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.646,home_other=0.00,high
+2521,2520,0x0058,IN,/Look direction:Int16,dist_diverge,tvd=0.821,home_other=0.50,high
+2521,2520,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.762,home_other=0.56,high
+2521,2520,0x0058,IN,Coord/x:Int16,dist_diverge,tvd=0.793,home_other=0.43,high
+2521,2520,0x0058,IN,Coord/y:Int16,dist_diverge,tvd=0.738,home_other=0.59,high
+2521,2520,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.866,home_other=0.32,high
+2521,2520,0x0058,IN,Velocity/x:Int16,dist_diverge,tvd=0.511,home_other=0.36,medium
+2527,2520,0x0058,IN,NpcControl #/BufferSize:Int16,dist_diverge,tvd=0.562,home_other=0.00,medium
+2527,2520,0x0058,IN,NpcControl #/Counter (per action):Int16,dist_diverge,tvd=0.579,home_other=0.73,medium
+2527,2520,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2520,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.835,home_other=0.20,high
+2527,2520,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.860,home_other=0.18,high
+2527,2520,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.974,home_other=0.00,high
+2527,2520,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.601,home_other=0.00,high
+2527,2520,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.578,home_other=0.00,medium
+2527,2520,0x0058,IN,NpcControl #/Short / #:Int16,count_neg,-32768,"[100,100]",high
+2527,2520,0x0058,IN,NpcControl #/state:Byte,dist_diverge,tvd=0.603,home_other=0.00,high
+12,2521,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2521,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.896,home_other=0.12,high
+2502,2521,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.669,home_other=0.09,high
+2527,2521,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2521,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.782,home_other=0.20,high
+2527,2521,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.810,home_other=0.18,high
+2527,2521,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2521,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.847,home_other=0.00,high
+2527,2521,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.641,home_other=0.00,high
+12,2522,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2522,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=1.000,home_other=0.12,high
+2502,2522,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.735,home_other=0.09,high
+2507,2522,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.674,home_other=0.09,high
+2527,2522,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2522,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.973,home_other=0.20,high
+2527,2522,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.822,home_other=0.18,high
+2527,2522,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2522,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.835,home_other=0.00,high
+2527,2522,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.729,home_other=0.00,high
+12,2524,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2524,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.726,home_other=0.12,high
+2521,2524,0x0058,IN,/Look direction:Int16,dist_diverge,tvd=0.791,home_other=0.50,high
+2521,2524,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.923,home_other=0.56,high
+2521,2524,0x0058,IN,/animation:Int16,dist_diverge,tvd=0.505,home_other=0.01,medium
+2521,2524,0x0058,IN,Coord/x:Int16,dist_diverge,tvd=0.728,home_other=0.43,high
+2521,2524,0x0058,IN,Coord/y:Int16,dist_diverge,tvd=0.877,home_other=0.59,high
+2521,2524,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.873,home_other=0.32,high
+2521,2524,0x0058,IN,Velocity/x:Int16,dist_diverge,tvd=0.589,home_other=0.36,medium
+2527,2524,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2524,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.959,home_other=0.20,high
+2527,2524,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.963,home_other=0.18,high
+2527,2524,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.998,home_other=0.00,high
+2527,2524,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.606,home_other=0.00,high
+12,2525,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.728,home_other=0.12,high
+2507,2525,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.537,home_other=0.09,medium
+2527,2525,0x0058,IN,NpcControl #/BufferSize:Int16,count_neg,-22858,"[26,26]",high
+2527,2525,0x0058,IN,NpcControl #/Flags:Byte,dist_diverge,tvd=0.845,home_other=0.00,high
+2527,2525,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2525,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.668,home_other=0.20,high
+2527,2525,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.763,home_other=0.18,high
+2527,2525,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.622,home_other=0.00,high
+2527,2525,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.839,home_other=0.00,high
+2527,2525,0x0058,IN,NpcControl #/Short / #:Int16,count_neg,-32512,"[100,100]",high
+2527,2525,0x0058,IN,NpcControl #/Short / #:Int16,dist_diverge,tvd=0.586,home_other=0.00,medium
+12,2527,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.694,home_other=0.12,high
+2507,2527,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.679,home_other=0.09,high
+2521,2527,0x0058,IN,/Look direction:Int16,dist_diverge,tvd=0.822,home_other=0.50,high
+2521,2527,0x0058,IN,/ObjectID:Int32,dist_diverge,tvd=0.873,home_other=0.56,high
+2521,2527,0x0058,IN,Coord/x:Int16,dist_diverge,tvd=0.597,home_other=0.43,medium
+2521,2527,0x0058,IN,Coord/y:Int16,dist_diverge,tvd=0.626,home_other=0.59,high
+2521,2527,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.924,home_other=0.32,high
+2521,2527,0x0058,IN,Velocity/x:Int16,dist_diverge,tvd=0.519,home_other=0.36,medium
+12,2528,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.773,home_other=0.12,high
+2507,2528,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.738,home_other=0.09,high
+12,2529,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2529,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.798,home_other=0.12,high
+2528,2529,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.694,home_other=0.00,high
+2528,2529,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.695,home_other=0.00,high
+2512,2529,0x003C,IN,/ObjectId:Int32,dist_diverge,tvd=0.971,home_other=0.24,high
+2512,2529,0x003C,IN,/SkillId:Int32,dist_diverge,tvd=0.982,home_other=0.15,high
+2512,2529,0x003C,IN,/SkillLevel:Int16,dist_diverge,tvd=0.532,home_other=0.00,medium
+2512,2529,0x003C,IN,DirectionCoordF/X:Single,dist_diverge,tvd=0.521,home_other=0.30,medium
+2512,2529,0x003C,IN,DirectionCoordF/Y:Single,dist_diverge,tvd=0.532,home_other=0.32,medium
+2512,2529,0x003C,IN,PositionCoordS/Z:Int16,dist_diverge,tvd=0.966,home_other=0.15,high
+2521,2529,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.512,home_other=0.32,medium
+2527,2529,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2529,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.740,home_other=0.20,high
+2527,2529,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.725,home_other=0.18,high
+2527,2529,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=0.999,home_other=0.00,high
+2527,2529,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.696,home_other=0.00,high
+2527,2529,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.525,home_other=0.00,medium
+2527,2529,0x0058,IN,NpcControl #/Short / #:Int16,count_neg,-32000,"[100,100]",high
+12,2530,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=1.000,home_other=0.12,high
+2502,2530,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.735,home_other=0.09,high
+2507,2530,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.674,home_other=0.09,high
+12,2531,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.773,home_other=0.12,high
+2507,2531,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.738,home_other=0.09,high
+2527,2531,0x0058,IN,NpcControl #/Counter (per action):Int16,dist_diverge,tvd=0.864,home_other=0.73,high
+2527,2531,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2531,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.949,home_other=0.20,high
+2527,2531,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.871,home_other=0.18,high
+2527,2531,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2531,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.578,home_other=0.00,medium
+2527,2531,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.655,home_other=0.00,high
+12,2532,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2532,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.756,home_other=0.12,high
+2502,2532,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.513,home_other=0.09,medium
+2507,2532,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.644,home_other=0.09,high
+2528,2532,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.544,home_other=0.00,medium
+2528,2532,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.544,home_other=0.00,medium
+12,2533,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2533,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.996,home_other=0.12,high
+2502,2533,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.731,home_other=0.09,high
+2507,2533,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.674,home_other=0.09,high
+2527,2533,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2533,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.953,home_other=0.20,high
+2527,2533,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=0.966,home_other=0.18,high
+2527,2533,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2533,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.666,home_other=0.00,high
+2506,2533,0x005E,IN,/timestamp:Int64,dist_diverge,tvd=0.865,home_other=0.97,high
+2506,2533,0x005E,IN,/trophy id:Int32,dist_diverge,tvd=0.535,home_other=0.86,medium
+12,2546,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2546,0x0019,IN,/count:Int32,dist_diverge,tvd=0.976,home_other=0.00,high
+12,2546,0x0019,IN,DungeonRoom #/Unknown:Byte,dist_diverge,tvd=0.521,home_other=0.00,medium
+2500,2546,0x0019,IN,/zero:Byte,dist_diverge,tvd=0.736,home_other=0.00,high
+12,2546,0x001D,IN,/AccountId:Int64,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2546,0x001D,IN,/Channel:Int32,dist_diverge,tvd=0.685,home_other=0.00,high
+12,2546,0x001D,IN,/CharacterId:Int64,dist_diverge,tvd=0.975,home_other=0.02,high
+12,2546,0x001D,IN,/Type:Int32,dist_diverge,tvd=0.673,home_other=0.00,high
+12,2546,0x001D,IN,Name/size:Int16,dist_diverge,tvd=0.541,home_other=0.00,medium
+12,2546,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.985,home_other=0.12,high
+2502,2546,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.719,home_other=0.09,high
+2507,2546,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.672,home_other=0.09,high
+12,2546,0x0034,OUT,/Height:Single,dist_diverge,tvd=0.523,home_other=0.56,medium
+2512,2546,0x003C,IN,/ObjectId:Int32,dist_diverge,tvd=0.755,home_other=0.24,high
+2512,2546,0x003C,IN,/SkillId:Int32,dist_diverge,tvd=0.843,home_other=0.15,high
+2512,2546,0x003C,IN,PositionCoordS/Z:Int16,dist_diverge,tvd=0.657,home_other=0.15,high
+2507,2546,0x0048,IN,/target map id:Int32,dist_diverge,tvd=0.637,home_other=0.05,high
+2507,2546,0x0048,IN,coords/x:Single,dist_diverge,tvd=0.554,home_other=0.19,medium
+2507,2546,0x0048,IN,coords/y:Single,dist_diverge,tvd=0.593,home_other=0.20,medium
+2512,2546,0x004C,IN,/OwnerObjectId:Int32,dist_diverge,tvd=0.954,home_other=0.05,high
+2512,2546,0x004C,IN,/ServerTicks:Int32,dist_diverge,tvd=0.532,home_other=0.85,medium
+2512,2546,0x004C,IN,/SkillId:Int32,dist_diverge,tvd=0.983,home_other=0.00,high
+2512,2546,0x004C,IN,/SkillLevel:Int16,dist_diverge,tvd=0.808,home_other=0.00,high
+2512,2546,0x004C,IN,PositionCoordF/Y:Single,dist_diverge,tvd=0.705,home_other=0.71,high
+2512,2546,0x004C,IN,PositionCoordF/Z:Single,dist_diverge,tvd=0.956,home_other=0.23,high
+2521,2546,0x0055,IN,/?:Int16,count_neg,-2509,"[0,902]",high
+2521,2546,0x0055,IN,/hp base:Int64,dist_diverge,tvd=0.691,home_other=0.00,high
+2521,2546,0x0055,IN,/hp bonus:Int64,dist_diverge,tvd=0.691,home_other=0.00,high
+2521,2546,0x0055,IN,/hp total:Int64,dist_diverge,tvd=0.691,home_other=0.00,high
+2521,2546,0x0055,IN,/id:Int32,dist_diverge,tvd=0.997,home_other=0.00,high
+2521,2546,0x0055,IN,coord/y:Single,dist_diverge,tvd=0.602,home_other=0.30,high
+2521,2546,0x0055,IN,coord/z:Single,dist_diverge,tvd=0.588,home_other=0.00,medium
+2486,2546,0x006A,IN,Cube #/AccountId:Int64,dist_diverge,tvd=0.906,home_other=0.23,high
+2486,2546,0x006A,IN,Cube #/CubeItemInfo/CUgcItemLook/AccountId:Int64,dist_diverge,tvd=0.925,home_other=0.00,high
+2486,2546,0x006A,IN,Cube #/CubeItemInfo/CUgcItemLook/CharacterId:Int64,dist_diverge,tvd=0.933,home_other=0.00,high
+2486,2546,0x006A,IN,Cube #/CubeItemInfo/CUgcItemLook/CreationTime:Int64,dist_diverge,tvd=0.687,home_other=0.71,high
+2486,2546,0x006A,IN,Cube #/CubeItemInfo/CUgcItemLook/Uid:Int64,dist_diverge,tvd=0.687,home_other=0.71,high
+2486,2546,0x006A,IN,Cube #/IsTaken:Byte,dist_diverge,tvd=0.588,home_other=0.00,medium
+2502,2546,0x006A,IN,/item_id:Int32,dist_diverge,tvd=0.756,home_other=0.21,high
+2502,2546,0x006A,IN,/plot number:Int32,count_neg,-2147287552,"[1,10]",high
+2502,2546,0x006A,IN,/plot number:Int32,dist_diverge,tvd=0.669,home_other=0.00,high
+2502,2546,0x006A,IN,/x:Byte,dist_diverge,tvd=0.593,home_other=0.00,medium
+2502,2546,0x006A,IN,/y:Byte,dist_diverge,tvd=0.585,home_other=0.00,medium
+2502,2546,0x006A,IN,/z:Byte,dist_diverge,tvd=0.521,home_other=0.00,medium
+2502,2546,0x006A,IN,/zero:Int32,dist_diverge,tvd=0.519,home_other=0.00,medium
+2502,2546,0x006A,IN,/zero:Int64,dist_diverge,tvd=0.572,home_other=0.00,medium
+2503,2546,0x006A,IN,/item_id:Int32,dist_diverge,tvd=0.774,home_other=0.19,high
+2503,2546,0x006A,IN,/plot number:Int32,count_neg,-2147287552,"[1,1]",high
+2503,2546,0x006A,IN,/plot number:Int32,dist_diverge,tvd=0.670,home_other=0.00,high
+2503,2546,0x006A,IN,/x:Byte,dist_diverge,tvd=0.593,home_other=0.00,medium
+2503,2546,0x006A,IN,/y:Byte,dist_diverge,tvd=0.586,home_other=0.00,medium
+2503,2546,0x006A,IN,/z:Byte,dist_diverge,tvd=0.515,home_other=0.00,medium
+2503,2546,0x006A,IN,/zero:Int32,dist_diverge,tvd=0.519,home_other=0.00,medium
+2503,2546,0x006A,IN,/zero:Int64,dist_diverge,tvd=0.572,home_other=0.00,medium
+2529,2546,0x0075,IN,/SkillId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2529,2546,0x0075,IN,/SkillLevel:Int16,dist_diverge,tvd=0.587,home_other=0.00,medium
+2529,2546,0x0075,IN,/coord x:Int16,dist_diverge,tvd=0.875,home_other=0.12,high
+2529,2546,0x0075,IN,/coord y:Int16,dist_diverge,tvd=0.949,home_other=0.04,high
+2529,2546,0x0075,IN,/coord z:Int16,dist_diverge,tvd=0.736,home_other=0.00,high
+12,2549,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2549,0x0024,IN,/ItemId:Int32,dist_diverge,tvd=0.985,home_other=0.12,high
+2502,2549,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.928,home_other=0.09,high
+2507,2549,0x0024,IN,/item id:Int32,dist_diverge,tvd=0.971,home_other=0.09,high
+2521,2549,0x0058,IN,/Look direction:Int16,dist_diverge,tvd=0.792,home_other=0.50,high
+2521,2549,0x0058,IN,/animation:Int16,dist_diverge,tvd=0.520,home_other=0.01,medium
+2521,2549,0x0058,IN,Coord/x:Int16,dist_diverge,tvd=0.718,home_other=0.43,high
+2521,2549,0x0058,IN,Coord/z:Int16,dist_diverge,tvd=0.832,home_other=0.32,high
+2521,2549,0x0058,IN,Velocity/x:Int16,dist_diverge,tvd=0.579,home_other=0.36,medium
+2527,2549,0x0058,IN,NpcControl #/BufferSize:Int16,count_neg,-13586,"[26,26]",high
+2527,2549,0x0058,IN,NpcControl #/ObjectId:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2549,0x0058,IN,NpcControl #/PositionCoordS/X:Int16,dist_diverge,tvd=0.949,home_other=0.20,high
+2527,2549,0x0058,IN,NpcControl #/PositionCoordS/Y:Int16,dist_diverge,tvd=1.000,home_other=0.18,high
+2527,2549,0x0058,IN,NpcControl #/PositionCoordS/Z:Int16,dist_diverge,tvd=1.000,home_other=0.00,high
+2527,2549,0x0058,IN,NpcControl #/Rotation / #:Int16,dist_diverge,tvd=0.586,home_other=0.00,medium
+2527,2549,0x0058,IN,NpcControl #/SequenceId:Int16,dist_diverge,tvd=0.529,home_other=0.00,medium
+2506,2549,0x005E,IN,/mode:Byte,dist_diverge,tvd=0.532,home_other=0.00,medium
+2503,2549,0x0069,IN,/item id:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2503,2549,0x0069,IN,/item uid:Int64,dist_diverge,tvd=0.895,home_other=0.80,high
+2503,2549,0x0069,IN,/obj id:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+12,2550,0x0011,IN,/TimeOffset:Int32,dist_diverge,tvd=1.000,home_other=0.00,high
+2528,2550,0x002E,IN,Stat #/StatMax:Int32,dist_diverge,tvd=0.640,home_other=0.00,high
+2528,2550,0x002E,IN,Stat #/StatTotal:Int32,dist_diverge,tvd=0.634,home_other=0.00,high

@@ -281,6 +281,20 @@ external ground truth. Only `0x0058` among the heavy 2546 opcodes is even a cred
 control. If the calibrated false-positive rate is high, Phase 1b becomes advisory ranking, not a gate —
 find that out *before* wiring it into the resolver.
 
+**DONE (2026-07-15/16), split verdict — absolute invariants gate, distributional advisory.**
+`analysis/invariants.py` + `baseline/matrix/invariants{,-edges}.csv`. Calibration: seed-split
+(same-build, different-sample) noise ceiling for the `~other`-robust TVD is 0.48 at n≥200 → thresholds
+0.50/0.60 sit above pure sampling noise; type-gated absolute checks (bool_escape/count_neg/count_huge/
+len_huge) show **zero** false positives on all calibration pairs. Corrupted-decoder control: catches
+reorders/shifts that move a concentrated field's support (TVD 0.537); inherently blind to high-entropy
+reorders and alignment-preserving retypes (marginals genuinely unchanged). Real result over the 365
+accepted edges: 61 pass / 193 suspect / 111 insufficient-fields; validated concrete catch —
+`2527→2525 0x0058 IN` `BufferSize` constant 26 at home, [−22858, 25600] at the edge: a clean-consuming
+desync Phase 1 had accepted. **Rule 3.0.0-invariants** now rejects would-be accepts with absolute
+violations: 12 edges flipped (365 → 353 accepts; 2546: 59.7% → 59.0%, macro 46.6% → 45.2%).
+`dist_diverge` is advisory only until a *temporal-split* (content-drift) noise floor exists — its 193
+suspects mix real desyncs with legitimate drift and must not gate.
+
 ### Phase 2 — Fix what the harness already found
 
 Two non-compiling scripts (`2502/Outbound/0x00A2.py`, `2507/Inbound/0x00EA.py`); the defects list in §6.
@@ -448,7 +462,7 @@ silently desync. Phases 0/1 give it the regression harness that makes the migrat
 
 | risk | status |
 |---|---|
-| **Clean ≠ correct.** Over-read is a floor. An in-bounds wrong parse is invisible to Phase 1's gate. | **OPEN — the main one.** Phase 1b is the only mitigation. Never quote 73.3% as "correct". |
+| **Clean ≠ correct.** Over-read is a floor. An in-bounds wrong parse is invisible to Phase 1's gate. | **PARTIALLY CLOSED (Phase 1b).** Absolute value-class invariants (zero calibrated FPs) now gate acceptance — 12 in-bounds desyncs ejected from the trusted set (rule v3). Remaining: high-entropy reorders and alignment-preserving retypes stay invisible to marginal stats; `dist_diverge` advisory pending temporal-split calibration. Still never quote coverage as "correct". |
 | Sampling (1500/opcode) may miss rare variants of heavy opcodes. | Partially mitigated (rev 3): first-N replaced by seeded uniform reservoir sampling — first-N provably missed variants (`0x003D`). Rare *modes* within a heavy opcode remain under-sampled; stratify by mode in the manifest run. |
 | Low-n edges accepted on statistically empty evidence. | Mitigated by design (rev 3): sample floor + `insufficient` third state; resolver treats `insufficient` as unknown. Floor: ~300 zero-failure obs for a 1% bound. |
 | Manifest evidence goes stale when scripts or shared modules are edited (Phases 2/6 do exactly that). | Mitigated by design (rev 3): edges bound to `script_sha` + `env_sha` (importable-module surface + path order); mismatch invalidates the edge. |
