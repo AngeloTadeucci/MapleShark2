@@ -63,7 +63,19 @@ namespace MapleShark2.UI {
         private void TrackOpcode(bool outbound, ushort header) {
             if (opcodeKeys.Add(OpcodeKey(outbound, header))) {
                 Opcodes.Add(new Opcode(outbound, header));
+                OpcodesDirty = true;
             }
+        }
+
+        // Set when a new opcode is tracked; consumed by MainForm to rebuild the search dropdown at
+        // most once per queue drain. Rebuilding per TCP segment owned ~95% of burst drain time
+        // (measured ~80-100ms per rebuild, dozens of rebuilds per drain -> multi-second UI hangs).
+        internal bool OpcodesDirty { get; private set; }
+
+        internal bool ConsumeOpcodesDirty() {
+            bool dirty = OpcodesDirty;
+            OpcodesDirty = false;
+            return dirty;
         }
 
         private void ClearOpcodes() {
@@ -193,7 +205,6 @@ namespace MapleShark2.UI {
             PerfLog.Accum("drain.reassemble", tReassemble);
 
             MapleStream packetStream = isOutbound ? tcpReassembler.OutStream : tcpReassembler.InStream;
-            int opcodeCount = Opcodes.Count;
             bool show = false;
             try {
                 while (true) {
@@ -223,12 +234,8 @@ namespace MapleShark2.UI {
                 return Results.Terminated;
             }
 
-            if (DockPanel != null && DockPanel.ActiveDocument == this && opcodeCount != Opcodes.Count) {
-                long tRefresh = PerfLog.Begin();
-                MainForm.SearchForm.RefreshOpcodes(true);
-                PerfLog.Accum("drain.refresh_opcodes", tRefresh);
-            }
-
+            // Dropdown refresh moved to MainForm.ProcessPacketQueue: once per drain via OpcodesDirty,
+            // not once per TCP segment.
             return show ? Results.Show : Results.Continue;
         }
 
@@ -373,6 +380,7 @@ namespace MapleShark2.UI {
             }
 
             MainForm.SearchForm.RefreshOpcodes(true);
+            OpcodesDirty = false; // Just rebuilt; don't trigger a redundant per-drain refresh.
 
             ListView.EndUpdate();
 

@@ -47,18 +47,23 @@ namespace MapleShark2.UI {
                 && session.Opcodes.Count > dropdownOpcode.SelectedIndex
                     ? session.Opcodes[dropdownOpcode.SelectedIndex]
                     : null;
-            dropdownOpcode.Items.Clear();
-            session.UpdateOpcodeList();
+            dropdownOpcode.BeginUpdate();
+            try {
+                dropdownOpcode.Items.Clear();
+                session.UpdateOpcodeList();
 
-            foreach (Opcode op in session.Opcodes) {
-                Definition definition =
-                    Config.Instance.GetDefinition(session.Build, session.Locale, op.Outbound, op.Header);
-                int addedIndex = dropdownOpcode.Items.Add(
-                    $"{(op.Outbound ? "OUT " : "IN  ")} 0x{op.Header:X4} {definition?.Name ?? ""}");
+                foreach (Opcode op in session.Opcodes) {
+                    Definition definition =
+                        Config.Instance.GetDefinition(session.Build, session.Locale, op.Outbound, op.Header);
+                    int addedIndex = dropdownOpcode.Items.Add(
+                        $"{(op.Outbound ? "OUT " : "IN  ")} 0x{op.Header:X4} {definition?.Name ?? ""}");
 
-                if (selected != null && selected.Outbound == op.Outbound && selected.Header == op.Header) {
-                    dropdownOpcode.SelectedIndex = addedIndex;
+                    if (selected != null && selected.Outbound == op.Outbound && selected.Header == op.Header) {
+                        dropdownOpcode.SelectedIndex = addedIndex;
+                    }
                 }
+            } finally {
+                dropdownOpcode.EndUpdate();
             }
         }
 

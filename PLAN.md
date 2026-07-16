@@ -380,6 +380,21 @@ Memory stayed flat (one tab); the tab-stacking chug still lacks a repro log. Whi
 reassemble / stream_read / decrypt / process / refresh_opcodes) and a `session.flush` breakdown
 (add / endUpdate / scroll). Next heavy run names the owner; fix follows the measurement, not the guess.
 
+**Breakdown run (2026-07-16, maintainer's machine): CONVICTED — `drain.refresh_opcodes`.** The
+`SearchForm.RefreshOpcodes` ComboBox rebuild (~80-100 ms per call) ran once per TCP segment whenever a
+new opcode appeared: 893 ms of an 895 ms drain (12 calls), 1668/1668 ms (21 calls), 1518/1519 ms
+(18 calls). Everything actually suspected — decrypt, reassembly, stream reads, parse, process — totals
+0-2 ms per drain even at 212 decoded packets. Zin's 22.6 s freeze ≈ 292 captures × ~75 ms rebuild.
+**Fix landed:** rebuild at most once per queue drain (`OpcodesDirty` flag on `SessionForm`, consumed in
+`ProcessPacketQueue`; `RefreshPackets` clears it after its own rebuild) + `BeginUpdate`/`EndUpdate`
+around the ComboBox rebuild. Verified by build + reasoning + 20/20 PerfLog tests; **NOT yet
+runtime-verified** — the next live run's `main.drain` lines (refresh_opcodes count ≤1 per drain, drains
+collapsing to ms) are the acceptance evidence, with the instrumentation left in place to confirm.
+Secondary measured costs, deliberately not fixed in the same change: `session.flush` scroll block
+(17-62 ms — the `FilteredPackets` double materialization + `EnsureVisible`) and `endUpdate` repaint on
+large flushes (74-99 ms); engine.create 0.4-1.3 s cold on the UI thread. Fix after the primary fix is
+confirmed, one variable at a time.
+
 ### Phase 4 — Generate the V12 layer from the emulator
 
 Scope: **executed SendOp traces only.** V12/GMS2 only — wrong lineage for KMS2.

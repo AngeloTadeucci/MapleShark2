@@ -457,6 +457,15 @@ namespace MapleShark2.UI {
                 }
             }
 
+            // Rebuild the search dropdown at most once per drain. Doing this per TCP segment inside
+            // BufferTcpPacket owned ~95% of burst drain time (measured: 80-100ms per rebuild, dozens
+            // of rebuilds per drain -> the reported multi-second session-load freezes).
+            if (mDockPanel.ActiveDocument is SessionForm activeSession && activeSession.ConsumeOpcodesDirty()) {
+                long tRefresh = PerfLog.Begin();
+                SearchForm.RefreshOpcodes(true);
+                PerfLog.Accum("drain.refresh_opcodes", tRefresh);
+            }
+
             perf.SetDetail($"packets={curQueue.Count} {PerfLog.FlushAccums()}");
         }
 
