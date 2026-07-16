@@ -12,6 +12,7 @@ namespace MapleShark2.Tools {
         
         private readonly StructureForm form;
         private readonly Dictionary<(byte Locale, uint Version), ScriptEngine> engines;
+        private readonly ScriptManifest manifest = new ScriptManifest();
         
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         // This needs to be a field to avoid being GCed.
@@ -50,14 +51,44 @@ namespace MapleShark2.Tools {
             };
         }
 
-        public void ExecuteScript(byte locale, uint version, bool outbound, ushort opcode) {
+        /// <summary>
+        /// A resolved decoder: the script to run and the build whose engine (and module surface) it runs
+        /// under. Fallback decoders come from the compatibility manifest — measured, accepted edges only.
+        /// </summary>
+        public readonly struct Decoder {
+            public byte Locale { get; init; }
+            public uint Build { get; init; }
+            public string Path { get; init; }
+            public bool IsFallback { get; init; }
+        }
+
+        // Resolution order: the packet's own build first; otherwise the best manifest-accepted,
+        // hash-validated edge. Unknown/insufficient edges resolve to nothing — never a silent guess.
+        public bool TryResolveDecoder(byte locale, uint version, bool outbound, ushort opcode, out Decoder decoder) {
             string scriptPath = Helpers.GetScriptPath(locale, version, outbound, opcode);
-            if (!File.Exists(scriptPath)) {
-                return;
+            if (File.Exists(scriptPath)) {
+                decoder = new Decoder { Locale = locale, Build = version, Path = scriptPath, IsFallback = false };
+                return true;
             }
 
-            ScriptEngine engine = GetEngine(locale, version);
-            ScriptSource script = engine.CreateScriptSourceFromFile(scriptPath);
+            if (manifest.TryResolve(locale, version, outbound, opcode, out uint sourceBuild)) {
+                decoder = new Decoder {
+                    Locale = locale, Build = sourceBuild,
+                    Path = Helpers.GetScriptPath(locale, sourceBuild, outbound, opcode),
+                    IsFallback = true,
+                };
+                return true;
+            }
+
+            decoder = default;
+            return false;
+        }
+
+        public void ExecuteScript(Decoder decoder) {
+            // The engine is keyed by the decoder's own build so its imports resolve against the module
+            // surface it was measured with, not the packet's build.
+            ScriptEngine engine = GetEngine(decoder.Locale, decoder.Build);
+            ScriptSource script = engine.CreateScriptSourceFromFile(decoder.Path);
             // TODO: Compile scripts for reuse? "script.Compile();"
             script.Execute();
         }

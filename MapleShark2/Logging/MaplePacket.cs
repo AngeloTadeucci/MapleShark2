@@ -38,7 +38,9 @@ namespace MapleShark2.Logging {
             }
 
             long startIndex = buffer.Offset + start;
-            for (long i = startIndex; i <= buffer.Array.Length - pattern.Length; i++) {
+            // Bound by the packet's segment, not the backing array — a match past segment end would be
+            // another packet's bytes.
+            for (long i = startIndex; i <= buffer.Offset + buffer.Count - pattern.Length; i++) {
                 bool match = true;
                 for (int j = 0; match && j < pattern.Length; j++) {
                     match = buffer.Array[i + j] == pattern[j];

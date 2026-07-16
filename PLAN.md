@@ -245,9 +245,21 @@ ks_max=0.2):** 7,498 edges → 365 accept / 2,741 reject / 4,392 insufficient. E
   that is Phase 5 territory.
 - Macro average total trusted share: 46.6% (per-build, unweighted).
 
+**Resolver integration (2026-07-15): DONE.** `ScriptManifest.cs` loads `Scripts/manifest.csv` (accepted
+rows only), validates `script_sha` per resolve and `env_sha` per source build (algorithm mirrors the
+harness byte-for-byte — verified by independent recomputation against sweep values), and picks
+candidates by quality tier → clean fraction → newer build. `ScriptManager.TryResolveDecoder` prefers a
+home script, falls back to the manifest, and executes fallback scripts under the *source* build's engine
+(the module surface they were measured with). `StructureForm` shows a `[manifest] build N decoder` node
+on fallback and a `[no decoder]` node when nothing validated resolves. Functional test (headless, against
+the deployed tree): 2546/`0x0058`/IN resolves to build 2521 — the manifest's accepted edge — with both
+hash checks passing; wrong locale and unknown opcodes resolve to nothing. **Not verified: the WinForms
+flow end-to-end** (opening an msb in the GUI and clicking a 2546 packet) — needs a manual run.
+`manifest.csv` is deployed to the Ochi tree.
+
 **Remaining for Phase 1:** signature-matched over-read rescue (rule v2 — needs per-packet failure
-signatures exported from the harness), and the product resolver consuming `manifest.csv` (accepted
-edges only, hash-validated, visible marker on unknown/insufficient).
+signatures exported from the harness; numbers-neutral for acceptance, primarily diagnostics that
+distinguish "new failure mode on edge" from "same defect as home").
 
 ### Phase 1b — Value-class invariants (closes the "clean but wrong" gap)
 
@@ -357,7 +369,10 @@ silently desync. Phases 0/1 give it the regression harness that makes the migrat
 ## 6. Defects to fix regardless (all verified; sol independently confirmed each)
 
 1. `DefinitionsContainer.cs:115` vs `Config.cs:73` — send/recv properties inverted between writer and reader.
+   **FIXED** — writer now maps outbound → `send.properties`, matching the reader and the deployed trees
+   (`Request*` in send, `Response*` in recv).
 2. `DefinitionsContainer.cs:114` — `return` where `continue` is meant; one `0xFFFF` truncates all output.
+   **FIXED.**
 3. `item.py:76` — set literal → the four stat blocks are mislabeled (`common.py:154` does it right).
    **FIXED** across all 10 `item.py` copies + the 6 self-contained `0x0021.py` variants (17 set-literal
    sites; 3-, 4- and 5-element variants), preserving the authors' written order.
@@ -366,7 +381,8 @@ silently desync. Phases 0/1 give it the regression harness that makes the migrat
    was verified by measurement before re-sweeping: re-running the 2546 matrix with the identical seed
    after both fixes produced **zero** outcome/consumption diffs across all 353 rows, while 280 rows
    changed `script_sha`/`env_sha` — label-only confirmed, and the staleness detection demonstrably fires.
-5. `MaplePacket.cs:41` — `Search` scans to `buffer.Array.Length`, not segment end.
+5. `MaplePacket.cs:41` — `Search` scans to `buffer.Array.Length`, not segment end. **FIXED** — bounded
+   by `buffer.Offset + buffer.Count`.
 6. `ScriptManager.cs:73` vs `:88` — sys.path order shadows version-specific modules (harness reproduces
    the bug by default; `--version-path-first` tests the fix). **FIXED** in `ScriptManager.cs` — version
    folder now precedes the shared root; measured impact in Phase 2a notes (11.0% → 0.0% over-read on

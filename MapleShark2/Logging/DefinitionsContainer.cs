@@ -111,7 +111,7 @@ namespace MapleShark2.Logging {
                 }
 
                 foreach (Definition def in definitions[(locale, version)].Values) {
-                    if (def.Opcode == 0xFFFF) return;
+                    if (def.Opcode == 0xFFFF) continue;
                     byte outbound = (byte) (def.Outbound ? 1 : 0);
 
                     headerList[outbound][(locale, version)][def.Opcode] = def.Name;
@@ -130,7 +130,10 @@ namespace MapleShark2.Logging {
                             $"{(kvp2.Value == "" ? "# UNSET: " : kvp2.Value.Replace(' ', '_'))} = 0x{kvp2.Key:X4}");
                     }
 
-                    string propertiesPath = Path.Combine(path, $"{(i == 0 ? "send" : "recv")}.properties");
+                    // headerList is indexed by the outbound flag (1 = outbound), and outbound maps to
+                    // send.properties — the convention Config.GetPropertiesFile reads and the deployed
+                    // trees follow (Request* in send, Response* in recv).
+                    string propertiesPath = Path.Combine(path, $"{(i == 1 ? "send" : "recv")}.properties");
                     File.WriteAllText(propertiesPath, builder.ToString());
                 }
             }

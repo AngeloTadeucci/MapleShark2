@@ -43,15 +43,28 @@ namespace MapleShark2.UI {
             packet.Reset(); // Seek back to beginning
             this.packet = packet;
 
-            try {
-                scriptManager.ExecuteScript(packet.Locale, packet.Version, packet.Outbound, packet.Opcode);
-            } catch (Exception ex) {
-                ScriptEngine engine = scriptManager.GetEngine(packet.Locale, packet.Version);
-                var exceptionOperations = engine.GetService<ExceptionOperations>();
-                string message = exceptionOperations.FormatException(ex);
+            if (scriptManager.TryResolveDecoder(packet.Locale, packet.Version, packet.Outbound, packet.Opcode,
+                    out ScriptManager.Decoder decoder)) {
+                if (decoder.IsFallback) {
+                    CurrentNodes.Add(new StructureNode(
+                        $"[manifest] build {decoder.Build} decoder (no build {packet.Version} script)",
+                        packet.GetReadSegment(0)));
+                }
 
-                logger.Error(message);
-                MessageBox.Show(ex.Message, "Script Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try {
+                    scriptManager.ExecuteScript(decoder);
+                } catch (Exception ex) {
+                    ScriptEngine engine = scriptManager.GetEngine(decoder.Locale, decoder.Build);
+                    var exceptionOperations = engine.GetService<ExceptionOperations>();
+                    string message = exceptionOperations.FormatException(ex);
+
+                    logger.Error(message);
+                    MessageBox.Show(ex.Message, "Script Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            } else if (this.packet.Available > 0) {
+                CurrentNodes.Add(new StructureNode(
+                    $"[no decoder] build {packet.Version} 0x{packet.Opcode:X4} — no script, no validated fallback",
+                    packet.GetReadSegment(0)));
             }
 
             if (this.packet.Available > 0) {
