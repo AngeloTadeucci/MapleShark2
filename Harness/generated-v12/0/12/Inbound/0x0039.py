@@ -1,5 +1,5 @@
 ''' LevelUp '''
-# Auto-generated (Phase 4a) from LevelUpPacket: LevelUp
+# Auto-generated (Phase 4a/4b) from LevelUpPacket: LevelUp
 from script_api import *
 
 add_int("player.ObjectId")

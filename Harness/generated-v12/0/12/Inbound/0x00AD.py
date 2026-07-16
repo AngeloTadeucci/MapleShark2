@@ -1,5 +1,5 @@
 ''' ItemUse '''
-# Auto-generated (Phase 4a) from ItemUsePacket: ExpandInventory, MaxInventory, CharacterSlotAdded, MaxCharacterSlots, QuestScroll, BeautyCoupon
+# Auto-generated (Phase 4a/4b) from ItemUsePacket: ExpandInventory, MaxInventory, CharacterSlotAdded, MaxCharacterSlots, QuestScroll, BeautyCoupon
 from script_api import *
 
 mode = add_byte("mode")

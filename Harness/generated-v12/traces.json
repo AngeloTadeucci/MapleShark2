@@ -1,23 +1,67 @@
 [
   {
-    "opcode": "0x0004",
-    "sendOp": "RequestKey",
-    "sourceClass": "RequestPacket",
+    "opcode": "0x000B",
+    "sendOp": "ServerList",
+    "sourceClass": "ServerListPacket",
+    "partial": false,
     "modes": [
       {
-        "method": "Key",
-        "fields": []
+        "method": "Error",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 7,
+        "truncated": false
       }
     ]
   },
   {
-    "opcode": "0x0009",
-    "sendOp": "RequestLogin",
-    "sourceClass": "RequestPacket",
+    "opcode": "0x000C",
+    "sendOp": "CharacterList",
+    "sourceClass": "CharacterListPacket",
+    "partial": true,
     "modes": [
       {
-        "method": "Login",
-        "fields": []
+        "method": "AddEntries",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "AppendEntry",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "DeleteEntry",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "BeginDelete",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "CancelDelete",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "NameChanged",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "EndList",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -25,16 +69,12 @@
     "opcode": "0x000D",
     "sendOp": "MoveResult",
     "sourceClass": "MigrationPacket",
+    "partial": false,
     "modes": [
       {
         "method": "MoveResult",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "error",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -42,96 +82,27 @@
     "opcode": "0x0011",
     "sendOp": "ResponseTimeSync",
     "sourceClass": "TimeSyncPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Response",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Response",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "Environment.TickCount",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "time.ToUnixTimeSeconds()",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "time.Offset.Seconds",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "0-24 Hours",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "key",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 6,
+        "truncated": false
       },
       {
         "method": "Reset",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Reset",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "Environment.TickCount",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "time.ToUnixTimeSeconds()",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "time.Offset.Seconds",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "0-24 Hours",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
       },
       {
         "method": "Request",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Request",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       },
       {
         "method": "Set",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Set",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "time.ToUnixTimeSeconds()",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -139,16 +110,12 @@
     "opcode": "0x0012",
     "sendOp": "RequestHeartbeat",
     "sourceClass": "RequestPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Heartbeat",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "Environment.TickCount",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -156,16 +123,12 @@
     "opcode": "0x0013",
     "sendOp": "RequestClientTickSync",
     "sourceClass": "RequestPacket",
+    "partial": false,
     "modes": [
       {
         "method": "TickSync",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "serverTick",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -173,16 +136,38 @@
     "opcode": "0x0014",
     "sendOp": "SyncNumber",
     "sourceClass": "StateSyncPacket",
+    "partial": false,
     "modes": [
       {
         "method": "SyncNumber",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "number",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0015",
+    "sendOp": "ServerEnter",
+    "sourceClass": "ServerEnterPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Request",
+        "nodeCount": 31,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0017",
+    "sendOp": "FieldAddUser",
+    "sourceClass": "FieldPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "AddPlayer",
+        "nodeCount": 2,
+        "truncated": true
       }
     ]
   },
@@ -190,16 +175,362 @@
     "opcode": "0x0018",
     "sendOp": "FieldRemoveUser",
     "sourceClass": "FieldPacket",
+    "partial": false,
     "modes": [
       {
         "method": "RemovePlayer",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0019",
+    "sendOp": "FieldEntrance",
+    "sourceClass": "FieldEntrancePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Admin",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x001A",
+    "sendOp": "RoomDungeon",
+    "sourceClass": "DungeonRoomPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 14,
+        "truncated": false
+      },
+      {
+        "method": "Modify",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "DungeonResult",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "RankRewards",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x001B",
+    "sendOp": "DungeonReward",
+    "sourceClass": "DungeonRewardPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Dungeon",
+        "nodeCount": 12,
+        "truncated": false
+      },
+      {
+        "method": "MiniGame",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Unknown2",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Unknown3",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x001D",
+    "sendOp": "UserChat",
+    "sourceClass": "ChatPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Send",
+        "nodeCount": 5,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x001F",
+    "sendOp": "Emote",
+    "sourceClass": "EmotePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Learn",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0021",
+    "sendOp": "ItemInventory",
+    "sourceClass": "ItemInventoryPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 22,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateAmount",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Move",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "NotifyNew",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "LoadTab",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "ExpandComplete",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Reset",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ExpandCount",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateItem",
+        "nodeCount": 18,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x0022",
+    "sendOp": "StorageInventory",
+    "sourceClass": "StorageInventoryPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 22,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Move",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "UpdateMesos",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SlotsUsed",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Reload",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Update",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Reset",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "SlotsExpanded",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "OpenDialog",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0023",
+    "sendOp": "FurnishingStorage",
+    "sourceClass": "FurnishingStoragePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Count",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Add",
+        "nodeCount": 21,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Purchase",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "EndList",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0024",
+    "sendOp": "FurnishingInventory",
+    "sourceClass": "FurnishingInventoryPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Add",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "EndList",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0025",
+    "sendOp": "ItemPutOn",
+    "sourceClass": "EquipPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "EquipItem",
+        "nodeCount": 22,
+        "truncated": true
       }
     ]
   },
@@ -207,21 +538,25 @@
     "opcode": "0x0026",
     "sendOp": "ItemPutOff",
     "sourceClass": "EquipPacket",
+    "partial": false,
     "modes": [
       {
         "method": "UnequipItem",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "player.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "item.Uid",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x002A",
+    "sendOp": "ItemUpdate",
+    "sourceClass": "ItemUpdatePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Update",
+        "nodeCount": 18,
+        "truncated": true
       }
     ]
   },
@@ -229,16 +564,12 @@
     "opcode": "0x002C",
     "sendOp": "FieldRemoveItem",
     "sourceClass": "FieldPacket",
+    "partial": false,
     "modes": [
       {
         "method": "RemoveItem",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -246,21 +577,12 @@
     "opcode": "0x0030",
     "sendOp": "UserBattle",
     "sourceClass": "SkillPacket",
+    "partial": false,
     "modes": [
       {
         "method": "InBattle",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "player.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "player.InBattle",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -268,21 +590,90 @@
     "opcode": "0x0031",
     "sendOp": "UserSkinColor",
     "sourceClass": "UserSkinColorPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Update",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "player.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_field",
-            "Label": "skinColor",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0032",
+    "sendOp": "Beauty",
+    "sourceClass": "BeautyPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "BeautyShop",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "DyeShop",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "SaveShop",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Voucher",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "RandomHair",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "RandomHairResult",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "ListCount",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ListHair",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "SaveHair",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "DeleteHair",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SaveSlots",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ApplySavedHair",
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -290,26 +681,12 @@
     "opcode": "0x0034",
     "sendOp": "RevivalConfirm",
     "sourceClass": "RevivalPacket",
+    "partial": false,
     "modes": [
       {
         "method": "UpdatePenalty",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "endTick",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "count",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -317,21 +694,12 @@
     "opcode": "0x0035",
     "sendOp": "Revival",
     "sourceClass": "RevivalPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Revive",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "Unknown",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -339,16 +707,12 @@
     "opcode": "0x0036",
     "sendOp": "RevivalCount",
     "sourceClass": "RevivalPacket",
+    "partial": false,
     "modes": [
       {
         "method": "RevivalCount",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "count",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -356,21 +720,12 @@
     "opcode": "0x0037",
     "sendOp": "UserState",
     "sourceClass": "UserStatePacket",
+    "partial": false,
     "modes": [
       {
         "method": "SetState",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "state",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -378,61 +733,17 @@
     "opcode": "0x0038",
     "sendOp": "ExpUp",
     "sourceClass": "ExperienceUpPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Add",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Add",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "gainedExp",
-            "Width": 8
-          },
-          {
-            "Api": "add_short",
-            "Label": "message",
-            "Width": 2
-          },
-          {
-            "Api": "add_long",
-            "Label": "totalExp",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "restExp",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "parameter",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "additional",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 7,
+        "truncated": false
       },
       {
         "method": "SetRestExp",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.SetRestExp",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "restExp",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -440,21 +751,12 @@
     "opcode": "0x0039",
     "sendOp": "LevelUp",
     "sourceClass": "LevelUpPacket",
+    "partial": false,
     "modes": [
       {
         "method": "LevelUp",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "player.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "player.Value.Character.Level",
-            "Width": 2
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -462,21 +764,12 @@
     "opcode": "0x003A",
     "sendOp": "Meso",
     "sourceClass": "CurrencyPacket",
+    "partial": false,
     "modes": [
       {
         "method": "UpdateMeso",
-        "fields": [
-          {
-            "Api": "add_long",
-            "Label": "currency.Meso",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "PCBang related",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -484,36 +777,86 @@
     "opcode": "0x003B",
     "sendOp": "Meret",
     "sourceClass": "CurrencyPacket",
+    "partial": false,
     "modes": [
       {
         "method": "UpdateMeret",
-        "fields": [
-          {
-            "Api": "add_long",
-            "Label": "currency.Meret",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "extra meret",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "currency.GameMeret",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "extra game meret",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "delta",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x003C",
+    "sendOp": "CurrencyToken",
+    "sourceClass": "CurrencyPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "UpdateCurrency",
+        "nodeCount": 5,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x003D",
+    "sendOp": "SkillUse",
+    "sourceClass": "SkillPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Use",
+        "nodeCount": 13,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x003E",
+    "sendOp": "SkillDamage",
+    "sourceClass": "SkillDamagePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Target",
+        "nodeCount": 12,
+        "truncated": false
+      },
+      {
+        "method": "Damage",
+        "nodeCount": 11,
+        "truncated": false
+      },
+      {
+        "method": "DotDamage",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "Heal",
+        "nodeCount": 8,
+        "truncated": false
+      },
+      {
+        "method": "Region",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "Tile",
+        "nodeCount": 5,
+        "truncated": true
+      },
+      {
+        "method": "DestroyBreakable",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "React",
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -521,71 +864,12 @@
     "opcode": "0x003F",
     "sendOp": "SkillSync",
     "sourceClass": "SkillPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Sync",
-        "fields": [
-          {
-            "Api": "add_long",
-            "Label": "skill.CastUid",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "skill.Caster.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "skill.SkillId",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "skill.Level",
-            "Width": 2
-          },
-          {
-            "Api": "add_byte",
-            "Label": "skill.MotionPoint",
-            "Width": 1
-          },
-          {
-            "Api": "add_field",
-            "Label": "skill.Position",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "skill.Direction",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "skill.Velocity",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "skill.Rotation",
-            "Width": 12
-          },
-          {
-            "Api": "add_bool",
-            "Label": "skill.IsCharge",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "skill.IsRelease",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "skill.SyncClientTick",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 12,
+        "truncated": false
       }
     ]
   },
@@ -593,21 +877,12 @@
     "opcode": "0x0040",
     "sendOp": "SkillCancel",
     "sourceClass": "SkillPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Cancel",
-        "fields": [
-          {
-            "Api": "add_long",
-            "Label": "skill.CastUid",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "skill.Caster.ObjectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -615,52 +890,56 @@
     "opcode": "0x0042",
     "sendOp": "StateSkill",
     "sourceClass": "SkillPacket",
+    "partial": false,
     "modes": [
       {
         "method": "StateSkill",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "0x06",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "player.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "ItemId??",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "skillCastUid",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "skillId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "player.State",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 6,
+        "truncated": false
       }
     ]
   },
   {
-    "opcode": "0x0044",
-    "sendOp": "SkillResetCooldown",
+    "opcode": "0x0043",
+    "sendOp": "SkillCooldown",
     "sourceClass": "SkillPacket",
+    "partial": false,
     "modes": [
       {
-        "method": "ResetCooldown",
-        "fields": []
+        "method": "Cooldown",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0045",
+    "sendOp": "SkillPoint",
+    "sourceClass": "SkillPointPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Sources",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0046",
+    "sendOp": "AttributePoint",
+    "sourceClass": "AttributePointPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Sources",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Allocation",
+        "nodeCount": 3,
+        "truncated": true
       }
     ]
   },
@@ -668,21 +947,35 @@
     "opcode": "0x0047",
     "sendOp": "CharacterCreate",
     "sourceClass": "CharacterListPacket",
+    "partial": false,
     "modes": [
       {
         "method": "CreateError",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "error",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "message",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0048",
+    "sendOp": "Buff",
+    "sourceClass": "BuffPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 5,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 6,
+        "truncated": true
       }
     ]
   },
@@ -690,191 +983,511 @@
     "opcode": "0x0049",
     "sendOp": "FieldPortal",
     "sourceClass": "PortalPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Add",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Add",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "portal.Id",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.Visible",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.Enabled",
-            "Width": 1
-          },
-          {
-            "Api": "add_field",
-            "Label": "fieldPortal.Position",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "fieldPortal.Rotation",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "portal.Dimension",
-            "Width": 12
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "fieldPortal.Model",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "portal.TargetMapId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "fieldPortal.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "portal.ActionType",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.MinimapVisible",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "fieldPortal.HomeId",
-            "Width": 8
-          },
-          {
-            "Api": "add_byte",
-            "Label": "portal.Type",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "fieldPortal.EndTick.Truncate32()",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "Unknown",
-            "Width": 2
-          },
-          {
-            "Api": "add_int",
-            "Label": "fieldPortal.StartTick.Truncate32()",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "!string.IsNullOrEmpty(fieldPortal.Password)",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "fieldPortal.OwnerName",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "featureName - gates portal behind CFeatureManager (empty = always enabled)",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "featurePatchVersion - gates portal behind patch version check (empty = always enabled)",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 21,
+        "truncated": false
       },
       {
         "method": "Remove",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Remove",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "portalId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Update",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Update",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "fieldPortal.Value.Id",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.Visible",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.Enabled",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "fieldPortal.MinimapVisible",
-            "Width": 1
-          },
-          {
-            "Api": "add_short",
-            "Label": "unused on the client",
-            "Width": 2
-          }
-        ]
+        "nodeCount": 6,
+        "truncated": false
       },
       {
         "method": "Move",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Move",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "fieldPortal.Value.Id",
-            "Width": 4
-          },
-          {
-            "Api": "add_field",
-            "Label": "fieldPortal.Position",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "fieldPortal.Rotation",
-            "Width": 12
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x004D",
+    "sendOp": "RegionSkill",
+    "sourceClass": "RegionSkillPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 9,
+        "truncated": false
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0050",
+    "sendOp": "Breakable",
+    "sourceClass": "BreakablePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Update",
+        "nodeCount": 5,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x0051",
+    "sendOp": "RoomTimer",
+    "sourceClass": "RoomTimerPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Start",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Modify",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "StartGauge",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "SetWidgetData",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Stop",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Expire",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0052",
+    "sendOp": "Shop",
+    "sourceClass": "ShopPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Open",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "LoadItems",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Buy",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "BuyBackItemCount",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "LoadBuyBackItem",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "RemoveBuyBackItem",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "InstantRestock",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0053",
+    "sendOp": "Quest",
+    "sourceClass": "QuestPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Talk",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Start",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Complete",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "AbandonResult",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Abandon",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Expired",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SetTracking",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "SummonPortal",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Initialize",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadQuestStates",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "LoadQuests",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "CleanupExpiredQuests",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateExplorationMilestone",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ClearDailyFieldQuests",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "DailyReputationMissions",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "WeeklyReputationMissions",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "AllianceAccept",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AllianceComplete",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ClearWeddingMissions",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0054",
+    "sendOp": "Party",
+    "sourceClass": "PartyPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Joined",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Leave",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Kicked",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "NotifyLogin",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "NotifyLogout",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Disband",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "NotifyUpdateLeader",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "Invite",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 34,
+        "truncated": true
+      },
+      {
+        "method": "UpdateDungeonInfo",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "UpdateGearScore",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Tombstone",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateStats",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "PartyNotice",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "InterfaceNotice",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "DungeonReset",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadPartySearchListing",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "PartySearch",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "PartySearchDungeon",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RandomDungeonLockout",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "HelperBroadcast",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "DungeonHelperCooldown",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "JoinRequest",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "StartVote",
+        "nodeCount": 8,
+        "truncated": true
+      },
+      {
+        "method": "ReadyCheck",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "EndVote",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "SurvivalPartySearch",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0055",
+    "sendOp": "Mail",
+    "sourceClass": "MailPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Send",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Read",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Returned",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Collect",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "CollectRead",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "AdBill",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Deleted",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Notify",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "NotifyTemporary",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "EndList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Gift",
+        "nodeCount": 8,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0056",
+    "sendOp": "FieldAddNpc",
+    "sourceClass": "FieldPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "AddNpc",
+        "nodeCount": 5,
+        "truncated": true
       }
     ]
   },
@@ -882,16 +1495,25 @@
     "opcode": "0x0057",
     "sendOp": "FieldRemoveNpc",
     "sourceClass": "FieldPacket",
+    "partial": false,
     "modes": [
       {
         "method": "RemoveNpc",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0059",
+    "sendOp": "NpcControl",
+    "sourceClass": "NpcControlPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Control",
+        "nodeCount": 2,
+        "truncated": true
       }
     ]
   },
@@ -899,21 +1521,25 @@
     "opcode": "0x005A",
     "sendOp": "InteractNpc",
     "sourceClass": "InteractNpcPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Cooldown",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "interactable",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x005B",
+    "sendOp": "FieldAddPet",
+    "sourceClass": "FieldPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "AddPet",
+        "nodeCount": 8,
+        "truncated": true
       }
     ]
   },
@@ -921,16 +1547,12 @@
     "opcode": "0x005C",
     "sendOp": "FieldRemovePet",
     "sourceClass": "FieldPacket",
+    "partial": false,
     "modes": [
       {
         "method": "RemovePet",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -938,26 +1560,214 @@
     "opcode": "0x005D",
     "sendOp": "SyncPetTamingPoint",
     "sourceClass": "PetPacket",
+    "partial": false,
     "modes": [
       {
         "method": "SyncTaming",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "pet.ObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "casterId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "pet.TamingPoint",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x005E",
+    "sendOp": "Tombstone",
+    "sourceClass": "RevivalPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Tombstone",
+        "nodeCount": 5,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x005F",
+    "sendOp": "Achieve",
+    "sourceClass": "AchievementPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Initialize",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 9,
+        "truncated": false
+      },
+      {
+        "method": "Favorite",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0063",
+    "sendOp": "Buddy",
+    "sourceClass": "BuddyPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Invite",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Accept",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "Decline",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Block",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Unblock",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "UpdateInfo",
+        "nodeCount": 26,
+        "truncated": false
+      },
+      {
+        "method": "Append",
+        "nodeCount": 26,
+        "truncated": false
+      },
+      {
+        "method": "UpdateBlock",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "NotifyAccept",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "NotifyBlock",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "NotifyRemove",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "NotifyOnline",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "StartList",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Cancel",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Forbidden",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "EndList",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SyncAutoAccept",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0065",
+    "sendOp": "InteractObject",
+    "sourceClass": "InteractObjectPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Update",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Interact",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "SetState",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "SetStateAll",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Add",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Result",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Announce",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Hold",
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -965,21 +1775,12 @@
     "opcode": "0x0067",
     "sendOp": "StateFallDamage",
     "sourceClass": "FallDamagePacket",
+    "partial": false,
     "modes": [
       {
         "method": "FallDamage",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "damage",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -987,21 +1788,161 @@
     "opcode": "0x0069",
     "sendOp": "Admin",
     "sourceClass": "AdminPacket",
+    "partial": false,
     "modes": [
       {
         "method": "SetMode",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "MODE_SET_ADMIN",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "adminLevel",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x006C",
+    "sendOp": "LoadCubes",
+    "sourceClass": "LoadCubesPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "PlotState",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PlotOwners",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PlotExpiry",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x006E",
+    "sendOp": "MeretMarket",
+    "sourceClass": "MeretMarketPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 7,
+        "truncated": false
+      },
+      {
+        "method": "LoadPersonalListings",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadSales",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ListItem",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "RemoveListing",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "RelistItem",
+        "nodeCount": 62,
+        "truncated": false
+      },
+      {
+        "method": "UpdateProduct",
+        "nodeCount": 62,
+        "truncated": false
+      },
+      {
+        "method": "UpdateProfit",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateExpiration",
+        "nodeCount": 7,
+        "truncated": false
+      },
+      {
+        "method": "LoadDesigners",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AddDesigner",
+        "nodeCount": 7,
+        "truncated": true
+      },
+      {
+        "method": "LoadDesignerItems",
+        "nodeCount": 7,
+        "truncated": true
+      },
+      {
+        "method": "RemoveDesigner",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "LoadItems",
+        "nodeCount": 5,
+        "truncated": true
+      },
+      {
+        "method": "LoadBlueprints",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "Purchase",
+        "nodeCount": 20,
+        "truncated": false
+      },
+      {
+        "method": "FeaturedPremium",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "FeaturedUgc",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "LoadUgcItems",
+        "nodeCount": 3,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x0070",
+    "sendOp": "GuideObject",
+    "sourceClass": "GuideObjectPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Create",
+        "nodeCount": 7,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1009,16 +1950,40 @@
     "opcode": "0x0072",
     "sendOp": "FollowNpc",
     "sourceClass": "FollowNpcPacket",
+    "partial": false,
     "modes": [
       {
         "method": "FollowNpc",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "npcObjectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0075",
+    "sendOp": "Liftable",
+    "sourceClass": "LiftablePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Update",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Add",
+        "nodeCount": 8,
+        "truncated": false
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1026,91 +1991,17 @@
     "opcode": "0x0077",
     "sendOp": "Vibrate",
     "sourceClass": "VibratePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Add",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Add",
-            "Width": 1
-          },
-          {
-            "Api": "add_str",
-            "Label": "entityId",
-            "Width": -1
-          },
-          {
-            "Api": "add_long",
-            "Label": "damage.SkillUid",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "damage.SkillId",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "damage.Level",
-            "Width": 2
-          },
-          {
-            "Api": "add_byte",
-            "Label": "damage.MotionPoint",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "damage.AttackPoint",
-            "Width": 1
-          },
-          {
-            "Api": "add_field",
-            "Label": "damage.Position",
-            "Width": 6
-          },
-          {
-            "Api": "add_int",
-            "Label": "Environment.TickCount",
-            "Width": 4
-          },
-          {
-            "Api": "add_str",
-            "Label": "nif path",
-            "Width": -1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "flag. 0 = clear/reset, 1 = show, 2 = hide",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 11,
+        "truncated": false
       },
       {
         "method": "Stop",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Stop",
-            "Width": 1
-          },
-          {
-            "Api": "add_str",
-            "Label": "entityId",
-            "Width": -1
-          },
-          {
-            "Api": "add_str",
-            "Label": "nif path",
-            "Width": -1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "flag. 0 = clear/reset, 1 = show, 2 = hide",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
       }
     ]
   },
@@ -1118,16 +2009,12 @@
     "opcode": "0x0078",
     "sendOp": "HideVibrate",
     "sourceClass": "VibratePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Hide",
-        "fields": [
-          {
-            "Api": "add_str",
-            "Label": "entityId",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -1135,16 +2022,256 @@
     "opcode": "0x0079",
     "sendOp": "ShowVibrate",
     "sourceClass": "VibratePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Show",
-        "fields": [
-          {
-            "Api": "add_str",
-            "Label": "entityId",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x007B",
+    "sendOp": "ResponseRide",
+    "sourceClass": "RidePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Start",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Stop",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Change",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Join",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Leave",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ChangeShared",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x007E",
+    "sendOp": "BonusGame",
+    "sourceClass": "BonusGamePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Spin",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0080",
+    "sendOp": "ProxyGameObj",
+    "sourceClass": "ProxyObjectPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "AddPlayer",
+        "nodeCount": 19,
+        "truncated": false
+      },
+      {
+        "method": "RemovePlayer",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdatePlayer",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "AddNpc",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "RemoveNpc",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateNpc",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "AddPet",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "RemovePet",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdatePet",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0081",
+    "sendOp": "BadgeEquip",
+    "sourceClass": "EquipPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "EquipBadge",
+        "nodeCount": 22,
+        "truncated": true
+      },
+      {
+        "method": "UnequipBadge",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0082",
+    "sendOp": "Taxi",
+    "sourceClass": "TaxiPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "RevealTaxi",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0083",
+    "sendOp": "FindFields",
+    "sourceClass": "FindFieldsPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0084",
+    "sendOp": "Trade",
+    "sourceClass": "TradePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Request",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Acknowledge",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Decline",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "StartTrade",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "EndTrade",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AddItem",
+        "nodeCount": 24,
+        "truncated": true
+      },
+      {
+        "method": "RemoveItem",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "SetMesos",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Finalize",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UnFinalize",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Complete",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AlreadyRequest",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0086",
+    "sendOp": "Worldmap",
+    "sourceClass": "WorldMapPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Population",
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1152,16 +2279,88 @@
     "opcode": "0x008A",
     "sendOp": "StoryBook",
     "sourceClass": "StoryBookPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Load",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "storyBookId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x008B",
+    "sendOp": "GuideRecord",
+    "sourceClass": "GuideRecordPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x008D",
+    "sendOp": "GroupChat",
+    "sourceClass": "GroupChatPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Create",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Invite",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Join",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Leave",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AddMember",
+        "nodeCount": 36,
+        "truncated": true
+      },
+      {
+        "method": "RemoveMember",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "LoginNotice",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LogoutNotice",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Chat",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 5,
+        "truncated": false
       }
     ]
   },
@@ -1169,21 +2368,258 @@
     "opcode": "0x0097",
     "sendOp": "PlayNpcSound",
     "sourceClass": "SoundPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Npc",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "sound",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0098",
+    "sendOp": "ItemDismantle",
+    "sourceClass": "ItemDismantlePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Stage",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Result",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Preview",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0099",
+    "sendOp": "ItemEnchant",
+    "sourceClass": "ItemEnchantPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "StageItem",
+        "nodeCount": 7,
+        "truncated": true
+      },
+      {
+        "method": "UpdateExp",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateCharges",
+        "nodeCount": 9,
+        "truncated": false
+      },
+      {
+        "method": "UpdateFodder",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Refund",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Success",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "Failure",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateItem",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "AutoAddIngredients",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x009A",
+    "sendOp": "BlackMarket",
+    "sourceClass": "BlackMarketPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "MyListings",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Add",
+        "nodeCount": 29,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Search",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Purchase",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "PurchaseResponse",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Preview",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x009B",
+    "sendOp": "MesoMarket",
+    "sourceClass": "MesoMarketPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 11,
+        "truncated": false
+      },
+      {
+        "method": "Quota",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "MyListings",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Create",
+        "nodeCount": 8,
+        "truncated": false
+      },
+      {
+        "method": "Cancel",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Search",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Purchase",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x009C",
+    "sendOp": "TeamPvp",
+    "sourceClass": "TeamPvpPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "UpdateRound",
+        "nodeCount": 9,
+        "truncated": false
+      },
+      {
+        "method": "MatchResult",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x009F",
+    "sendOp": "FieldMaid",
+    "sourceClass": "FieldMaidPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 16,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A0",
+    "sendOp": "UserMaid",
+    "sourceClass": "MaidPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Add",
+        "nodeCount": 16,
+        "truncated": true
+      },
+      {
+        "method": "Update",
+        "nodeCount": 16,
+        "truncated": true
+      },
+      {
+        "method": "OpenDialog",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1191,81 +2627,32 @@
     "opcode": "0x00A3",
     "sendOp": "SystemShop",
     "sourceClass": "SystemShopPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Arena",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Arena",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "true",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Fishing",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Fishing",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "true",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Mentee",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Mentee",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "true",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Mentor",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Mentor",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "true",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Item",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Item",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "true",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1273,16 +2660,40 @@
     "opcode": "0x00A4",
     "sendOp": "AutoRevive",
     "sourceClass": "AutoRevivePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Countdown",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "timeMs",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A6",
+    "sendOp": "Attendance",
+    "sourceClass": "AttendancePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Unknown5",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Unknown6",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Unknown7",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1290,21 +2701,93 @@
     "opcode": "0x00A8",
     "sendOp": "DeadUser",
     "sourceClass": "DeadUserPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Dead",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "darkTombstone",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00A9",
+    "sendOp": "DynamicChannel",
+    "sourceClass": "ChannelPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 9,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00AA",
+    "sendOp": "UserEnv",
+    "sourceClass": "UserEnvPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "AddTitle",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateTitle",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadTitles",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ItemCollects",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "InteractedObjects",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "GatheringCounts",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadClaimedRewards",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Reputation",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateReputation",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadFame",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateFame",
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1312,81 +2795,37 @@
     "opcode": "0x00AD",
     "sendOp": "ItemUse",
     "sourceClass": "ItemUsePacket",
+    "partial": false,
     "modes": [
       {
         "method": "ExpandInventory",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.ExpandInventory",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       },
       {
         "method": "MaxInventory",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.MaxInventory",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       },
       {
         "method": "CharacterSlotAdded",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.CharacterSlotAdded",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       },
       {
         "method": "MaxCharacterSlots",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.MaxCharacterSlots",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       },
       {
         "method": "QuestScroll",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.QuestScroll",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "itemId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "BeautyCoupon",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.BeautyCoupon",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "playerObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "itemUid",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1394,26 +2833,12 @@
     "opcode": "0x00AE",
     "sendOp": "ItemBox",
     "sourceClass": "ItemBoxPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Open",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "sourceItemId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "amount",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "error",
-            "Width": 2
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1421,41 +2846,12 @@
     "opcode": "0x00B2",
     "sendOp": "WorldShareInfo",
     "sourceClass": "WorldShareInfoPacket",
+    "partial": false,
     "modes": [
       {
         "method": "BossAlive",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Function.BossAlive",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "npcId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "mapId",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "channel",
-            "Width": 2
-          },
-          {
-            "Api": "add_long",
-            "Label": "timestamp",
-            "Width": 8
-          },
-          {
-            "Api": "add_bool",
-            "Label": "alive",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 6,
+        "truncated": false
       }
     ]
   },
@@ -1463,26 +2859,231 @@
     "opcode": "0x00B3",
     "sendOp": "Insignia",
     "sourceClass": "InsigniaPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Update",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_short",
-            "Label": "insigniaId",
-            "Width": 2
-          },
-          {
-            "Api": "add_bool",
-            "Label": "display",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B4",
+    "sendOp": "GameEvent",
+    "sourceClass": "GameEventPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Add",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Reload",
+        "nodeCount": 2,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B5",
+    "sendOp": "BannerList",
+    "sourceClass": "BannerListPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00B8",
+    "sendOp": "Pvp",
+    "sourceClass": "PvpPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "GuildPvpOpen",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "IndividualPvpQueueStart",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "IndividualPvpQueueCancel",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "IndividualPvpMatchProposed",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "KillLog",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "DuelPvpQueueStart",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "DuelPvpQueueCancel",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "DuelPvpMatchProposed",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "NotifyCannotApply",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Result",
+        "nodeCount": 14,
+        "truncated": false
+      },
+      {
+        "method": "ToggleInvincible",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "UpdateRating",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "BattleStats",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ObserveNotification",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Fight",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RoundDisplay",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "RoundWin",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RoundLose",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Draw",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Perfect",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PlayerState",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "ResetScoreboard",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "UpdatePlayer",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "UpdateRoundTimer",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ShowKillNotification",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ScoreboardAddPlayer",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateTeamScores",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdatePlayerKillStats",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "TeamResult",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateFlagGauge",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ShowTeamNotification",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ShowFlagCapture",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "GuildTeamTopUi",
+        "nodeCount": 7,
+        "truncated": false
+      },
+      {
+        "method": "GuildTeamResult",
+        "nodeCount": 14,
+        "truncated": false
       }
     ]
   },
@@ -1490,56 +3091,17 @@
     "opcode": "0x00B9",
     "sendOp": "HomeCommand",
     "sourceClass": "HomeCommandPacket",
+    "partial": false,
     "modes": [
       {
         "method": "LoadHome",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Load",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "accountId",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "last time player nominated home",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "UpdateArchitectScore",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.UpdateArchitectScore",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "ownerObjectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "DateTimeOffset.UtcNow.ToUnixTimeSeconds()",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "architectScoreCurrent",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "architectScoreTotal",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
       }
     ]
   },
@@ -1547,21 +3109,12 @@
     "opcode": "0x00BA",
     "sendOp": "CharMaxCount",
     "sourceClass": "CharacterListPacket",
+    "partial": false,
     "modes": [
       {
         "method": "SetMax",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "unlocked",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "total",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1569,31 +3122,40 @@
     "opcode": "0x00BC",
     "sendOp": "ItemDropNotice",
     "sourceClass": "ItemDropNoticePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Notice",
-        "fields": [
-          {
-            "Api": "add_unicode_str",
-            "Label": "playerName",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "item.Amount",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "item.Rarity",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "item.Uid",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00BD",
+    "sendOp": "PartySearch",
+    "sourceClass": "PartySearchPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 13,
+        "truncated": false
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1601,61 +3163,35 @@
     "opcode": "0x00BE",
     "sendOp": "RecallScroll",
     "sourceClass": "RecallScrollPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Close",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Close",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "scrollType",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Open",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Open",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "scrollType",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "playerName",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "Unknown1: read by client but never used. channel ?",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "mapId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "portalId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "expiresAt",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 7,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C3",
+    "sendOp": "GlobalPortal",
+    "sourceClass": "GlobalPortalPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Announce",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "Close",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1663,61 +3199,17 @@
     "opcode": "0x00C4",
     "sendOp": "QuizEvent",
     "sourceClass": "QuizEventPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Question",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Question",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "category",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "question",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "answer",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "duration",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
       },
       {
         "method": "Answer",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Answer",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "isTrue",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "answer",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "duration",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
       }
     ]
   },
@@ -1725,16 +3217,445 @@
     "opcode": "0x00C5",
     "sendOp": "PlaySystemSound",
     "sourceClass": "SoundPacket",
+    "partial": false,
     "modes": [
       {
         "method": "System",
-        "fields": [
-          {
-            "Api": "add_unicode_str",
-            "Label": "sound",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C6",
+    "sendOp": "Fishing",
+    "sourceClass": "FishingPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Prepare",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Stop",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "IncreaseMastery",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "LoadTiles",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CatchItem",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PrizeFish",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "LoadAlbum",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "CatchFish",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "Start",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Auto",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Simulate",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C7",
+    "sendOp": "DarkStream",
+    "sourceClass": "DarkStreamPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "OpenScore",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "SetScore",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Results",
+        "nodeCount": 7,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00C9",
+    "sendOp": "PlayInstrument",
+    "sourceClass": "InstrumentPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "StartImprovise",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "Improvise",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "StopImprovise",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "StartScore",
+        "nodeCount": 10,
+        "truncated": true
+      },
+      {
+        "method": "StopScore",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LeaveEnsemble",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "ComposeScore",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "RemainUses",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ViewScore",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Fireworks",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Unknown",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CA",
+    "sendOp": "ChangeAttributes",
+    "sourceClass": "ChangeAttributesPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "PreviewItem",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "SelectItem",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CB",
+    "sendOp": "ChangeAttributesScroll",
+    "sourceClass": "ChangeAttributesScrollPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "UseScroll",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PreviewItem",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "SelectItem",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CC",
+    "sendOp": "FieldProperty",
+    "sourceClass": "FieldPropertyPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Add",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CD",
+    "sendOp": "GameEventUserValue",
+    "sourceClass": "GameEventUserValuePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 6,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CE",
+    "sendOp": "ResponsePet",
+    "sourceClass": "PetPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Summon",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "UnSummon",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Unknown2",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Rename",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "UpdatePotionConfig",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "UpdateLootConfig",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadCollection",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AddCollection",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Fusion",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "LevelUp",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "FusionCount",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "IsSummoned",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "PetInfo",
+        "nodeCount": 21,
+        "truncated": true
+      },
+      {
+        "method": "Evolve",
+        "nodeCount": 20,
+        "truncated": true
+      },
+      {
+        "method": "EvolvePoints",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "MasterSnare",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Unknown21",
+        "nodeCount": 3,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x00CF",
+    "sendOp": "Mastery",
+    "sourceClass": "MasteryPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "UpdateMastery",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "ClaimReward",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "GetCraftedItem",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00D0",
+    "sendOp": "PetInventory",
+    "sourceClass": "PetInventoryPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Add",
+        "nodeCount": 22,
+        "truncated": true
+      },
+      {
+        "method": "Remove",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Move",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Reset",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00D3",
+    "sendOp": "SkillMacro",
+    "sourceClass": "SkillMacroPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Init",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1742,26 +3663,76 @@
     "opcode": "0x00D5",
     "sendOp": "CheckCharNameResult",
     "sourceClass": "CheckCharacterNamePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Result",
-        "fields": [
-          {
-            "Api": "add_bool",
-            "Label": "nameIsUsed",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "itemUid",
-            "Width": 8
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "characterName",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00D9",
+    "sendOp": "SmartPush",
+    "sourceClass": "SmartPushPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "ActivateEffect",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00DD",
+    "sendOp": "ItemLock",
+    "sourceClass": "ItemLockPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Stage",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Unstage",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Commit",
+        "nodeCount": 2,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00E1",
+    "sendOp": "CharacterAbility",
+    "sourceClass": "CharacterAbilityPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Learn",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1769,61 +3740,96 @@
     "opcode": "0x00E3",
     "sendOp": "ShadowExpedition",
     "sourceClass": "ShadowExpeditionPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Open",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Open",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "uiType",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "title",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "currentPoints",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "maxPoints",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
       },
       {
         "method": "UpdateGauge",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.UpdateGauge",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "points",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Close",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Close",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00E5",
+    "sendOp": "ItemSocketScroll",
+    "sourceClass": "ItemSocketScrollPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "UseScroll",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Unlock",
+        "nodeCount": 8,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00E6",
+    "sendOp": "ItemRepackage",
+    "sourceClass": "ItemRepackPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Open",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Commit",
+        "nodeCount": 19,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00E7",
+    "sendOp": "Mapleopoly",
+    "sourceClass": "MapleopolyPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "Roll",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "Result",
+        "nodeCount": 8,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -1831,111 +3837,27 @@
     "opcode": "0x00EA",
     "sendOp": "NpcNotice",
     "sourceClass": "NpcNoticePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Announce",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Announce",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "message",
-            "Width": -1
-          },
-          {
-            "Api": "add_int",
-            "Label": "duration",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "TargetEffect",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.TargetEffect",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "targetId",
-            "Width": 4
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "effect",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "Animation",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Animation",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "sequence",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "SidePopup",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.SidePopup",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "type",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "duration",
-            "Width": 4
-          },
-          {
-            "Api": "add_str",
-            "Label": "Unknown",
-            "Width": -1
-          },
-          {
-            "Api": "add_str",
-            "Label": "illustration",
-            "Width": -1
-          },
-          {
-            "Api": "add_str",
-            "Label": "voice",
-            "Width": -1
-          },
-          {
-            "Api": "add_str",
-            "Label": "sound",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "script",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 8,
+        "truncated": false
       }
     ]
   },
@@ -1943,26 +3865,12 @@
     "opcode": "0x00EB",
     "sendOp": "LocalCamera",
     "sourceClass": "CameraPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Local",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "triggerId",
-            "Width": 4
-          },
-          {
-            "Api": "add_bool",
-            "Label": "enable",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1970,26 +3878,12 @@
     "opcode": "0x00F0",
     "sendOp": "InGameRank",
     "sourceClass": "InGameRankPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Load",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "31",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "Constant.PersonalRankingRefreshSeconds",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "Constant.GlobalRankingRefreshMinutes",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -1997,21 +3891,25 @@
     "opcode": "0x00F2",
     "sendOp": "DungeonWaiting",
     "sourceClass": "DungeonWaitingPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Set",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "size",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F3",
+    "sendOp": "OneTimeEffect",
+    "sourceClass": "CinematicPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "OneTimeEffect",
+        "nodeCount": 3,
+        "truncated": true
       }
     ]
   },
@@ -2019,16 +3917,12 @@
     "opcode": "0x00F4",
     "sendOp": "CameraInterpolation",
     "sourceClass": "CameraPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Interpolate",
-        "fields": [
-          {
-            "Api": "add_float",
-            "Label": "interpolationTime",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -2036,36 +3930,239 @@
     "opcode": "0x00F5",
     "sendOp": "TimeScale",
     "sourceClass": "FieldPropertyPacket",
+    "partial": false,
     "modes": [
       {
         "method": "TimeScale",
-        "fields": [
-          {
-            "Api": "add_bool",
-            "Label": "enable",
-            "Width": 1
-          },
-          {
-            "Api": "add_float",
-            "Label": "startScale",
-            "Width": 4
-          },
-          {
-            "Api": "add_float",
-            "Label": "endScale",
-            "Width": 4
-          },
-          {
-            "Api": "add_float",
-            "Label": "duration",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "interpolator",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F6",
+    "sendOp": "LegionBattle",
+    "sourceClass": "LegionBattlePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F7",
+    "sendOp": "ItemScript",
+    "sourceClass": "ItemScriptPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "LulluBox",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "TreasureChest",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Gacha",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F8",
+    "sendOp": "Club",
+    "sourceClass": "ClubPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Update",
+        "nodeCount": 12,
+        "truncated": true
+      },
+      {
+        "method": "Establish",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Create",
+        "nodeCount": 12,
+        "truncated": true
+      },
+      {
+        "method": "DeleteStagedClub",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Invited",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Invite",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "AcceptInvite",
+        "nodeCount": 6,
+        "truncated": false
+      },
+      {
+        "method": "InviteNotification",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "UpdateMember",
+        "nodeCount": 4,
+        "truncated": true
+      },
+      {
+        "method": "Rename",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Leave",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "StagedClubInviteReply",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Disband",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "NotifyAcceptInvite",
+        "nodeCount": 6,
+        "truncated": true
+      },
+      {
+        "method": "LeaveNotice",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "NotifyLogin",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "NotifyLogout",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "UpdateLeader",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "UpdateMemberMap",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "UpdateMemberName",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ChangeBuff",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "ChangeBuffNotification",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Join",
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x00F9",
+    "sendOp": "EventReward",
+    "sourceClass": "EventRewardPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Unknown1",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ClaimTimeRunFinalReward",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ClaimTimeRunStepReward",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "FlipGalleryCard",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ClaimGalleryReward",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SnowmanDailyReward",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SnowmanAccumReward",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "OpenBingo",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "UpdateBingo",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ClaimBingoReward",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -2073,16 +4170,12 @@
     "opcode": "0x00FD",
     "sendOp": "DungeonReviveCount",
     "sourceClass": "RevivalPacket",
+    "partial": false,
     "modes": [
       {
         "method": "DungeonReviveCount",
-        "fields": [
-          {
-            "Api": "add_int",
-            "Label": "count",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -2090,16 +4183,12 @@
     "opcode": "0x0100",
     "sendOp": "ChangeBackground",
     "sourceClass": "FieldPropertyPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Background",
-        "fields": [
-          {
-            "Api": "add_str",
-            "Label": "ddsPath",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -2107,51 +4196,68 @@
     "opcode": "0x0101",
     "sendOp": "RoomStageDungeon",
     "sourceClass": "RoomStageDungeonPacket",
+    "partial": false,
     "modes": [
       {
         "method": "LoadMissionPanel",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.LoadMissionPanel",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "unknown (stored at DungeonMissionPanel\u002B0x28, no known reads)",
-            "Width": 1
-          },
-          {
-            "Api": "add_bool",
-            "Label": "abandonEnabled",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 5,
+        "truncated": false
       },
       {
         "method": "ClearMissionPanel",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.ClearMissionPanel",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0102",
+    "sendOp": "DungeonMission",
+    "sourceClass": "DungeonMissionPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Update",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Sync",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SetAbandon",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Giveup",
+        "nodeCount": 1,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0104",
+    "sendOp": "ItemExchange",
+    "sourceClass": "ItemExchangeScrollPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Unknown0",
+        "nodeCount": 5,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -2159,31 +4265,35 @@
     "opcode": "0x0108",
     "sendOp": "GmCommand",
     "sourceClass": "GmCommandPacket",
+    "partial": false,
     "modes": [
       {
         "method": "AddMessage",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.AddMessage",
-            "Width": 1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "url",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "message",
-            "Width": -1
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "unknown3",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0109",
+    "sendOp": "GlamourAnvil",
+    "sourceClass": "ItemExtractionPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "Extract",
+        "nodeCount": 13,
+        "truncated": true
+      },
+      {
+        "method": "FullInventory",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "InsufficientAnvils",
+        "nodeCount": 1,
+        "truncated": false
       }
     ]
   },
@@ -2191,96 +4301,128 @@
     "opcode": "0x010B",
     "sendOp": "DungeonHelp",
     "sourceClass": "DungeonHelperPacket",
+    "partial": false,
     "modes": [
       {
         "method": "FindHelper",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.FindHelper",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "helpRequestId",
-            "Width": 4
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "characterName",
-            "Width": -1
-          },
-          {
-            "Api": "add_long",
-            "Label": "accountId",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "characterId",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "partySize",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 7,
+        "truncated": false
       },
       {
         "method": "FindMember",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.FindMember",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "rookieCount",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "expertCount",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "helpRequestId",
-            "Width": 4
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "characterName",
-            "Width": -1
-          },
-          {
-            "Api": "add_long",
-            "Label": "accountId",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "characterId",
-            "Width": 8
-          },
-          {
-            "Api": "add_int",
-            "Label": "dungeonId",
-            "Width": 4
-          },
-          {
-            "Api": "add_byte",
-            "Label": "partySize",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 9,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x010C",
+    "sendOp": "Mentor",
+    "sourceClass": "MentorPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "UpdateRole",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "MenteeInvitations",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "MyList",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "AssignReturningUser",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "MenteeInvite",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "AcceptMentorInvite",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "DeclineMentorInvite",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AssignMentor",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Load",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "LoginPoints",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "DailyPoints",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "PairMode",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ReceiveMenteeInvite",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "UpdateOnlineStatus",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ReturningUserStatus",
+        "nodeCount": 3,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x010E",
+    "sendOp": "SkillBookTree",
+    "sourceClass": "SkillBookPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Save",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Rename",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "Expand",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -2288,161 +4430,42 @@
     "opcode": "0x010F",
     "sendOp": "BuddyEmote",
     "sourceClass": "BuddyEmotePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Invite",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Invite",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "emoteId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "sender.Character.Id",
-            "Width": 8
-          },
-          {
-            "Api": "add_unicode_str",
-            "Label": "sender.Character.Name",
-            "Width": -1
-          }
-        ]
+        "nodeCount": 4,
+        "truncated": false
       },
       {
         "method": "InviteConfirm",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.InviteConfirm",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "receiverId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Error",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Error",
-            "Width": 1
-          },
-          {
-            "Api": "add_byte",
-            "Label": "error",
-            "Width": 1
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Accept",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Accept",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "emoteId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "receiverId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "Decline",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Decline",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "emoteId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "receiverId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "Start",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Start",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "emoteId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "senderId",
-            "Width": 8
-          },
-          {
-            "Api": "add_long",
-            "Label": "receiverId",
-            "Width": 8
-          },
-          {
-            "Api": "add_field",
-            "Label": "senderPosition",
-            "Width": 12
-          },
-          {
-            "Api": "add_field",
-            "Label": "senderRotation",
-            "Width": 12
-          },
-          {
-            "Api": "add_int",
-            "Label": "Unknown",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 7,
+        "truncated": false
       },
       {
         "method": "Cancel",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Cancel",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "emoteId",
-            "Width": 4
-          },
-          {
-            "Api": "add_long",
-            "Label": "characterId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       }
     ]
   },
@@ -2450,36 +4473,17 @@
     "opcode": "0x0110",
     "sendOp": "BuddyBadge",
     "sourceClass": "BuddyBadgePacket",
+    "partial": false,
     "modes": [
       {
         "method": "Start",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Start",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "characterId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       },
       {
         "method": "Stop",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Stop",
-            "Width": 1
-          },
-          {
-            "Api": "add_long",
-            "Label": "characterId",
-            "Width": 8
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   },
@@ -2487,41 +4491,439 @@
     "opcode": "0x0114",
     "sendOp": "SuperWorldChat",
     "sourceClass": "SuperChatPacket",
+    "partial": false,
     "modes": [
       {
         "method": "Select",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Select",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          },
-          {
-            "Api": "add_int",
-            "Label": "itemId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 3,
+        "truncated": false
       },
       {
         "method": "Deselect",
-        "fields": [
-          {
-            "Api": "add_byte",
-            "Label": "Command.Deselect",
-            "Width": 1
-          },
-          {
-            "Api": "add_int",
-            "Label": "objectId",
-            "Width": 4
-          }
-        ]
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0116",
+    "sendOp": "Microgame",
+    "sourceClass": "MicrogamePacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "RpsInvite",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "RpsRequest",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RpsDecline",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RpsCancel",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RpsInteractCancel",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Unknown5",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "RpsResult",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "AddRewardItems",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "NpcInteractStart",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "RpsAccepted",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceInvite",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceRequest",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceDecline",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceAccepted",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceCancel",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CraftUpdate",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "Unknown19",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "CoupleDanceResult",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "CraftAnimation",
+        "nodeCount": 6,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0118",
+    "sendOp": "SurvivalEvent",
+    "sourceClass": "SurvivalEventPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "CreateStorm",
+        "nodeCount": 7,
+        "truncated": false
+      },
+      {
+        "method": "UpdateStorm",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "RemoveStorm",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "ClearAllStorms",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "ShowPlayerCountdown",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "CreateDamageStorm",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "UpdateSafeZone",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x011D",
+    "sendOp": "Lapenshard",
+    "sourceClass": "LapenshardPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Equip",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Unequip",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Preview",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Upgrade",
+        "nodeCount": 5,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x011E",
+    "sendOp": "Prestige",
+    "sourceClass": "PrestigePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 5,
+        "truncated": false
+      },
+      {
+        "method": "AddExp",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LevelUp",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "ClaimReward",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "UpdateMissions",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "LoadMissions",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0125",
+    "sendOp": "Wardrobe",
+    "sourceClass": "WardrobePacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 6,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0128",
+    "sendOp": "ChatStamp",
+    "sourceClass": "ChatStickerPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Add",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Use",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "GroupChat",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Favorite",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Unfavorite",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x012A",
+    "sendOp": "Wedding",
+    "sourceClass": "WeddingPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "UpdateMarriage",
+        "nodeCount": 19,
+        "truncated": false
+      },
+      {
+        "method": "UpdateHall",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "Proposal",
+        "nodeCount": 3,
+        "truncated": false
+      },
+      {
+        "method": "Engaged",
+        "nodeCount": 19,
+        "truncated": false
+      },
+      {
+        "method": "DivorceRequest",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "Reserve",
+        "nodeCount": 16,
+        "truncated": false
+      },
+      {
+        "method": "ConfirmReservation",
+        "nodeCount": 16,
+        "truncated": false
+      },
+      {
+        "method": "RequestCancelReservation",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "DeclinedCancelReservation",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "AcceptCancelReservation",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "ChangeReservationRequest",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "AcceptReservationChange",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "ClearHallEntries",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "SideTalk",
+        "nodeCount": 17,
+        "truncated": false
+      },
+      {
+        "method": "RemoveHallListEntry",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "SearchUser",
+        "nodeCount": 4,
+        "truncated": false
+      },
+      {
+        "method": "SendInvite",
+        "nodeCount": 1,
+        "truncated": false
+      },
+      {
+        "method": "WeddingSetup",
+        "nodeCount": 3,
+        "truncated": true
+      },
+      {
+        "method": "WeddingStep",
+        "nodeCount": 2,
+        "truncated": false
+      },
+      {
+        "method": "WeddingEmote",
+        "nodeCount": 3,
+        "truncated": true
+      }
+    ]
+  },
+  {
+    "opcode": "0x012C",
+    "sendOp": "WeddingBillboard",
+    "sourceClass": "WeddingBillboardPacket",
+    "partial": false,
+    "modes": [
+      {
+        "method": "Load",
+        "nodeCount": 2,
+        "truncated": false
+      }
+    ]
+  },
+  {
+    "opcode": "0x0130",
+    "sendOp": "LimitBreak",
+    "sourceClass": "LimitBreakPacket",
+    "partial": true,
+    "modes": [
+      {
+        "method": "StageItem",
+        "nodeCount": 20,
+        "truncated": true
+      },
+      {
+        "method": "LimitBreak",
+        "nodeCount": 18,
+        "truncated": true
+      },
+      {
+        "method": "Error",
+        "nodeCount": 2,
+        "truncated": false
       }
     ]
   }

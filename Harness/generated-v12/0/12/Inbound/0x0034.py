@@ -1,5 +1,5 @@
 ''' RevivalConfirm '''
-# Auto-generated (Phase 4a) from RevivalPacket: UpdatePenalty
+# Auto-generated (Phase 4a/4b) from RevivalPacket: UpdatePenalty
 from script_api import *
 
 add_int("objectId")

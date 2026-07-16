@@ -1,5 +1,5 @@
 ''' SuperWorldChat '''
-# Auto-generated (Phase 4a) from SuperChatPacket: Select, Deselect
+# Auto-generated (Phase 4a/4b) from SuperChatPacket: Select, Deselect
 from script_api import *
 
 mode = add_byte("mode")

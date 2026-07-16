@@ -1,5 +1,5 @@
 ''' ShadowExpedition '''
-# Auto-generated (Phase 4a) from ShadowExpeditionPacket: Open, UpdateGauge, Close
+# Auto-generated (Phase 4a/4b) from ShadowExpeditionPacket: Open, UpdateGauge, Close
 from script_api import *
 
 mode = add_byte("mode")

@@ -1,5 +1,5 @@
 ''' ItemBox '''
-# Auto-generated (Phase 4a) from ItemBoxPacket: Open
+# Auto-generated (Phase 4a/4b) from ItemBoxPacket: Open
 from script_api import *
 
 add_int("sourceItemId")

@@ -1,5 +1,5 @@
 ''' DungeonHelp '''
-# Auto-generated (Phase 4a) from DungeonHelperPacket: FindHelper, FindMember
+# Auto-generated (Phase 4a/4b) from DungeonHelperPacket: FindHelper, FindMember
 from script_api import *
 
 mode = add_byte("mode")

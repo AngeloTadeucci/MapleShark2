@@ -1,5 +1,5 @@
 ''' NpcNotice '''
-# Auto-generated (Phase 4a) from NpcNoticePacket: Announce, TargetEffect, Animation, SidePopup
+# Auto-generated (Phase 4a/4b) from NpcNoticePacket: Announce, TargetEffect, Animation, SidePopup
 from script_api import *
 
 mode = add_byte("mode")

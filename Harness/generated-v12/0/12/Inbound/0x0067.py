@@ -1,5 +1,5 @@
 ''' StateFallDamage '''
-# Auto-generated (Phase 4a) from FallDamagePacket: FallDamage
+# Auto-generated (Phase 4a/4b) from FallDamagePacket: FallDamage
 from script_api import *
 
 add_int("objectId")

@@ -1,5 +1,5 @@
 ''' QuizEvent '''
-# Auto-generated (Phase 4a) from QuizEventPacket: Question, Answer
+# Auto-generated (Phase 4a/4b) from QuizEventPacket: Question, Answer
 from script_api import *
 
 mode = add_byte("mode")

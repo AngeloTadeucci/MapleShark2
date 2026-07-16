@@ -1,5 +1,5 @@
 ''' ExpUp '''
-# Auto-generated (Phase 4a) from ExperienceUpPacket: Add, SetRestExp
+# Auto-generated (Phase 4a/4b) from ExperienceUpPacket: Add, SetRestExp
 from script_api import *
 
 mode = add_byte("mode")

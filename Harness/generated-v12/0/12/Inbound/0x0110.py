@@ -1,5 +1,5 @@
 ''' BuddyBadge '''
-# Auto-generated (Phase 4a) from BuddyBadgePacket: Start, Stop
+# Auto-generated (Phase 4a/4b) from BuddyBadgePacket: Start, Stop
 from script_api import *
 
 mode = add_byte("mode")

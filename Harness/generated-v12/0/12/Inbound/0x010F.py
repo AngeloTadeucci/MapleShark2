@@ -1,5 +1,5 @@
 ''' BuddyEmote '''
-# Auto-generated (Phase 4a) from BuddyEmotePacket: Invite, InviteConfirm, Error, Accept, Decline, Start, Cancel
+# Auto-generated (Phase 4a/4b) from BuddyEmotePacket: Invite, InviteConfirm, Error, Accept, Decline, Start, Cancel
 from script_api import *
 
 mode = add_byte("mode")

@@ -1,5 +1,5 @@
 ''' ItemDropNotice '''
-# Auto-generated (Phase 4a) from ItemDropNoticePacket: Notice
+# Auto-generated (Phase 4a/4b) from ItemDropNoticePacket: Notice
 from script_api import *
 
 add_unicode_str("playerName")

@@ -1,5 +1,5 @@
 ''' TimeScale '''
-# Auto-generated (Phase 4a) from FieldPropertyPacket: TimeScale
+# Auto-generated (Phase 4a/4b) from FieldPropertyPacket: TimeScale
 from script_api import *
 
 add_bool("enable")

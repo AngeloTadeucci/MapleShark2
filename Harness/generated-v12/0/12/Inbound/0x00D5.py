@@ -1,5 +1,5 @@
 ''' CheckCharNameResult '''
-# Auto-generated (Phase 4a) from CheckCharacterNamePacket: Result
+# Auto-generated (Phase 4a/4b) from CheckCharacterNamePacket: Result
 from script_api import *
 
 add_bool("nameIsUsed")

@@ -1,5 +1,5 @@
 ''' GmCommand '''
-# Auto-generated (Phase 4a) from GmCommandPacket: AddMessage
+# Auto-generated (Phase 4a/4b) from GmCommandPacket: AddMessage
 from script_api import *
 
 add_byte("mode")

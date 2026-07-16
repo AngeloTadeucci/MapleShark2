@@ -1,5 +1,5 @@
 ''' SkillSync '''
-# Auto-generated (Phase 4a) from SkillPacket: Sync
+# Auto-generated (Phase 4a/4b) from SkillPacket: Sync
 from script_api import *
 
 add_long("skill.CastUid")

@@ -1,5 +1,5 @@
 ''' CharacterCreate '''
-# Auto-generated (Phase 4a) from CharacterListPacket: CreateError
+# Auto-generated (Phase 4a/4b) from CharacterListPacket: CreateError
 from script_api import *
 
 add_byte("error")

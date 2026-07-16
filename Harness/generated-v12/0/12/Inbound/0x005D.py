@@ -1,5 +1,5 @@
 ''' SyncPetTamingPoint '''
-# Auto-generated (Phase 4a) from PetPacket: SyncTaming
+# Auto-generated (Phase 4a/4b) from PetPacket: SyncTaming
 from script_api import *
 
 add_int("pet.ObjectId")

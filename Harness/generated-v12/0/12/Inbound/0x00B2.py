@@ -1,5 +1,5 @@
 ''' WorldShareInfo '''
-# Auto-generated (Phase 4a) from WorldShareInfoPacket: BossAlive
+# Auto-generated (Phase 4a/4b) from WorldShareInfoPacket: BossAlive
 from script_api import *
 
 add_byte("mode")

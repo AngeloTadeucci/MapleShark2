@@ -1,5 +1,5 @@
 ''' LocalCamera '''
-# Auto-generated (Phase 4a) from CameraPacket: Local
+# Auto-generated (Phase 4a/4b) from CameraPacket: Local
 from script_api import *
 
 add_int("triggerId")

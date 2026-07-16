@@ -1,5 +1,5 @@
 ''' SystemShop '''
-# Auto-generated (Phase 4a) from SystemShopPacket: Arena, Fishing, Mentee, Mentor, Item
+# Auto-generated (Phase 4a/4b) from SystemShopPacket: Arena, Fishing, Mentee, Mentor, Item
 from script_api import *
 
 mode = add_byte("mode")
